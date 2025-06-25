@@ -10,4 +10,3 @@
 - [ ] create creator page (for users to post and monetize their work)
 - [ ] creator analytics
 - [ ] configure paywall for content made by creators
--
