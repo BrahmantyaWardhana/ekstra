@@ -30,7 +30,7 @@ const RotatingBackground = ({ images, interval = 5000 }: RotatingBackgroundProps
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}
           fill
-          priority={index === 0}
+          priority={index <= 1}
         />
       ))}
     </div>

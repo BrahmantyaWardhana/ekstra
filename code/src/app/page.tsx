@@ -4,6 +4,7 @@ import SearchBar from "~/components/SearchBar";
 import background1 from "~/assets/background1.jpg";
 import background2 from "~/assets/background2.jpg";
 import background3 from "~/assets/background3.jpg";
+import Head from 'next/head';
 
 
 function HomePage() {
@@ -14,29 +15,36 @@ function HomePage() {
   ];
 
   return (
-    <div className="bg-slate-950">
-      <Navbar />
-      
-      {/* Main content area */}
-      <div className="flex min-h-[calc(100vh)] pt-24">
-        {/* Left Column with Gradient */}
-        <div className="relative w-2/3">
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_30%_40%,#3e3e3e,transparent)] opacity-80"></div>
-          {/* Content */}
-          <div className="relative z-10 h-full flex flex-col justify-center items-center p-8 text-white">
-            <h1 className="text-4xl font-bold mb-6">Left Column</h1>
-            <SearchBar />
+    <>
+      <Head>
+          <link rel="preload" href={background1.src} as="image" />
+          <link rel="preload" href={background2.src} as="image" />
+          <link rel="preload" href={background3.src} as="image" />
+      </Head>
+      <div className="bg-slate-950">
+        <Navbar />
+        
+        {/* Main content area */}
+        <div className="flex min-h-[calc(100vh)] pt-24">
+          {/* Left Column with Gradient */}
+          <div className="relative w-2/3">
+            {/* Gradient Background */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_30%_40%,#3e3e3e,transparent)] opacity-80"></div>
+            {/* Content */}
+            <div className="relative z-10 h-full flex flex-col justify-center items-center p-8 text-white">
+              <h1 className="text-4xl font-bold mb-6">Left Column</h1>
+              <SearchBar />
+            </div>
+          </div>
+
+          {/* Right Column*/}
+          <div className="w-1/3 bg-white">
+            <RotatingBackground images={backgroundImages} interval={4500} />
           </div>
         </div>
-
-        {/* Right Column*/}
-        <div className="w-1/3 bg-white">
-          <RotatingBackground images={backgroundImages} interval={4500} />
-        </div>
+        {/*Footer goes here*/}
       </div>
-      {/*Footer goes here*/}
-    </div>
+    </>
   );
 }
 
