@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -17,7 +19,7 @@ function Navbar() {
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="/" className="text-xl font-bold text-white">Logo</a>
+            <a href="/" className="text-xl font-bold text-white">Ekstra</a>
           </div>
 
           {/* Desktop Navigation */}

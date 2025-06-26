@@ -1,9 +1,9 @@
-import Navbar from "./components/Navbar";
-import RotatingBackground from "./components/RotatingBackground";
-import SearchBar from "./components/SearchBar";
-import background1 from "./assets/background1.jpg";
-import background2 from "./assets/background2.jpg";
-import background3 from "./assets/background3.jpg";
+import Navbar from "~/components/Navbar";
+import RotatingBackground from "~/components/RotatingBackground";
+import SearchBar from "~/components/SearchBar";
+import background1 from "~/assets/background1.jpg";
+import background2 from "~/assets/background2.jpg";
+import background3 from "~/assets/background3.jpg";
 
 
 function HomePage() {

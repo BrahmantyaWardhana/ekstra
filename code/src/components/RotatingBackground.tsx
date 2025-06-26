@@ -1,6 +1,7 @@
+'use client';
+
 import { useEffect, useState } from "react";
 import Image, { type StaticImageData } from 'next/image';
-
 
 interface RotatingBackgroundProps {
   images: StaticImageData[];
@@ -21,16 +22,15 @@ const RotatingBackground = ({ images, interval = 5000 }: RotatingBackgroundProps
   return (
     <div className="relative w-full h-full overflow-hidden">
       {images.map((image, index) => (
-        <div
+        <Image
           key={index}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-2000 ${
+          src={image}
+          alt={`Background ${index}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}
-          style={{
-            backgroundImage: `url(${image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+          fill
+          priority={index === 0}
         />
       ))}
     </div>
