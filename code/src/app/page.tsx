@@ -4,7 +4,6 @@ import SearchBar from "~/components/SearchBar";
 import background1 from "~/assets/background1.jpg";
 import background2 from "~/assets/background2.jpg";
 import background3 from "~/assets/background3.jpg";
-import Head from 'next/head';
 
 
 function HomePage() {
@@ -16,11 +15,6 @@ function HomePage() {
 
   return (
     <>
-      <Head>
-          <link rel="preload" href={background1.src} as="image" />
-          <link rel="preload" href={background2.src} as="image" />
-          <link rel="preload" href={background3.src} as="image" />
-      </Head>
       <div className="bg-slate-950">
         <Navbar />
         
