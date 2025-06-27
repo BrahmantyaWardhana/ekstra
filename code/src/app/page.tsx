@@ -1,16 +1,13 @@
 import Navbar from "~/components/Navbar";
 import RotatingBackground from "~/components/RotatingBackground";
 import SearchBar from "~/components/SearchBar";
-import background1 from "~/assets/background1.jpg";
-import background2 from "~/assets/background2.jpg";
-import background3 from "~/assets/background3.jpg";
 
 
 function HomePage() {
   const backgroundImages = [
-    background1,
-    background2,
-    background3,
+    "https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW6nccUyusiOYux84dvGiIMFK3swEA2RH9BhXtr",
+    "https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW6gRENU06a0mreNzdKsxC8FwkqVWR72OugoTX1",
+    "https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW6K465D5LBnGzPfrHkxJ9y0YUXveC8mV1ANsTt",
   ];
 
   return (
