@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 interface RotatingBackgroundProps {
-  images: string[];
+  images: { url: string }[];
   interval?: number;
 }
 
@@ -23,7 +23,7 @@ const RotatingBackground = ({ images, interval = 5000 }: RotatingBackgroundProps
       {images.map((image, index) => (
         <img
           key={index}
-          src={image}
+          src={image.url}
           alt={`Background ${index}`}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
             index === currentIndex ? "opacity-100" : "opacity-0"

@@ -1,14 +1,19 @@
 import Navbar from "~/components/Navbar";
 import RotatingBackground from "~/components/RotatingBackground";
 import SearchBar from "~/components/SearchBar";
+import { db } from "~/server/db";
 
+export const dynamic = "force-dynamic"
 
-function HomePage() {
-  const backgroundImages = [
-    "https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW6nccUyusiOYux84dvGiIMFK3swEA2RH9BhXtr",
-    "https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW6gRENU06a0mreNzdKsxC8FwkqVWR72OugoTX1",
-    "https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW6K465D5LBnGzPfrHkxJ9y0YUXveC8mV1ANsTt",
-  ];
+export default async function HomePage() {
+
+  const backgroundImages = await db.query.appImages.findMany({
+    columns:{
+      url:true
+    },
+    orderBy: (model, { desc }) => [desc(model.id)],
+    limit:3
+  });
 
   return (
     <>
@@ -38,5 +43,3 @@ function HomePage() {
     </>
   );
 }
-
-export default HomePage;
