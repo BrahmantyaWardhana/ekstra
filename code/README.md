@@ -3,10 +3,10 @@
 ## TODO
 
 - [x] Make it deploy (vercel)
-- [ ] Scaffold basic ui with mock data
-- [ ] Actually set up a database (vercel postgresql)
+- [x] Scaffold basic ui with mock data
+- [x] Actually set up a database (vercel postgresql)
 - [ ] attach database to ui
-- [ ] add authentication (clerk)
-- [ ] create creator page (for users to post and monetize their work)
+- [ ] add authentication (next auth)
+- [ ] create creator page (for users to post and monetize their work (use upload thing))
 - [ ] creator analytics
 - [ ] configure paywall for content made by creators
