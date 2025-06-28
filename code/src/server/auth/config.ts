@@ -59,6 +59,11 @@ export const authConfig = {
 		verificationTokensTable: verificationTokens,
 	}),
 	callbacks: {
+    redirect: ({ url, baseUrl}) => {
+      if (url.startsWith(baseUrl)) 
+        return url;
+      return '${baseUrl}/home';
+    },
 		session: ({ session, user }) => ({
 			...session,
 			user: {
