@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
-function Navbar() {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -77,5 +77,3 @@ function Navbar() {
     </nav>
   );
 }
-
-export default Navbar;

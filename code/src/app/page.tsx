@@ -3,8 +3,6 @@ import RotatingBackground from "~/components/RotatingBackground";
 import SearchBar from "~/components/SearchBar";
 import { db } from "~/server/db";
 
-export const dynamic = "force-dynamic"
-
 export default async function HomePage() {
 
   const backgroundImages = await db.query.appImages.findMany({

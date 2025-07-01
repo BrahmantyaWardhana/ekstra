@@ -1,4 +1,4 @@
-function SearchBar() {
+export default function SearchBar() {
   return (
     <div className="relative w-full max-w-md mx-auto">
       {/* Search Input */}
@@ -35,5 +35,3 @@ function SearchBar() {
     </div>
   );
 }
-
-export default SearchBar;
