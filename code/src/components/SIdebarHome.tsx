@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 export default function SidebarHome() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
   const menuItems = [
     {
@@ -105,13 +106,13 @@ export default function SidebarHome() {
                   dark:bg-neutral-800 dark:border-neutral-700 z-50"
         aria-label="Sidebar"
       >
-        <div className="relative flex flex-col h-full max-h-full">
+        <div className="relative flex flex-col h-full">
           <header className="p-4 flex justify-between items-center gap-x-2">
             <a className="flex-none font-semibold text-xl text-black dark:text-white" href="#" aria-label="Brand">
               Ekstra
             </a>
           </header>
-          <nav className="h-full overflow-y-auto">
+          <nav className="flex-1 overflow-y-auto">
             <div className="pb-0 px-2 w-full flex flex-col flex-wrap">
               <ul className="space-y-1">
                 {menuItems.map((item) => (
@@ -131,6 +132,68 @@ export default function SidebarHome() {
               </ul>
             </div>
           </nav>
+          
+          {/* Account Info Section - Improved */}
+          <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
+            <div className="relative">
+              <button 
+                onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
+                className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200"
+                aria-expanded={isAccountDropdownOpen}
+                aria-label="Account menu"
+              >
+                <img 
+                  className="w-8 h-8 rounded-full" 
+                  src="https://images.unsplash.com/photo-1734122415415-88cb1d7d5dc0?q=80&w=320&h=320&auto=format&fit=facearea&facepad=3&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                  alt="User avatar"
+                />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">Mia Hudson</p>
+                  <p className="text-xs text-gray-500 dark:text-neutral-400">Admin</p>
+                </div>
+                <svg 
+                  className={`ml-auto h-4 w-4 text-gray-500 dark:text-neutral-400 transition-transform duration-200 ${
+                    isAccountDropdownOpen ? 'rotate-180' : ''
+                  }`}
+                  xmlns="http://www.w3.org/2000/svg" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <path d="m7 15 5 5 5-5"/>
+                  <path d="m7 9 5-5 5 5"/>
+                </svg>
+              </button>
+              
+              {/* Dropdown Menu */}
+              {isAccountDropdownOpen && (
+                <div className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 overflow-hidden z-10">
+                  <a 
+                    href="#" 
+                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  >
+                    Profile
+                  </a>
+                  <a 
+                    href="#" 
+                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  >
+                    Settings
+                  </a>
+
+                  <a 
+                    href="#" 
+                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  >
+                    Sign out
+                  </a>
+                </div>
+              )}
+            </div>
+          </footer>
         </div>
       </aside>
 
@@ -155,7 +218,7 @@ export default function SidebarHome() {
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </header>
-              <nav className="h-full overflow-y-auto">
+              <nav className="flex-1 overflow-y-auto">
                 <div className="pb-0 px-2 w-full flex flex-col flex-wrap">
                   <ul className="space-y-1">
                     {menuItems.map((item) => (
@@ -175,6 +238,21 @@ export default function SidebarHome() {
                   </ul>
                 </div>
               </nav>
+              
+              {/* Mobile Account Info Section */}
+              <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
+                <div className="flex items-center gap-x-3">
+                  <img 
+                    className="w-8 h-8 rounded-full" 
+                    src="https://images.unsplash.com/photo-1734122415415-88cb1d7d5dc0?q=80&w=320&h=320&auto=format&fit=facearea&facepad=3&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    alt="User avatar"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">Mia Hudson</p>
+                    <p className="text-xs text-gray-500 dark:text-neutral-400">Admin</p>
+                  </div>
+                </div>
+              </footer>
             </div>
           </aside>
         </div>
