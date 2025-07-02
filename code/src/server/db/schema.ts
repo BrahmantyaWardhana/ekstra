@@ -27,7 +27,7 @@ export const appImages = createTable("appImage",
 )
 
 export const posts = createTable(
-	"post",
+	"content",
 	(d) => ({
 		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
 		name: d.varchar({ length: 256 }),
@@ -35,6 +35,9 @@ export const posts = createTable(
 			.varchar({ length: 255 })
 			.notNull()
 			.references(() => users.id),
+    type: d
+      .varchar({ length: 100})
+      .notNull(),
 		createdAt: d
 			.timestamp({ withTimezone: true })
 			.default(sql`CURRENT_TIMESTAMP`)
@@ -61,6 +64,10 @@ export const users = createTable("user", (d) => ({
 			withTimezone: true,
 		})
 		.default(sql`CURRENT_TIMESTAMP`),
+  role:d
+    .varchar({length:50})
+    .notNull()
+    .$type<"user" | "admin">(),
 	image: d.varchar({ length: 255 }),
 }));
 

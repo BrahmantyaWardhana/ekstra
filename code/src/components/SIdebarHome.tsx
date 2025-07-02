@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type SetStateAction } from 'react';
+import { signOut } from "next-auth/react";
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function SidebarHome() {
@@ -184,9 +185,9 @@ export default function SidebarHome() {
                     Settings
                   </a>
 
-                  <a 
-                    href="#" 
-                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  <a
+                    onClick={() => signOut({ redirectTo: "/" })}
+                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700 hover:cursor-pointer"
                   >
                     Sign out
                   </a>
