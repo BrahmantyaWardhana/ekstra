@@ -9,11 +9,17 @@ export default auth((req) => {
     '/gettingstarted'
   ].includes(pathname);
 
-  if (isPublicRoute || req.auth) {
-    return;
+  // If user is authenticated redirect to /home
+  if (req.auth && isPublicRoute) {
+    return Response.redirect(new URL("/home", req.nextUrl.origin));
   }
 
-  return Response.redirect(new URL("/login", req.nextUrl.origin));
+  // If user is not authenticated redirect to /login
+  if (!req.auth && !isPublicRoute) {
+    return Response.redirect(new URL("/login", req.nextUrl.origin));
+  }
+
+  return;
 });
 
 export const config = {
