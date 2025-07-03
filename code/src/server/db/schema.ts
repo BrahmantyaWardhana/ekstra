@@ -67,6 +67,7 @@ export const users = createTable("user", (d) => ({
   role:d
     .varchar({length:50})
     .notNull()
+    .default("user")
     .$type<"user" | "admin">(),
 	image: d.varchar({ length: 255 }),
 }));
