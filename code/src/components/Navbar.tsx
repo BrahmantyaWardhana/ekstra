@@ -37,13 +37,13 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Mobile menu button - updated to match dark theme */}
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-full 
                          text-white hover:bg-white hover:text-black
-                         focus:outline-none transition-all duration-300"
+                         focus:outline-none transition-all duration-300 hover:cursor-pointer"
             >
               {isOpen ? (
                 <XMarkIcon className="h-8 w-8" />
