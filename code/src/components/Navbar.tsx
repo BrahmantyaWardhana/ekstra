@@ -42,8 +42,8 @@ export default function Navbar() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-full 
-                         text-white hover:bg-white hover:text-black
-                         focus:outline-none transition-all duration-300 hover:cursor-pointer"
+                         text-white hover:bg-white hover:text-black cursor-pointer
+                         focus:outline-none transition-all duration-300"
             >
               {isOpen ? (
                 <XMarkIcon className="h-8 w-8" />

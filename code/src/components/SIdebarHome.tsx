@@ -98,7 +98,7 @@ export default function SidebarHome() {
                   transition-all duration-300"
         aria-label="Open sidebar"
       >
-        <Bars3Icon className="h-6 w-6" />
+        <Bars3Icon className="h-6 w-6 cursor-pointer" />
       </button>
 
       {/* Desktop Sidebar */}
@@ -213,10 +213,10 @@ export default function SidebarHome() {
                 </a>
                 <button
                   onClick={() => setIsMobileSidebarOpen(false)}
-                  className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-neutral-700"
+                  className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-neutral-700 hover:cursor-pointer"
                   aria-label="Close sidebar"
                 >
-                  <XMarkIcon className="h-6 w-6" />
+                  <XMarkIcon className="h-6 w-6 cursor-pointer" />
                 </button>
               </header>
               <nav className="flex-1 overflow-y-auto">
