@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type SetStateAction } from 'react';
+import { useState, useRef, useEffect, type SetStateAction } from 'react';
 import { signOut } from "next-auth/react";
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -8,6 +8,28 @@ export default function SidebarHome() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Add effect to handle outside clicks
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Check if click is outside both the dropdown and the button
+      if (isAccountDropdownOpen && 
+          dropdownRef.current && 
+          !dropdownRef.current.contains(event.target as Node) && 
+          buttonRef.current && 
+          !buttonRef.current.contains(event.target as Node)) {
+        setIsAccountDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isAccountDropdownOpen]);
 
   const menuItems = [
     {
@@ -134,12 +156,16 @@ export default function SidebarHome() {
             </div>
           </nav>
           
-          {/* Account Info Section - Improved */}
+          {/* Account Info Section */}
           <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
             <div className="relative">
               <button 
-                onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
-                className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200"
+                ref={buttonRef}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsAccountDropdownOpen(!isAccountDropdownOpen);
+                }}
+                className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200 hover:cursor-pointer"
                 aria-expanded={isAccountDropdownOpen}
                 aria-label="Account menu"
               >
@@ -171,7 +197,7 @@ export default function SidebarHome() {
               
               {/* Dropdown Menu */}
               {isAccountDropdownOpen && (
-                <div className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 overflow-hidden z-10">
+                <div ref={dropdownRef} className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 overflow-hidden z-10">
                   <a 
                     href="#" 
                     className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
@@ -242,16 +268,67 @@ export default function SidebarHome() {
               
               {/* Mobile Account Info Section */}
               <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
-                <div className="flex items-center gap-x-3">
-                  <img 
-                    className="w-8 h-8 rounded-full" 
-                    src="https://images.unsplash.com/photo-1734122415415-88cb1d7d5dc0?q=80&w=320&h=320&auto=format&fit=facearea&facepad=3&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                    alt="User avatar"
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">Mia Hudson</p>
-                    <p className="text-xs text-gray-500 dark:text-neutral-400">Admin</p>
-                  </div>
+                <div className="relative">
+                  <button 
+                    ref={buttonRef}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsAccountDropdownOpen(!isAccountDropdownOpen);
+                    }}
+                    className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200 hover:cursor-pointer"
+                    aria-expanded={isAccountDropdownOpen}
+                    aria-label="Account menu"
+                  >
+                    <img 
+                      className="w-8 h-8 rounded-full" 
+                      src="https://images.unsplash.com/photo-1734122415415-88cb1d7d5dc0?q=80&w=320&h=320&auto=format&fit=facearea&facepad=3&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                      alt="User avatar"
+                    />
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">Mia Hudson</p>
+                      <p className="text-xs text-gray-500 dark:text-neutral-400">Admin</p>
+                    </div>
+                    <svg 
+                      className={`ml-auto h-4 w-4 text-gray-500 dark:text-neutral-400 transition-transform duration-200 ${
+                        isAccountDropdownOpen ? 'rotate-180' : ''
+                      }`}
+                      xmlns="http://www.w3.org/2000/svg" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                    >
+                      <path d="m7 15 5 5 5-5"/>
+                      <path d="m7 9 5-5 5 5"/>
+                    </svg>
+                  </button>
+                  
+                  {/* Dropdown Menu */}
+                  {isAccountDropdownOpen && (
+                    <div ref={dropdownRef} className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 overflow-hidden z-10">
+                      <a 
+                        href="#" 
+                        className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                      >
+                        Profile
+                      </a>
+                      <a 
+                        href="#" 
+                        className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                      >
+                        Settings
+                      </a>
+
+                      <a
+                        onClick={() => signOut({ redirectTo: "/" })}
+                        className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700 hover:cursor-pointer"
+                      >
+                        Sign out
+                      </a>
+                    </div>
+                  )}
                 </div>
               </footer>
             </div>
