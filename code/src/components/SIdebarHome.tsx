@@ -115,12 +115,11 @@ export default function SidebarHome() {
       {/* Mobile Hamburger Button */}
       <button
         onClick={() => setIsMobileSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md 
-                  bg-gray-800 text-white hover:bg-gray-700 
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 text-white 
                   transition-all duration-300"
         aria-label="Open sidebar"
       >
-        <Bars3Icon className="h-6 w-6 cursor-pointer" />
+        <Bars3Icon className="h-6 w-6 scale-150 cursor-pointer" />
       </button>
 
       {/* Desktop Sidebar */}
