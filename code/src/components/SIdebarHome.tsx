@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, type SetStateAction } from 'react';
 import { signOut } from "next-auth/react";
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useSession } from "next-auth/react";
 
 export default function SidebarHome() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -11,6 +12,12 @@ export default function SidebarHome() {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // session user data
+  const { data: session } = useSession();
+  const userName = session?.user?.name;
+  const userEmail = session?.user?.email;
+  const userImage = session?.user?.image;
 
   // Add effect to handle outside clicks
   useEffect(() => {
@@ -174,8 +181,7 @@ export default function SidebarHome() {
                   alt="User avatar"
                 />
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">Mia Hudson</p>
-                  <p className="text-xs text-gray-500 dark:text-neutral-400">Admin</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{userName}</p>
                 </div>
                 <svg 
                   className={`ml-auto h-4 w-4 text-gray-500 dark:text-neutral-400 transition-transform duration-200 ${
@@ -284,8 +290,7 @@ export default function SidebarHome() {
                       alt="User avatar"
                     />
                     <div className="text-left">
-                      <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">Mia Hudson</p>
-                      <p className="text-xs text-gray-500 dark:text-neutral-400">Admin</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{userName}</p>
                     </div>
                     <svg 
                       className={`ml-auto h-4 w-4 text-gray-500 dark:text-neutral-400 transition-transform duration-200 ${
