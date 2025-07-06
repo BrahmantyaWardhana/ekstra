@@ -10,6 +10,7 @@ import type { AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `ekstra_${name}`);
 
+// App stuff
 export const appImages = createTable("appImage", 
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
@@ -26,8 +27,10 @@ export const appImages = createTable("appImage",
 	],
 )
 
+// user functionality
+
 export const posts = createTable(
-	"content",
+	"membership_content",
 	(d) => ({
 		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
 		name: d.varchar({ length: 256 }),
