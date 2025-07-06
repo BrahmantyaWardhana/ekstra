@@ -21,7 +21,7 @@ export default async function HomePage() {
         {/* Main content area */}
         <div className="flex min-h-[calc(100vh)] pt-24">
           {/* Left Column with Gradient */}
-          <div className="relative w-2/3">
+          <div className="relative w-full md:w-2/3">
             {/* Gradient Background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_30%_40%,#3e3e3e,transparent)] opacity-80"></div>
             {/* Content */}
@@ -32,7 +32,7 @@ export default async function HomePage() {
           </div>
 
           {/* Right Column*/}
-          <div className="w-1/3 bg-white">
+          <div className="md:w-1/3 bg-white hidden md:block">
             <RotatingBackground images={backgroundImages} interval={4500} />
           </div>
         </div>
