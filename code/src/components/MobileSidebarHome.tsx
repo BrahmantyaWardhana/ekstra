@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect, type SetStateAction } from 'react';
-import { signOut } from "next-auth/react";
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useSession } from "next-auth/react";
 import { menuItems } from '~/components/UserMenuItems';

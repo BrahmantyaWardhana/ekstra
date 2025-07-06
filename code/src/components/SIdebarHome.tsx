@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, type SetStateAction } from 'react';
-import { signOut } from "next-auth/react";
+import { useState, useRef, type SetStateAction } from 'react';
 import { useSession } from "next-auth/react";
 import MobileSidebarHome from './MobileSidebarHome';
 import { menuItems } from '~/components/UserMenuItems';
