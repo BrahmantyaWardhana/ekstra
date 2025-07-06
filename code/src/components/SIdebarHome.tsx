@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import MobileSidebarHome from './MobileSidebarHome';
 import { menuItems } from '~/components/UserMenuItems';
 import { useClickOutside } from '~/hooks/useClickOutside';
+import AccountDropdown from './AccountDropdown';
 
 export default function SidebarHome() {
   const [activeItem, setActiveItem] = useState("Home");
@@ -54,7 +55,7 @@ export default function SidebarHome() {
                 {menuItems.map((item) => (
                   <li key={item.name}>
                     <a
-                      className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${
+                      className={`w-full flex items-center gap-x-3.5 py-2 mb-3 px-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${
                         activeItem === item.name ? "bg-gray-100 dark:bg-neutral-700" : ""
                       }`}
                       href={item.href}
@@ -71,67 +72,7 @@ export default function SidebarHome() {
           
           {/* Account Info Section */}
           <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
-            <div className="relative">
-              <button 
-                ref={buttonRef}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsAccountDropdownOpen(!isAccountDropdownOpen);
-                }}
-                className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200 hover:cursor-pointer"
-                aria-expanded={isAccountDropdownOpen}
-                aria-label="Account menu"
-              >
-                <img 
-                  className="w-8 h-8 rounded-full" 
-                  src={userImage} 
-                  alt="User avatar"
-                />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{userName}</p>
-                </div>
-                <svg 
-                  className={`ml-auto h-4 w-4 text-gray-500 dark:text-neutral-400 transition-transform duration-200 ${
-                    isAccountDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                >
-                  <path d="m7 15 5 5 5-5"/>
-                  <path d="m7 9 5-5 5 5"/>
-                </svg>
-              </button>
-              
-              {/* Dropdown Menu */}
-              {isAccountDropdownOpen && (
-                <div ref={dropdownRef} className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 overflow-hidden z-10">
-                  <a 
-                    href="#" 
-                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
-                  >
-                    Profile
-                  </a>
-                  <a 
-                    href="#" 
-                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
-                  >
-                    Settings
-                  </a>
-
-                  <a
-                    onClick={() => signOut({ redirectTo: "/" })}
-                    className="block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700 hover:cursor-pointer"
-                  >
-                    Sign out
-                  </a>
-                </div>
-              )}
-            </div>
+            <AccountDropdown />
           </footer>
         </div>
       </aside>
