@@ -1,5 +1,5 @@
 {
-  "id": "9345981b-b8b7-4519-b4e2-5c0ad1228df8",
+  "id": "6505c9e3-9027-4019-b6c6-ee4c8d8fe50b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -121,8 +121,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.ekstra_appImage": {
-      "name": "ekstra_appImage",
+    "public.ekstra_app_image": {
+      "name": "ekstra_app_image",
       "schema": "",
       "columns": {
         "id": {
@@ -132,7 +132,7 @@
           "notNull": true,
           "identity": {
             "type": "byDefault",
-            "name": "ekstra_appImage_id_seq",
+            "name": "ekstra_app_image_id_seq",
             "schema": "public",
             "increment": "1",
             "startWith": "1",
@@ -192,26 +192,124 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.ekstra_creator_page": {
+      "name": "ekstra_creator_page",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pageUrl": {
+          "name": "pageUrl",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profileImage": {
+          "name": "profileImage",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "creator_page_user_idx": {
+          "name": "creator_page_user_idx",
+          "columns": [
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "creator_page_url_idx": {
+          "name": "creator_page_url_idx",
+          "columns": [
+            {
+              "expression": "pageUrl",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "ekstra_creator_page_userId_ekstra_user_id_fk": {
+          "name": "ekstra_creator_page_userId_ekstra_user_id_fk",
+          "tableFrom": "ekstra_creator_page",
+          "tableTo": "ekstra_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "ekstra_creator_page_pageUrl_unique": {
+          "name": "ekstra_creator_page_pageUrl_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "pageUrl"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.ekstra_membership_content": {
       "name": "ekstra_membership_content",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "varchar(255)",
           "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "ekstra_membership_content_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -284,6 +382,57 @@
           "tableTo": "ekstra_user",
           "columnsFrom": [
             "createdById"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ekstra_membership": {
+      "name": "ekstra_membership",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creatorId": {
+          "name": "creatorId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ekstra_membership_creatorId_ekstra_creator_page_id_fk": {
+          "name": "ekstra_membership_creatorId_ekstra_creator_page_id_fk",
+          "tableFrom": "ekstra_membership",
+          "tableTo": "ekstra_creator_page",
+          "columnsFrom": [
+            "creatorId"
           ],
           "columnsTo": [
             "id"

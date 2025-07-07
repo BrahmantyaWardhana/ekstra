@@ -11,7 +11,7 @@ import type { AdapterAccount } from "next-auth/adapters";
 export const createTable = pgTableCreator((name) => `ekstra_${name}`);
 
 // App stuff
-export const appImages = createTable("appImage", 
+export const app_images = createTable("app_image", 
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
     name: d.varchar({ length: 256 }).notNull(),
@@ -28,30 +28,28 @@ export const appImages = createTable("appImage",
 )
 
 // user functionality
-
-export const membership_contents = createTable(
-	"membership_content",
-	(d) => ({
-		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-		name: d.varchar({ length: 256 }),
-		createdById: d
-			.varchar({ length: 255 })
-			.notNull()
-			.references(() => users.id),
-    type: d
-      .varchar({ length: 100})
-      .notNull(),
-		createdAt: d
-			.timestamp({ withTimezone: true })
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
-	}),
-	(t) => [
-		index("created_by_idx").on(t.createdById),
-		index("name_idx").on(t.name),
-	],
-);
+export const users = createTable("user",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: d.varchar({ length: 255 }),
+    email: d.varchar({ length: 255 }).notNull(),
+    emailVerified: d
+      .timestamp({
+        mode: "date",
+        withTimezone: true,
+      })
+      .default(sql`CURRENT_TIMESTAMP`),
+    role:d
+      .varchar({length:50})
+      .notNull()
+      .default("user")
+      .$type<"user" | "admin">(),
+    image: d.varchar({ length: 255 }),
+}));
 
 export const creator_pages = createTable(
   "creator_page", 
@@ -84,28 +82,56 @@ export const creator_pages = createTable(
   ]
 );
 
-export const users = createTable("user",
+export const memberships = createTable(
+  "membership",
   (d) => ({
     id: d
       .varchar({ length: 255 })
       .notNull()
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-    name: d.varchar({ length: 255 }),
-    email: d.varchar({ length: 255 }).notNull(),
-    emailVerified: d
-      .timestamp({
-        mode: "date",
-        withTimezone: true,
-      })
-      .default(sql`CURRENT_TIMESTAMP`),
-    role:d
-      .varchar({length:50})
+    creatorId: d
+      .varchar({ length: 255 })
       .notNull()
-      .default("user")
-      .$type<"user" | "admin">(),
-    image: d.varchar({ length: 255 }),
-}));
+      .references(() => creator_pages.id),
+    name: d
+      .varchar({ length: 255 }).notNull(),
+    price: d
+      .numeric({ precision: 10, scale: 2 })
+      .notNull(),
+  }),
+  (t) => [
+
+  ]
+)
+
+export const membership_contents = createTable(
+	"membership_content",
+	(d) => ({
+		id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+		name: d.varchar({ length: 256 }),
+		createdById: d
+			.varchar({ length: 255 })
+			.notNull()
+			.references(() => users.id),
+    type: d
+      .varchar({ length: 100})
+      .notNull(),
+		createdAt: d
+			.timestamp({ withTimezone: true })
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+	}),
+	(t) => [
+		index("created_by_idx").on(t.createdById),
+		index("name_idx").on(t.name),
+	],
+);
 
 // auth
 
