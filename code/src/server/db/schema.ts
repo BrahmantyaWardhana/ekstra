@@ -29,7 +29,7 @@ export const appImages = createTable("appImage",
 
 // user functionality
 
-export const posts = createTable(
+export const membership_contents = createTable(
 	"membership_content",
 	(d) => ({
 		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
@@ -53,27 +53,61 @@ export const posts = createTable(
 	],
 );
 
-export const users = createTable("user", (d) => ({
-	id: d
-		.varchar({ length: 255 })
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	name: d.varchar({ length: 255 }),
-	email: d.varchar({ length: 255 }).notNull(),
-	emailVerified: d
-		.timestamp({
-			mode: "date",
-			withTimezone: true,
-		})
-		.default(sql`CURRENT_TIMESTAMP`),
-  role:d
-    .varchar({length:50})
-    .notNull()
-    .default("user")
-    .$type<"user" | "admin">(),
-	image: d.varchar({ length: 255 }),
+export const creator_pages = createTable(
+  "creator_page", 
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: d
+      .varchar({ length: 255 }).notNull(),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id),
+    pageUrl: d
+      .varchar({ length: 1024 }).notNull().unique(),
+    profileImage: d
+      .varchar({ length: 255 }), // default image should be taken from user profile image
+    createdAt: d
+      .timestamp({ withTimezone: true, mode: 'date' })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: d
+      .timestamp({ withTimezone: true, mode: 'date' })
+  }),
+  (t) =>[
+    index("creator_page_user_idx").on(t.userId),
+    index("creator_page_url_idx").on(t.pageUrl)
+  ]
+);
+
+export const users = createTable("user",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: d.varchar({ length: 255 }),
+    email: d.varchar({ length: 255 }).notNull(),
+    emailVerified: d
+      .timestamp({
+        mode: "date",
+        withTimezone: true,
+      })
+      .default(sql`CURRENT_TIMESTAMP`),
+    role:d
+      .varchar({length:50})
+      .notNull()
+      .default("user")
+      .$type<"user" | "admin">(),
+    image: d.varchar({ length: 255 }),
 }));
+
+// auth
 
 export const usersRelations = relations(users, ({ many }) => ({
 	accounts: many(accounts),
