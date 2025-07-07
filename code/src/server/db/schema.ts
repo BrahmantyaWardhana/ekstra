@@ -10,7 +10,8 @@ import type { AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `ekstra_${name}`);
 
-export const appImages = createTable("appImage", 
+// App stuff
+export const app_images = createTable("app_image", 
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
     name: d.varchar({ length: 256 }).notNull(),
@@ -26,15 +27,100 @@ export const appImages = createTable("appImage",
 	],
 )
 
-export const posts = createTable(
-	"post",
+// user functionality
+export const users = createTable("user",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: d.varchar({ length: 255 }),
+    email: d.varchar({ length: 255 }).notNull(),
+    emailVerified: d
+      .timestamp({
+        mode: "date",
+        withTimezone: true,
+      })
+      .default(sql`CURRENT_TIMESTAMP`),
+    role:d
+      .varchar({length:50})
+      .notNull()
+      .default("user")
+      .$type<"user" | "admin">(),
+    image: d.varchar({ length: 255 }),
+}));
+
+export const creator_pages = createTable(
+  "creator_page", 
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: d
+      .varchar({ length: 255 }).notNull(),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id),
+    pageUrl: d
+      .varchar({ length: 1024 }).notNull().unique(), // should use name from user table for the link
+    profileImage: d
+      .varchar({ length: 255 }), // default image should be taken from user profile image
+    createdAt: d
+      .timestamp({ withTimezone: true, mode: 'date' })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: d
+      .timestamp({ withTimezone: true, mode: 'date' })
+  }),
+  (t) =>[
+    index("creator_page_user_idx").on(t.userId),
+    index("creator_page_url_idx").on(t.pageUrl)
+  ]
+);
+
+export const memberships = createTable(
+  "membership",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    creatorId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => creator_pages.id),
+    name: d
+      .varchar({ length: 255 }).notNull(),
+    price: d
+      .numeric({ precision: 10, scale: 2 })
+      .notNull(),
+  }),
+  (t) => [
+
+  ]
+)
+
+export const membership_contents = createTable(
+	"membership_content",
 	(d) => ({
-		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+		id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
 		name: d.varchar({ length: 256 }),
 		createdById: d
 			.varchar({ length: 255 })
 			.notNull()
 			.references(() => users.id),
+    type: d
+      .varchar({ length: 100})
+      .notNull(),
 		createdAt: d
 			.timestamp({ withTimezone: true })
 			.default(sql`CURRENT_TIMESTAMP`)
@@ -47,22 +133,7 @@ export const posts = createTable(
 	],
 );
 
-export const users = createTable("user", (d) => ({
-	id: d
-		.varchar({ length: 255 })
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	name: d.varchar({ length: 255 }),
-	email: d.varchar({ length: 255 }).notNull(),
-	emailVerified: d
-		.timestamp({
-			mode: "date",
-			withTimezone: true,
-		})
-		.default(sql`CURRENT_TIMESTAMP`),
-	image: d.varchar({ length: 255 }),
-}));
+// auth
 
 export const usersRelations = relations(users, ({ many }) => ({
 	accounts: many(accounts),

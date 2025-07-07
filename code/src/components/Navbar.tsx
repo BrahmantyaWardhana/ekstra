@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
-function Navbar() {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -37,12 +37,12 @@ function Navbar() {
             ))}
           </div>
 
-          {/* Mobile menu button - updated to match dark theme */}
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-full 
-                         text-white hover:bg-white hover:text-black
+                         text-white hover:bg-white hover:text-black cursor-pointer
                          focus:outline-none transition-all duration-300"
             >
               {isOpen ? (
@@ -77,5 +77,3 @@ function Navbar() {
     </nav>
   );
 }
-
-export default Navbar;
