@@ -68,7 +68,7 @@ export const creator_pages = createTable(
       .notNull()
       .references(() => users.id),
     pageUrl: d
-      .varchar({ length: 1024 }).notNull().unique(),
+      .varchar({ length: 1024 }).notNull().unique(), // should use name from user table for the link
     profileImage: d
       .varchar({ length: 255 }), // default image should be taken from user profile image
     createdAt: d
