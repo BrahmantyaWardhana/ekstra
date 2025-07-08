@@ -38,7 +38,7 @@ export default function MobileSidebarHome() {
       {/* Mobile Hamburger Button */}
       <button
         onClick={() => setIsMobileSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 text-white 
+        className="lg:hidden fixed top-4 right-4 z-50 p-2 text-white 
                   transition-all duration-300"
         aria-label="Open sidebar"
       >
@@ -66,7 +66,8 @@ export default function MobileSidebarHome() {
                   <XMarkIcon className="h-6 w-6 cursor-pointer" />
                 </button>
               </header>
-              <nav className="flex-1 overflow-y-auto">
+              
+              <nav className="flex-1 overflow-y-auto pt-1.5">
                 <div className="pb-0 px-2 w-full flex flex-col flex-wrap">
                   <ul className="space-y-1">
                     {menuItems.map((item) => (

@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Getting Started', href: '#gettingstarted' },
-    { name: 'Login', href: '/login' },
+    { name: "About", href: "#about" },
+    { name: "Services", href: "#services" },
+    { name: "Getting Started", href: "#gettingstarted" },
+    { name: "Login", href: "/login" },
   ];
 
   return (
@@ -19,7 +19,9 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="/" className="text-xl font-bold text-white">Ekstra</a>
+            <a href="/" className="text-xl font-bold text-white">
+              Ekstra
+            </a>
           </div>
 
           {/* Desktop Navigation */}

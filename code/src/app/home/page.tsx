@@ -1,15 +1,14 @@
-import Sidebar from "~/components/SIdebarHome";
+import Sidebar from "~/components/SidebarHome";
 
 export default async function AppHome() {
-
-  return(
+  return (
     <>
       <div className="lg:ml-64">
         <Sidebar />
-        <main className="p-4">
+        <main className="p-6">
           <p>App Home Page</p>
         </main>
       </div>
     </>
-  )
+  );
 }

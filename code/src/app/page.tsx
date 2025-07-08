@@ -4,20 +4,19 @@ import SearchBar from "~/components/SearchBar";
 import { db } from "~/server/db";
 
 export default async function HomePage() {
-
-  const backgroundImages = await db.query.appImages.findMany({
-    columns:{
-      url:true
+  const backgroundImages = await db.query.app_images.findMany({
+    columns: {
+      url: true,
     },
     orderBy: (model, { desc }) => [desc(model.id)],
-    limit:3
+    limit: 3,
   });
 
   return (
     <>
       <div className="bg-slate-950">
         <Navbar />
-        
+
         {/* Main content area */}
         <div className="flex min-h-[calc(100vh)] pt-24">
           {/* Left Column with Gradient */}
@@ -31,7 +30,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Right Column*/}
+          {/* Right Column */}
           <div className="md:w-1/3 bg-white hidden md:block">
             <RotatingBackground images={backgroundImages} interval={4500} />
           </div>

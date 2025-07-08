@@ -19,6 +19,7 @@
 	},
 	"dependencies": {
 		"@auth/drizzle-adapter": "^1.10.0",
+		"@headlessui/react": "^2.2.4",
 		"@heroicons/react": "^2.2.0",
 		"@neondatabase/serverless": "^1.0.1",
 		"@t3-oss/env-nextjs": "^0.12.0",
