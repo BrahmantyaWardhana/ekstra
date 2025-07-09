@@ -1,7 +1,7 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
+import { getCreatorId } from "~/server/queries";
 import { db } from "~/server/db";
 import {
 	accounts,
@@ -9,6 +9,7 @@ import {
 	users,
 	verificationTokens,
 } from "~/server/db/schema";
+
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -21,6 +22,7 @@ declare module "next-auth" {
 		user: {
 			id: string;
       role: string;
+      creatorId: string | null;
 			// ...other properties
 			// role: UserRole;
 		} & DefaultSession["user"];
@@ -59,13 +61,14 @@ export const authConfig = {
 		verificationTokensTable: verificationTokens,
 	}),
 	callbacks: {
-		session: ({ session, user }) => ({
-			...session,
-			user: {
-				...session.user,
-				id: user.id,
+		session: async ({ session, user }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: user.id,
         role: user.role,
-			},
+        creatorPageId: await getCreatorId(user.id)
+      },
 		}),
 	},
 } satisfies NextAuthConfig;
