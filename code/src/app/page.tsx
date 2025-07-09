@@ -4,7 +4,7 @@ import SearchBar from "~/components/SearchBar";
 import { db } from "~/server/db";
 
 export default async function HomePage() {
-  const backgroundImages = await db.query.app_images.findMany({
+  const backgroundImages = await db.query.appImages.findMany({
     columns: {
       url: true,
     },

@@ -11,7 +11,7 @@ import type { AdapterAccount } from "next-auth/adapters";
 export const createTable = pgTableCreator((name) => `ekstra_${name}`);
 
 // App stuff
-export const app_images = createTable("app_image", 
+export const appImages = createTable("appImage", 
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
     name: d.varchar({ length: 256 }).notNull(),
@@ -51,8 +51,8 @@ export const users = createTable("user",
     image: d.varchar({ length: 255 }),
 }));
 
-export const creator_pages = createTable(
-  "creator_page", 
+export const creatorPages = createTable(
+  "creatorPage", 
   (d) => ({
     id: d
       .varchar({ length: 255 })
@@ -77,7 +77,7 @@ export const creator_pages = createTable(
       .timestamp({ withTimezone: true, mode: 'date' })
   }),
   (t) =>[
-
+    index("creator_page_user_id_idx").on(t.userId),
   ]
 );
 
@@ -92,7 +92,7 @@ export const memberships = createTable(
     creatorId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => creator_pages.id),
+      .references(() => creatorPages.id),
     name: d
       .varchar({ length: 255 }).notNull(),
     price: d
@@ -104,8 +104,8 @@ export const memberships = createTable(
   ]
 )
 
-export const membership_contents = createTable(
-	"membership_content",
+export const membershipContents = createTable(
+	"membershipContent",
 	(d) => ({
 		id: d
       .varchar({ length: 255 })
@@ -131,7 +131,7 @@ export const membership_contents = createTable(
 		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
 	}),
 	(t) => [
-
+    
 	],
 );
 
@@ -187,7 +187,7 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 }));
 
 export const verificationTokens = createTable(
-	"verification_token",
+	"verificationToken",
 	(d) => ({
 		identifier: d.varchar({ length: 255 }).notNull(),
 		token: d.varchar({ length: 255 }).notNull(),

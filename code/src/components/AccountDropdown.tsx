@@ -8,6 +8,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 export default function AccountDropdown() {
   const { data: session } = useSession();
   const userName = session?.user?.name;
+  const creatorId = session?.user?.creatorId;
   const userImage =
     session?.user?.image ?? "https://www.gravatar.com/avatar/?d=mp";
 
@@ -49,6 +50,22 @@ export default function AccountDropdown() {
           bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 z-50
           origin-bottom duration-150 ease-out data-closed:translate-y-2 data-closed:opacity-0 data-closed:scale-98"
         >
+          {/* Options depending on user creator status */}
+          {!creatorId && (
+            <MenuItem as="a" href="/creator/setup" className={dropDownItemStyle}>
+              Create on Ekstra
+            </MenuItem>
+          )}
+          {creatorId && (
+            <MenuItem 
+              as="a" 
+              href={`/creator/${creatorId}/dashboard`} 
+              className={dropDownItemStyle}
+            >
+              Creator Dashboard
+            </MenuItem>
+          )}
+
           <MenuItem as="a" href="#" className={dropDownItemStyle}>
             Profile
           </MenuItem>
