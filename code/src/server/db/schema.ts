@@ -23,7 +23,7 @@ export const app_images = createTable("app_image",
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
   (t) => [
-		index("imageName_idx").on(t.name),
+
 	],
 )
 
@@ -77,8 +77,7 @@ export const creator_pages = createTable(
       .timestamp({ withTimezone: true, mode: 'date' })
   }),
   (t) =>[
-    index("creator_page_user_idx").on(t.userId),
-    index("creator_page_url_idx").on(t.pageUrl)
+
   ]
 );
 
@@ -118,6 +117,10 @@ export const membership_contents = createTable(
 			.varchar({ length: 255 })
 			.notNull()
 			.references(() => users.id),
+    membershipId: d
+      .varchar({ length: 255 })
+			.notNull()
+			.references(() => memberships.id),
     type: d
       .varchar({ length: 100})
       .notNull(),
@@ -128,8 +131,7 @@ export const membership_contents = createTable(
 		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
 	}),
 	(t) => [
-		index("created_by_idx").on(t.createdById),
-		index("name_idx").on(t.name),
+
 	],
 );
 
