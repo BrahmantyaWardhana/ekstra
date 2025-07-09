@@ -66,7 +66,7 @@ export const creatorPages = createTable(
       .notNull()
       .references(() => users.id),
     pageUrl: d
-      .varchar({ length: 1024 }).notNull().unique(), // should use name from user table for the link
+      .varchar({ length: 1024 }).notNull().unique(), // user created
     profileImage: d
       .varchar({ length: 255 }), // default image should be taken from user profile image
     createdAt: d
@@ -136,7 +136,6 @@ export const membershipContents = createTable(
 );
 
 // auth
-
 export const usersRelations = relations(users, ({ many }) => ({
 	accounts: many(accounts),
 }));

@@ -11,3 +11,15 @@ export async function getCreatorId(userId: string) {
   });
   return creatorPage?.id ?? null;
 }
+
+// images queries
+export async function getBackground() {
+  const backgroundImages = await db.query.appImages.findMany({
+    columns: {
+      url: true,
+    },
+    orderBy: (model, { desc }) => [desc(model.id)],
+    limit: 3,
+  });
+  return backgroundImages;
+}
