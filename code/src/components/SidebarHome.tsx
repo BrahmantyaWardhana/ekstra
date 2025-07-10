@@ -1,32 +1,12 @@
 "use client";
 
-import { useState, useRef, type SetStateAction } from "react";
-import { useSession } from "next-auth/react";
+import { useState, type SetStateAction } from "react";
 import MobileSidebarHome from "./MobileSidebarHome";
 import { menuItems } from "~/components/UserMenuItems";
-import { useClickOutside } from "~/hooks/useClickOutside";
 import AccountDropdown from "./AccountDropdown";
 
 export default function SidebarHome() {
   const [activeItem, setActiveItem] = useState("Home");
-  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  // session user data
-  const { data: session } = useSession();
-  const userName = session?.user?.name;
-  const userImage =
-    session?.user?.image ?? "https://www.gravatar.com/avatar/?d=mp";
-
-  // Add effect to handle outside clicks
-  useClickOutside({
-    refs: [dropdownRef, buttonRef],
-    handler: () => setIsAccountDropdownOpen(false),
-    isActive: isAccountDropdownOpen,
-    eventType: "mousedown",
-  });
 
   const handleItemClick = (itemName: SetStateAction<string>) => {
     setActiveItem(itemName);
