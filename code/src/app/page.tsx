@@ -1,16 +1,11 @@
+import Footer from "~/components/AppFooter";
 import Navbar from "~/components/Navbar";
 import RotatingBackground from "~/components/RotatingBackground";
 import SearchBar from "~/components/SearchBar";
-import { db } from "~/server/db";
+import { getBackground } from "~/server/queries";
 
 export default async function HomePage() {
-  const backgroundImages = await db.query.appImages.findMany({
-    columns: {
-      url: true,
-    },
-    orderBy: (model, { desc }) => [desc(model.id)],
-    limit: 3,
-  });
+  const backgroundImages = await getBackground();
 
   return (
     <>
@@ -25,7 +20,7 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_30%_40%,#3e3e3e,transparent)] opacity-80"></div>
             {/* Content */}
             <div className="relative z-10 h-full flex flex-col justify-center items-center p-8 text-white">
-              <h1 className="text-4xl font-bold mb-6">Left Column</h1>
+              <h1 className="text-4xl font-bold mb-6">Left Column Content</h1>
               <SearchBar />
             </div>
           </div>
@@ -36,6 +31,7 @@ export default async function HomePage() {
           </div>
         </div>
         {/*Footer goes here*/}
+        <Footer />
       </div>
     </>
   );
