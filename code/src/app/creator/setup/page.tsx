@@ -14,9 +14,11 @@ export default async function creatorSetup() {
             {/* Gradient Background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_30%_40%,#3e3e3e,transparent)] opacity-80"></div>
             {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-center items-center p-8 text-white">
-              <h1 className="text-4xl font-bold mb-6">Create a name for your page</h1>
-              <p>you can always change this later</p>
+            <div className="relative z-10 h-full flex flex-col justify-center items-center p-8">
+              <div className="max-w-md w-full border-3 border-white rounded-xl shadow-lg p-8">
+                <h1 className="text-4xl font-bold mb-6">Create a name for your page</h1>
+                <p>you can always change this later</p>
+              </div>
             </div>
           </div>
 
