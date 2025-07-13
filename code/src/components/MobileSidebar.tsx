@@ -1,11 +1,20 @@
 'use client';
 
-import { useState, type SetStateAction } from 'react';
+import { useState, type ReactElement, type SetStateAction } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { menuItems } from '~/components/UserMenuItems';
 import AccountDropdown from './AccountDropdown';
 
-export default function MobileSidebarHome() {
+interface MenuItem {
+    name: string;
+    icon: ReactElement;
+    href: string;
+}
+
+interface SidebarProps {
+  menuItems: MenuItem[];
+}
+
+export default function MobileSidebar({ menuItems } : SidebarProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
 

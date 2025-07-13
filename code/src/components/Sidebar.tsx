@@ -1,11 +1,20 @@
 "use client";
 
-import { useState, type SetStateAction } from "react";
-import MobileSidebarHome from "./MobileSidebarHome";
-import { menuItems } from "~/components/UserMenuItems";
+import { useState, type ReactElement, type SetStateAction } from "react";
+import MobileSidebar from "./MobileSidebar";
 import AccountDropdown from "./AccountDropdown";
 
-export default function SidebarHome() {
+interface MenuItem {
+    name: string;
+    icon: ReactElement;
+    href: string;
+}
+
+interface SidebarProps {
+  menuItems: MenuItem[];
+}
+
+export default function Sidebar({ menuItems } : SidebarProps) {
   const [activeItem, setActiveItem] = useState("Home");
 
   const handleItemClick = (itemName: SetStateAction<string>) => {
@@ -15,7 +24,7 @@ export default function SidebarHome() {
   return (
     <>
       {/* Mobile Hamburger Button */}
-      <MobileSidebarHome />
+      <MobileSidebar menuItems={menuItems} />
 
       {/* Desktop Sidebar */}
       <aside
