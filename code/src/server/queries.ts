@@ -15,29 +15,22 @@ export async function getCreatorId(userId: string) {
 
 // create creator page form queries
 export async function createCreatorPage(
-  data: { 
-    name: string; 
-    handle: string; 
-    description: string; 
+  data: {
+    name: string;
+    handle: string;
+    description: string;
+    userId: string;
+    userImage: string | null;
   }
 ) {
-
-  const user = await auth();
-  const userId = user?.user?.id;
-  const userImage = user?.user?.image;
-
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
-  const newCreatorPage = await db.insert(schema.creatorPages)
-    .values({
-      name: data.name,
-      userId: userId,
-      description: data.description,
-      pageUrl: data.handle, 
-      profileImage: userImage,
-    })
+  const newCreatorPage = await db.insert(schema.creatorPages).values({
+    name: data.name,
+    userId: data.userId,
+    description: data.description,
+    pageUrl: data.handle,
+    profileImage: data.userImage,
+  });
+  return newCreatorPage;
 }
 
 // images queries
