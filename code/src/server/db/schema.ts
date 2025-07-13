@@ -65,6 +65,8 @@ export const creatorPages = createTable(
       .varchar({ length: 255 })
       .notNull()
       .references(() => users.id),
+    description: d
+      .varchar({ length: 255 }),
     pageUrl: d
       .varchar({ length: 1024 }).notNull().unique(), // user created
     profileImage: d

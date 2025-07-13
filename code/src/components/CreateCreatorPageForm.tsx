@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { submitCreatorPage } from '~/server/actions';
 
 // validation rules
 const formSchema = z.object({
@@ -29,8 +30,7 @@ export default function CreateCreatorPageForm() {
 
   // form submission handler
   const onSubmit = (data: FormValues) => {
-    console.log("Form data:", data);
-    // form submission logic here
+    submitCreatorPage(data)
   };
 
   return (
