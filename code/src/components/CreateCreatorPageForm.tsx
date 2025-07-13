@@ -80,11 +80,16 @@ export default function CreateCreatorPageForm() {
       {/* Handle */}
       <div>
         <label className="block pb-2">Unique Handle</label>
-        <input
-          {...register("handle")}
-          className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white"
-          placeholder="your-handle"
-        />
+        <div className="relative">
+          <div className="absolute left-0 top-0 bottom-0 flex items-center pl-4 pointer-events-none text-gray-400">
+            domain/creatorpage/
+          </div>
+          <input
+            {...register("handle")}
+            className="w-full pl-44 px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white"
+            placeholder="your-handle"
+          />
+        </div>
         {errors.handle && (
           <p className="text-red-500 text-sm pt-1">{errors.handle.message}</p>
         )}
