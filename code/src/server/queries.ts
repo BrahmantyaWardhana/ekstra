@@ -13,6 +13,14 @@ export async function getCreatorId(userId: string) {
   return creatorPage?.id ?? null;
 }
 
+// check handle availability
+export async function isHandleAvailable(handle: string) {
+  const existing = await db.query.creatorPages.findFirst({
+    where: eq(schema.creatorPages.pageUrl, handle),
+  });
+  return !existing; // Returns true if handle is available
+}
+
 // create creator page form queries
 export async function createCreatorPage(
   data: {

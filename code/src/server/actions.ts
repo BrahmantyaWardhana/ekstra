@@ -1,7 +1,11 @@
 'use server';
 
 import { auth } from '~/server/auth';
-import { createCreatorPage } from '~/server/queries';
+import { createCreatorPage, isHandleAvailable } from '~/server/queries';
+
+export async function checkHandleUnique(handle: string) {
+  return await isHandleAvailable(handle); // returns true if taken
+}
 
 export async function submitCreatorPage(data: {
   name: string;

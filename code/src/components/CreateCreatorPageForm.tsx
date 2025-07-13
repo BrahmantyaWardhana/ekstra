@@ -3,9 +3,9 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { submitCreatorPage } from '~/server/actions';
+import { submitCreatorPage, checkHandleUnique } from '~/server/actions';
+import { useEffect } from 'react';
 
-// validation rules
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   handle: z.string()
@@ -14,28 +14,57 @@ const formSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters")
 });
 
-// create type from the schema
 type FormValues = z.infer<typeof formSchema>;
 
 export default function CreateCreatorPageForm() {
-  // form with validation
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid }
+    formState: { errors, isValid },
+    setError,
+    clearErrors,
+    watch,
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: 'onChange'
   });
 
-  // form submission handler
-  const onSubmit = (data: FormValues) => {
-    submitCreatorPage(data)
+  const handleValue = watch("handle");
+
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      if (handleValue.length >= 3) {
+        const available = await checkHandleUnique(handleValue);
+        if (!available) {
+          setError("handle", {
+            type: "manual",
+            message: "This handle is already taken",
+          });
+        } else {
+          clearErrors("handle");
+        }
+      }
+    }, 500); // debounce delay
+
+    return () => clearTimeout(delay);
+  }, [handleValue]);
+
+  const onSubmit = async (data: FormValues) => {
+    const available = await checkHandleUnique(data.handle);
+    if (!available) {
+      setError("handle", {
+        type: "manual",
+        message: "This handle is already taken",
+      });
+      return;
+    }
+
+    await submitCreatorPage(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Name Field */}
+      {/* Name */}
       <div>
         <label className="block pb-2">Your Name</label>
         <input
@@ -48,7 +77,7 @@ export default function CreateCreatorPageForm() {
         )}
       </div>
 
-      {/* Handle Field */}
+      {/* Handle */}
       <div>
         <label className="block pb-2">Unique Handle</label>
         <input
@@ -61,7 +90,7 @@ export default function CreateCreatorPageForm() {
         )}
       </div>
 
-      {/* Description Field */}
+      {/* Description */}
       <div>
         <label className="block pb-2">Description</label>
         <textarea
@@ -75,7 +104,7 @@ export default function CreateCreatorPageForm() {
         )}
       </div>
 
-      {/* Submit Button */}
+      {/* Submit */}
       <button
         type="submit"
         disabled={!isValid}
