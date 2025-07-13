@@ -10,9 +10,12 @@ export default function AccountDropdown() {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const { data: session } = useSession();
+
+  console.log("Session data:", session);
+
   const userName = session?.user?.name;
   const userImage = session?.user?.image ?? "https://www.gravatar.com/avatar/?d=mp";
-  const creatorPageId = session?.user?.creatorId;
+  const creatorPageId = session?.user?.creatorPageId;
 
   const dropDownItemStyle = 
     "block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full text-left cursor-pointer"
@@ -72,7 +75,7 @@ export default function AccountDropdown() {
             )}
             {creatorPageId && (
               <a 
-                href={`/creator/${creatorPageId}/dashboard`} 
+                href=""
                 className={dropDownItemStyle}
               >
                 Creator Dashboard
