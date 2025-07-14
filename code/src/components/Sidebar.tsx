@@ -24,7 +24,10 @@ export default function Sidebar({ menuItems, accountDropdown } : SidebarProps) {
   return (
     <>
       {/* Mobile Hamburger Button */}
-      <MobileSidebar menuItems={menuItems} />
+      <MobileSidebar 
+        menuItems={menuItems}
+        accountDropdown={accountDropdown}
+      />
 
       {/* Desktop Sidebar */}
       <aside

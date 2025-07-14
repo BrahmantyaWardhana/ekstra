@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, type ReactElement, type SetStateAction } from 'react';
+import { useState, type ReactElement, type ReactNode, type SetStateAction } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import AccountDropdown from './AccountDropdown';
 
 interface MenuItem {
     name: string;
@@ -12,9 +11,10 @@ interface MenuItem {
 
 interface SidebarProps {
   menuItems: MenuItem[];
+  accountDropdown?: ReactNode;
 }
 
-export default function MobileSidebar({ menuItems } : SidebarProps) {
+export default function MobileSidebar({ menuItems, accountDropdown } : SidebarProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
 
@@ -80,7 +80,7 @@ export default function MobileSidebar({ menuItems } : SidebarProps) {
               
               {/* Mobile Account Info Section */}
               <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
-                <AccountDropdown />
+                {accountDropdown}
               </footer>
             </div>
           </aside>
