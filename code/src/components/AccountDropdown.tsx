@@ -71,7 +71,7 @@ export default function AccountDropdown() {
           {/* Options depending on user creator status */}
             {!creatorPageId && (
               <a 
-                href="/creator/setup" className={dropDownItemStyle}>
+                href="/creatorsetup" className={dropDownItemStyle}>
                 Create on Ekstra
               </a>
             )}
