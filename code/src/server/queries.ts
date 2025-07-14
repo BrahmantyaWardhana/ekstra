@@ -2,7 +2,6 @@ import "server-only";
 import { db } from "~/server/db";
 import { eq } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
-import { auth } from "~/server/auth";
 
 // session data query
 // find if user is a creator

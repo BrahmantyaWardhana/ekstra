@@ -12,9 +12,6 @@ export default function AccountDropdown() {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const { data: session } = useSession();
-
-  console.log("Session data:", session);
-
   const userName = session?.user?.name;
   const userImage = session?.user?.image ?? "https://www.gravatar.com/avatar/?d=mp";
   const creatorPageId = session?.user?.creatorPageId;
@@ -37,7 +34,7 @@ export default function AccountDropdown() {
           e.stopPropagation();
           setIsDropdownOpen(!isDropdownOpen);
         }}
-        className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200 hover:cursor-pointer"
+        className="w-full flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-200 cursor-pointer"
         aria-expanded={isDropdownOpen}
         aria-label="Account menu"
       >

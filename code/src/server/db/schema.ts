@@ -83,6 +83,132 @@ export const creatorPages = createTable(
   ]
 );
 
+export const contents = createTable(
+  "content",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    creatorId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => creatorPages.id),
+    type: d // video, image, file, etc.
+      .varchar({ length: 100})
+      .notNull(),
+    contentUrl: d // upload thing
+      .varchar({ length: 1024 }).notNull(),
+    usedIn: d
+      .varchar({ length: 25 }),
+  	createdAt: d
+			.timestamp({ withTimezone: true })
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+
+  ]
+)
+
+export const storeListings = createTable (
+  "storeListing",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    title: d
+      .varchar({ length: 255 }).notNull(),
+    price: d
+      .numeric({ precision: 10, scale: 2 })
+      .notNull(),
+    creatorId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => creatorPages.id),
+  	createdAt: d
+			.timestamp({ withTimezone: true })
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+
+  ]
+)
+
+export const storeContents = createTable(
+  "storeContent",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    contentId: d
+			.varchar({ length: 255 })
+			.notNull()
+			.references(() => contents.id),
+    storeListingId: d
+      .varchar({ length: 255 })
+			.notNull()
+			.references(() => storeListings.id),
+  })
+)
+
+export const posts = createTable(
+  "post",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    title: d
+      .varchar({ length: 255 }).notNull(),
+    description: d
+      .varchar({ length: 255 }),
+    creatorId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => creatorPages.id),
+    createdAt: d
+			.timestamp({ withTimezone: true })
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+
+  ]
+)
+
+export const postContents = createTable(
+  "postContent",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+		contentId: d
+			.varchar({ length: 255 })
+			.notNull()
+			.references(() => contents.id),
+    postId: d
+			.varchar({ length: 255 })
+			.notNull()
+			.references(() => posts.id),
+  }),
+  (t) => [
+
+  ]
+)
+
 export const memberships = createTable(
   "membership",
   (d) => ({
@@ -95,11 +221,18 @@ export const memberships = createTable(
       .varchar({ length: 255 })
       .notNull()
       .references(() => creatorPages.id),
-    name: d
+    title: d
       .varchar({ length: 255 }).notNull(),
+    description: d
+      .varchar({ length: 255 }),
     price: d
       .numeric({ precision: 10, scale: 2 })
       .notNull(),
+    createdAt: d
+			.timestamp({ withTimezone: true })
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),   
   }),
   (t) => [
 
@@ -114,23 +247,14 @@ export const membershipContents = createTable(
       .notNull()
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-		name: d.varchar({ length: 256 }),
-		createdById: d
+		contentId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => users.id),
+			.references(() => contents.id),
     membershipId: d
       .varchar({ length: 255 })
 			.notNull()
 			.references(() => memberships.id),
-    type: d
-      .varchar({ length: 100})
-      .notNull(),
-		createdAt: d
-			.timestamp({ withTimezone: true })
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
 	}),
 	(t) => [
     
@@ -138,10 +262,6 @@ export const membershipContents = createTable(
 );
 
 // auth
-export const usersRelations = relations(users, ({ many }) => ({
-	accounts: many(accounts),
-}));
-
 export const accounts = createTable(
 	"account",
 	(d) => ({
@@ -196,3 +316,9 @@ export const verificationTokens = createTable(
 	}),
 	(t) => [primaryKey({ columns: [t.identifier, t.token] })],
 );
+
+// relations
+export const usersRelations = relations(users, ({ many }) => ({
+	accounts: many(accounts),
+}));
+
