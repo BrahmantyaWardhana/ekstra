@@ -18,7 +18,6 @@ export async function submitCreatorPage(data: {
 
   if (!userId) {
     throw new Error('User not authenticated');
-    // Or redirect to login: redirect('/login');
   }
 
   try {

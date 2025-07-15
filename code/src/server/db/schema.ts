@@ -318,7 +318,87 @@ export const verificationTokens = createTable(
 );
 
 // relations
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
 	accounts: many(accounts),
+  session: one(sessions),
+  creatorPage: one(creatorPages),
+}));
+
+export const creatorPagesRelations = relations(creatorPages, ({ many, one }) => ({
+  users: one(users, {
+    fields: [creatorPages.userId],
+    references: [users.id],
+  }),
+  contents: many(contents),
+  storeListings: many(storeListings),
+  posts: many(posts),
+  memberships: many(memberships),
+}));
+
+export const contentsRelations = relations(contents, ({ one, many }) => ({
+  creator: one(creatorPages, {
+    fields: [contents.creatorId],
+    references: [creatorPages.id],
+  }),
+  storeContents: many(storeContents),
+  postContents: many(postContents),
+  membershipContents: many(membershipContents),
+}));
+
+export const storeListingsRelations = relations(storeListings, ({ one, many }) => ({
+  creator: one(creatorPages, {
+    fields: [storeListings.creatorId],
+    references: [creatorPages.id],
+  }),
+  storeContents: many(storeContents),
+}));
+
+export const storeContentsRelations = relations(storeContents, ({ one }) => ({
+  content: one(contents, {
+    fields: [storeContents.contentId],
+    references: [contents.id],
+  }),
+  storeListing: one(storeListings, {
+    fields: [storeContents.storeListingId],
+    references: [storeListings.id],
+  }),
+}));
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  creator: one(creatorPages, {
+    fields: [posts.creatorId],
+    references: [creatorPages.id],
+  }),
+  postContents: many(postContents),
+}));
+
+export const postContentsRelations = relations(postContents, ({ one }) => ({
+  post: one(posts, {
+    fields: [postContents.postId],
+    references: [posts.id],
+  }),
+  content: one(contents, {
+    fields: [postContents.contentId],
+    references: [contents.id],
+  }),
+}));
+
+export const membershipsRelations = relations(memberships, ({ one, many }) => ({
+  creator: one(creatorPages, {
+    fields: [memberships.creatorId],
+    references: [creatorPages.id],
+  }),
+  membershipContents: many(membershipContents),
+}));
+
+export const membershipContentsRelations = relations(membershipContents, ({ one }) => ({
+  membership: one(memberships, {
+    fields: [membershipContents.membershipId],
+    references: [memberships.id],
+  }),
+  content: one(contents, {
+    fields: [membershipContents.contentId],
+    references: [contents.id],
+  }),
 }));
 
