@@ -1,10 +1,14 @@
 'use server';
 
 import { auth } from '~/server/auth';
-import { createCreatorPage, isHandleAvailable } from '~/server/queries';
+import * as queries from '~/server/queries';
 
 export async function checkHandleUnique(handle: string) {
-  return await isHandleAvailable(handle); // returns true if taken
+  try{
+    return await queries.isHandleAvailable(handle); // returns true if taken
+  } catch (error) {
+    return { success: false, error: 'Failed to check if handle is available'}
+  }
 }
 
 export async function submitCreatorPage(data: {
@@ -21,7 +25,7 @@ export async function submitCreatorPage(data: {
   }
 
   try {
-    await createCreatorPage({
+    await queries.createCreatorPage({
       ...data,
       userId,
       userImage,
@@ -29,5 +33,19 @@ export async function submitCreatorPage(data: {
     return { success: true };
   } catch (error) {
     return { success: false, error: 'Failed to create creator page' };
+  }
+}
+
+export async function retrieveCreatorPageData() {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    return null;
+  }
+  try {
+    const creatorPageData = await queries.getMyCreatorPageData({creatorPageId});
+    return creatorPageData
+  } catch (error) {
+    return { success: false, error: 'Failed to fetch creator page data' };
   }
 }

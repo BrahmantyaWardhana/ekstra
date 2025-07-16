@@ -15,7 +15,7 @@ export async function getCreatorId(userId: string) {
 // check handle availability
 export async function isHandleAvailable(handle: string) {
   const existing = await db.query.creatorPages.findFirst({
-    where: eq(schema.creatorPages.pageUrl, handle),
+    where: eq(schema.creatorPages.pageHandle, handle),
   });
   return !existing; // Returns true if handle is available
 }
@@ -34,10 +34,29 @@ export async function createCreatorPage(
     name: data.name,
     userId: data.userId,
     description: data.description,
-    pageUrl: data.handle,
+    pageHandle: data.handle,
     profileImage: data.userImage,
   });
   return newCreatorPage;
+}
+
+// fetch creator account data (for account dropdown so profile image and page name) based on creator page id from session
+export async function getMyCreatorPageData(
+  data: {
+    creatorPageId: string;
+  }
+) {
+  const creatorPageData = 
+    await db.select({
+      name: schema.creatorPages.name,
+      description: schema.creatorPages.description,
+      profileImage: schema.creatorPages.profileImage,
+      pageHandle: schema.creatorPages.pageHandle,
+    })
+    .from(schema.creatorPages)
+    .where(eq(schema.creatorPages.id, data.creatorPageId));
+
+  return creatorPageData
 }
 
 // images queries

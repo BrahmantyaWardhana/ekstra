@@ -67,7 +67,7 @@ export const creatorPages = createTable(
       .references(() => users.id),
     description: d
       .varchar({ length: 255 }),
-    pageUrl: d
+    pageHandle: d
       .varchar({ length: 1024 }).notNull().unique(), // user created
     profileImage: d
       .varchar({ length: 255 }), // default image should be taken from user profile image
@@ -80,6 +80,7 @@ export const creatorPages = createTable(
   }),
   (t) =>[
     index("creator_page_user_id_idx").on(t.userId),
+    index("creator_page_id_idx").on(t.id),
   ]
 );
 

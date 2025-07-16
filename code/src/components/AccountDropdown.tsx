@@ -87,12 +87,6 @@ export default function AccountDropdown() {
           >
             Profile
           </a>
-          <a 
-            href="#" 
-            className={dropDownItemStyle}
-          >
-            Settings
-          </a>
           <button
             onClick={() => signOut({ redirectTo: "/" })}
             className={dropDownItemStyle}
