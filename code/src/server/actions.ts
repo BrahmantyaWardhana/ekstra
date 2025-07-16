@@ -36,16 +36,16 @@ export async function submitCreatorPage(data: {
   }
 }
 
-export async function retrieveCreatorPageData() {
+export async function retrieveCreatorDropdownData() {
   const user = await auth();
   const creatorPageId = user?.user.creatorPageId
   if (!creatorPageId) {
     return null;
   }
   try {
-    const creatorPageData = await queries.getMyCreatorPageData({creatorPageId});
-    return creatorPageData
+    const creatorDropdownData = await queries.getMyCreatorDropdownData({creatorPageId});
+    return creatorDropdownData
   } catch (error) {
-    return { success: false, error: 'Failed to fetch creator page data' };
+    return null;
   }
 }

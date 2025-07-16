@@ -4,14 +4,20 @@ import { useRef } from 'react';
 import { signOut } from "next-auth/react";
 import { useClickOutside } from '~/hooks/useClickOutside';
 import { useState } from 'react';
-import { retrieveCreatorPageData } from '~/server/actions';
 
-export default function CreatorAccountDropdown() {
+interface CreatorDropdownData {
+  name: string, 
+  profileImage: string | null,
+}
+
+export default function CreatorAccountDropdown({
+  creatorDropdownData
+}: {
+  creatorDropdownData?: CreatorDropdownData | null
+}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const creatorPageData = retrieveCreatorPageData()
 
   const dropDownItemStyle = 
     "block px-4 py-2 text-sm text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700 w-full text-left cursor-pointer"
@@ -38,12 +44,12 @@ export default function CreatorAccountDropdown() {
       
       <img 
         className="w-8 h-8 rounded-full" 
-        src={creatorPageImage}
+        src={creatorDropdownData?.profileImage || "https://www.gravatar.com/avatar/?d=mp"}
         alt="Page avatar"
       />
 
       <div className="text-left">
-        <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{creatorPageName}</p>
+        <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{creatorDropdownData?.name}</p>
       </div>
 
       <svg 

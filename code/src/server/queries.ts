@@ -59,6 +59,22 @@ export async function getMyCreatorPageData(
   return creatorPageData
 }
 
+export async function getMyCreatorDropdownData(
+  data: {
+    creatorPageId: string;
+  }
+) {
+  const creatorDropdownData = 
+    await db.select({
+      name: schema.creatorPages.name,
+      profileImage: schema.creatorPages.profileImage,
+    })
+    .from(schema.creatorPages)
+    .where(eq(schema.creatorPages.id, data.creatorPageId));
+
+  return creatorDropdownData[0] || null;
+}
+
 // images queries
 export async function getBackground() {
   const backgroundImages = await db.query.appImages.findMany({
