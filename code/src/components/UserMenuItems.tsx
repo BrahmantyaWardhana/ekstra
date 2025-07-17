@@ -26,7 +26,7 @@ export const menuItems: MenuItem[] = [
         <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
       </svg>
     ),
-    href: "#"
+    href: "/user/home"
   },
   {
     name: "Explore",
@@ -47,7 +47,7 @@ export const menuItems: MenuItem[] = [
         <circle cx="11" cy="11" r="8"/>
       </svg>
     ),
-    href: "#"
+    href: "/user/explore"
   },
   {
     name: "Settings",
@@ -75,6 +75,6 @@ export const menuItems: MenuItem[] = [
         <circle cx="12" cy="12" r="3"/>
       </svg>
     ),
-    href: "#"
+    href: "/user/settings"
   }
 ];
