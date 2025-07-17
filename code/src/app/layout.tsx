@@ -20,9 +20,6 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en" className={`${geist.variable}`}>
-      <head>
-        <meta name="referrer" content="no-referrer-when-downgrade" />
-      </head>
       <SessionProvider>
 			  <body>{children}</body>
       </SessionProvider>

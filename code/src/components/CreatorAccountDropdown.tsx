@@ -46,6 +46,7 @@ export default function CreatorAccountDropdown({
         className="w-8 h-8 rounded-full" 
         src={creatorDropdownData?.profileImage || "https://www.gravatar.com/avatar/?d=mp"}
         alt="Page avatar"
+        referrerPolicy="no-referrer"
       />
 
       <div className="text-left">
@@ -75,7 +76,7 @@ export default function CreatorAccountDropdown({
             href="/user/home"
             className={dropDownItemStyle}
           >
-            User menus
+            User account
           </a>    
           <a 
             href="#" 

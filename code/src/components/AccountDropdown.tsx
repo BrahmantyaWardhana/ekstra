@@ -42,6 +42,7 @@ export default function AccountDropdown() {
           className="w-8 h-8 rounded-full" 
           src={userImage} 
           alt="User avatar"
+          referrerPolicy="no-referrer"
         />
         <div className="text-left">
           <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{userName}</p>
