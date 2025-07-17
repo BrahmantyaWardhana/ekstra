@@ -1,4 +1,4 @@
-export default async function UserExplore() {
+export default function UserExplore() {
   return (
     <>
       <main className="p-6">
