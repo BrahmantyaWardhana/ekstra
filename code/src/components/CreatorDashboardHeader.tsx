@@ -1,6 +1,8 @@
 "use client"
 
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react'
+import DomainDisplay from './DomainDisplay';
 
 interface CreatorPageData {
   name: string,
@@ -10,6 +12,12 @@ interface CreatorPageData {
 }
 
 export default function CreatorDashboardHeader( {creatorData} : { creatorData: CreatorPageData[] | null } ) {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  
   const navItems = [
     {name: 'Home', href: '/creator/dashboard/home'},
     {name: 'Membership', href: '/creator/dashboard/membership'},
@@ -33,7 +41,7 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
             referrerPolicy="no-referrer" 
           />
           <h1 className="mt-4 text-2xl font-semibold text-black">{creatorData?.[0]?.name}</h1>
-          <p className="text-sm text-gray-800 mt-1">domain.com/{creatorData?.[0]?.pageHandle}</p>
+          <p className="text-sm text-gray-800 mt-1"><DomainDisplay />/{creatorData?.[0]?.pageHandle}</p>
         </div>
 
         {/* Navigation Tabs */}
