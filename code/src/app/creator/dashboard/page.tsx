@@ -1,9 +1,7 @@
 export default function Dashboard() {
   return (
-    <>
-      <main className="p-6">
-        <p>Creator Dashboard Page</p>
-      </main>  
-    </>
+    <main className="p-6">
+      <p>Creator Dashboard Page</p>
+    </main>  
   )
 }

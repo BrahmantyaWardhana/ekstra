@@ -28,7 +28,7 @@ export const menuItems: MenuItem[] = [
         <rect width="7" height="5" x="3" y="16" rx="1"/>
       </svg>
     ),
-    href: "#"
+    href: "/creator/dashboard"
   },
   {
     name: "Members",
@@ -51,7 +51,7 @@ export const menuItems: MenuItem[] = [
         <circle cx="9" cy="7" r="4"/>
       </svg>
     ),
-    href: "#"
+    href: "/creator/members"
   },
   {
     name: "Analytics",
@@ -76,7 +76,7 @@ export const menuItems: MenuItem[] = [
         <path d="M8 14v7"/>
       </svg>
     ),
-    href: "#"
+    href: "/creator/analytics"
   },
   {
     name: "Settings",
@@ -104,6 +104,6 @@ export const menuItems: MenuItem[] = [
         <circle cx="12" cy="12" r="3"/>
       </svg>
     ),
-    href: "#"
+    href: "/creator/settings"
   }
 ];

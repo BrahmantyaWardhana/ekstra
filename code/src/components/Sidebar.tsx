@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type ReactElement, type ReactNode, type SetStateAction } from "react";
+import { type ReactElement, type ReactNode} from "react";
 import MobileSidebar from "./MobileSidebar";
+import { usePathname } from 'next/navigation';
 
 interface MenuItem {
     name: string;
@@ -14,12 +15,11 @@ interface SidebarProps {
   accountDropdown?: ReactNode;
 }
 
-export default function Sidebar({ menuItems, accountDropdown } : SidebarProps) {
-  const [activeItem, setActiveItem] = useState(menuItems[0]?.name || "");
-
-  const handleItemClick = (itemName: SetStateAction<string>) => {
-    setActiveItem(itemName);
-  };
+export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
+  const pathname = usePathname();
+  
+  // Find the menu item that matches the current path
+  const activeItem = menuItems.find(item => pathname.startsWith(item.href))?.name || menuItems[0]?.name;
 
   return (
     <>
@@ -58,7 +58,6 @@ export default function Sidebar({ menuItems, accountDropdown } : SidebarProps) {
                           : ""
                       }`}
                       href={item.href}
-                      onClick={() => handleItemClick(item.name)}
                     >
                       {item.icon}
                       {item.name}
