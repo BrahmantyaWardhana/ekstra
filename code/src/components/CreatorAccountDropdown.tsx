@@ -10,11 +10,7 @@ interface CreatorDropdownData {
   profileImage: string | null,
 }
 
-export default function CreatorAccountDropdown({
-  creatorDropdownData
-}: {
-  creatorDropdownData?: CreatorDropdownData | null
-}) {
+export default function CreatorAccountDropdown({ creatorDropdownData }: { creatorDropdownData?: CreatorDropdownData[] | null }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -44,13 +40,12 @@ export default function CreatorAccountDropdown({
       
       <img 
         className="w-8 h-8 rounded-full" 
-        src={creatorDropdownData?.profileImage || "https://www.gravatar.com/avatar/?d=mp"}
+        src={creatorDropdownData?.[0]?.profileImage || "https://www.gravatar.com/avatar/?d=mp"}
         alt="Page avatar"
-        referrerPolicy="no-referrer"
       />
 
       <div className="text-left">
-        <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{creatorDropdownData?.name}</p>
+        <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{creatorDropdownData?.[0]?.name}</p>
       </div>
 
       <svg 

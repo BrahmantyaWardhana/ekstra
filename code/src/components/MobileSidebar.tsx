@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, type ReactElement, type ReactNode, type SetStateAction } from 'react';
+import { useState, type ReactElement, type ReactNode } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { usePathname } from 'next/navigation';
 
 interface MenuItem {
     name: string;
@@ -16,12 +17,11 @@ interface SidebarProps {
 
 export default function MobileSidebar({ menuItems, accountDropdown } : SidebarProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState("Home");
 
-    const handleItemClick = (itemName: SetStateAction<string>) => {
-    setActiveItem(itemName);
-    setIsMobileSidebarOpen(false);
-  };
+  const pathname = usePathname();
+  
+  // Find the menu item that matches the current path
+  const activeItem = menuItems.find(item => pathname.startsWith(item.href))?.name || menuItems[0]?.name;
 
   return (
     <>
@@ -67,7 +67,6 @@ export default function MobileSidebar({ menuItems, accountDropdown } : SidebarPr
                             activeItem === item.name ? "bg-gray-100 dark:bg-neutral-700" : ""
                           }`}
                           href={item.href}
-                          onClick={() => handleItemClick(item.name)}
                         >
                           {item.icon}
                           {item.name}

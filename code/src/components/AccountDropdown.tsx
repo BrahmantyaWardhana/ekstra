@@ -75,7 +75,7 @@ export default function AccountDropdown() {
             )}
             {creatorPageId && (
               <a 
-                href="/creator/dashboard"
+                href="/creator/dashboard/home"
                 className={dropDownItemStyle}
               >
                 Creator Dashboard

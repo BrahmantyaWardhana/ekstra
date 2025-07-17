@@ -54,7 +54,8 @@ export async function getMyCreatorPageData(
       pageHandle: schema.creatorPages.pageHandle,
     })
     .from(schema.creatorPages)
-    .where(eq(schema.creatorPages.id, data.creatorPageId));
+    .where(eq(schema.creatorPages.id, data.creatorPageId))
+    .limit(1);
 
   return creatorPageData
 }
@@ -70,9 +71,10 @@ export async function getMyCreatorDropdownData(
       profileImage: schema.creatorPages.profileImage,
     })
     .from(schema.creatorPages)
-    .where(eq(schema.creatorPages.id, data.creatorPageId));
+    .where(eq(schema.creatorPages.id, data.creatorPageId))
+    .limit(1);
 
-  return creatorDropdownData[0] || null;
+  return creatorDropdownData;
 }
 
 // images queries

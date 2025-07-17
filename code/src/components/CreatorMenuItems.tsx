@@ -28,7 +28,7 @@ export const menuItems: MenuItem[] = [
         <rect width="7" height="5" x="3" y="16" rx="1"/>
       </svg>
     ),
-    href: "/creator/dashboard"
+    href: "/creator/dashboard/home"
   },
   {
     name: "Members",

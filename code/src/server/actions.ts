@@ -7,7 +7,7 @@ export async function checkHandleUnique(handle: string) {
   try{
     return await queries.isHandleAvailable(handle); // returns true if taken
   } catch (error) {
-    return { success: false, error: 'Failed to check if handle is available'}
+    return null
   }
 }
 
@@ -44,6 +44,20 @@ export async function retrieveCreatorDropdownData() {
   }
   try {
     const creatorDropdownData = await queries.getMyCreatorDropdownData({creatorPageId});
+    return creatorDropdownData
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function retrieveCreatorPageData() {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    return null;
+  }
+  try {
+    const creatorDropdownData = await queries.getMyCreatorPageData({creatorPageId});
     return creatorDropdownData
   } catch (error) {
     return null;
