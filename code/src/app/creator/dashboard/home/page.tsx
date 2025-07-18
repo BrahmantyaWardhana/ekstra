@@ -1,5 +1,5 @@
 import CreatorHome from "~/components/CreatorHome";
-import Posts from "~/components/DummyData"
+import Posts from "~/components/dummyData/DummyData"
 
 export default function CreatorDashboardHome() {
   return (
