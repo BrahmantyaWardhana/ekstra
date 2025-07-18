@@ -31,14 +31,13 @@ export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
 
       {/* Desktop Sidebar */}
       <aside
-        className="hidden lg:block fixed inset-y-0 left-0 w-64 bg-white border-e border-gray-200 
-                  dark:bg-neutral-800 dark:border-neutral-700 z-50"
+        className="hidden lg:block fixed inset-y-0 left-0 w-64 bg-neutral-800 border-neutral-700 z-50"
         aria-label="Sidebar"
       >
         <div className="relative flex flex-col h-full">
           <header className="p-4 mt-1 ml-1 flex justify-between items-center gap-x-2">
             <a
-              className="flex-none font-semibold text-xl text-black dark:text-white"
+              className="flex-none font-semibold text-xl"
               href="#"
               aria-label="Brand"
             >
@@ -52,10 +51,8 @@ export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
                 {menuItems.map((item) => (
                   <li key={item.name}>
                     <a
-                      className={`w-full flex items-center gap-x-3.5 p-2.5 text-base rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${
-                        activeItem === item.name
-                          ? "bg-gray-100 dark:bg-neutral-700"
-                          : ""
+                      className={`w-full flex items-center gap-x-3.5 p-2.5 text-base rounded-lg hover:bg-neutral-700 ${
+                        activeItem === item.name ? "bg-neutral-700" : ""
                       }`}
                       href={item.href}
                     >
@@ -69,7 +66,7 @@ export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
           </nav>
 
           {/* Account Info Section */}
-          <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
+          <footer className="p-4 border-t border-neutral-700">
             {accountDropdown}
           </footer>
         </div>

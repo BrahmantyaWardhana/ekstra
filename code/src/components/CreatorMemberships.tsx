@@ -41,7 +41,7 @@ export default function CreatorMemberships() {
               )}
               
               <div className="mt-4 flex space-x-2">
-                <button className="px-3 py-1 text-sm bg-white text-black rounded-lg hover:bg-gray-200 cursor-pointer flex items-center justify-center transition-colors">
+                <button className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 cursor-pointer flex items-center justify-center transition-colors">
                   Edit
                 </button>
               </div>
@@ -50,7 +50,7 @@ export default function CreatorMemberships() {
         ))}
       </div>
       
-      <button className="mt-6 w-full py-2 px-4 bg-white text-black rounded-lg hover:bg-gray-200 cursor-pointer flex items-center justify-center">
+      <button className="mt-6 w-full py-2 px-4 bg-white text-black rounded-lg hover:bg-gray-200 cursor-pointer flex items-center justify-center transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>

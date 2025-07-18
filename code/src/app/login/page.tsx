@@ -12,7 +12,7 @@ export default function LoginPage() {
         <div className="flex justify-center">
           <button
             onClick={() => signIn("google", { redirectTo: "/user/home" })}
-            className="px-4 py-2 border-2 flex gap-2 border-slate-200 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 hover:cursor-pointer"
+            className="px-4 py-2 border-2 flex gap-2 border-slate-200 rounded-lg text-slate-200 hover:border-slate-500 hover:text-slate-300 hover:shadow transition duration-150 hover:cursor-pointer"
           >
             <img
               className="w-6 h-6"

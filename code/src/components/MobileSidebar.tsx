@@ -39,18 +39,18 @@ export default function MobileSidebar({ menuItems, accountDropdown } : SidebarPr
       {isMobileSidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
           <aside
-            className={`absolute inset-0 bg-white dark:bg-neutral-800 transform ${
+            className={`absolute inset-0 bg-neutral-800 transform ${
               isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             } transition-transform duration-300 ease-in-out`}
           >
             <div className="relative flex flex-col h-full max-h-full">
               <header className="p-4 mt-1 ml-1 flex justify-between items-center gap-x-2">
-                <a className="flex-none font-semibold text-xl text-black dark:text-white" href="#" aria-label="Brand">
+                <a className="flex-none font-semibold text-xl" href="#" aria-label="Brand">
                   Ekstra
                 </a>
                 <button
                   onClick={() => setIsMobileSidebarOpen(false)}
-                  className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-neutral-700 hover:cursor-pointer"
+                  className="p-1 rounded-md hover:bg-neutral-700 hover:cursor-pointer"
                   aria-label="Close sidebar"
                 >
                   <XMarkIcon className="h-6 w-6 cursor-pointer" />
@@ -63,8 +63,8 @@ export default function MobileSidebar({ menuItems, accountDropdown } : SidebarPr
                     {menuItems.map((item) => (
                       <li key={item.name}>
                         <a
-                          className={`w-full flex items-center gap-x-3.5 p-2.5 text-base rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 ${
-                            activeItem === item.name ? "bg-gray-100 dark:bg-neutral-700" : ""
+                          className={`w-full flex items-center gap-x-3.5 p-2.5 text-base rounded-lg hover:bg-neutral-700 ${
+                            activeItem === item.name ? "bg-neutral-700" : ""
                           }`}
                           href={item.href}
                         >
@@ -78,7 +78,7 @@ export default function MobileSidebar({ menuItems, accountDropdown } : SidebarPr
               </nav>
               
               {/* Mobile Account Info Section */}
-              <footer className="p-4 border-t border-gray-200 dark:border-neutral-700">
+              <footer className="p-4 border-t border-neutral-700">
                 {accountDropdown}
               </footer>
             </div>
