@@ -1,7 +1,11 @@
+import CreatorHome from "~/components/CreatorHome";
+
 export default function CreatorDashboardHome() {
   return (
     <main className="p-6">
-      <p>Creator Dashboard Home Page</p>
+      <div className="w-1/2 mx-auto">
+        <CreatorHome />
+      </div>
     </main>  
   )
 }
