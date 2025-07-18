@@ -1,6 +1,7 @@
 import React from 'react';
 
 type ContentItem = {
+  id : string;
   type: string;
   url: string;
   title: string;
