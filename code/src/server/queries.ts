@@ -106,7 +106,7 @@ export async function getMyMembershipTiers(data: {
       price: schema.memberships.price,
     })
     .from(schema.memberships)
-    .where(eq(schema.creatorPages.id, data.creatorPageId))
+    .where(eq(schema.memberships.creatorPageId, data.creatorPageId))
   return myMembershipTiers
 }
 
