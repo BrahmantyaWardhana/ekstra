@@ -3,6 +3,8 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { submitMembershipTierInfo } from '~/server/actions';
+import { redirect } from 'next/navigation';
 
 const formSchema = z.object({
   title: z.string().min(1, "Name is required"),
@@ -19,36 +21,36 @@ export default function CreateMembershipForm() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: '',
-      price: undefined,
-      description: ''
-    }
+    mode: 'onChange'
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log('Form submitted:', data);
     try {
-      
+      await submitMembershipTierInfo(data)
       alert('Membership created successfully!');
+      redirect('creator/dashboard/membership')
     } catch (error) {
       console.error('Error creating membership:', error);
       alert('Failed to create membership');
     }
   };
 
+  const labelStyle = 'block pb-2'
+  const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white'
+ 
   return (
-    <div className="w-full p-4 bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-neutral-700">
+    <div className="w-full p-4 bg-neutral-800 rounded-lg shadow-sm">
+      <h2 className="text-2xl font-bold mb-6">Membership Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Membership Name */}
         <div>
-          <label className="block pb-2 text-sm font-medium text-gray-300">
+          <label className={labelStyle}>
             Membership Name
           </label>
           <input
             {...register("title")}
-            className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white"
-            placeholder="eg. Bronze Tier"
+            className={inputStyle}
+            placeholder="Bronze Tier"
           />
           {errors.title && (
             <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
@@ -57,14 +59,14 @@ export default function CreateMembershipForm() {
 
         {/* Monthly Cost */}
         <div>
-          <label className="block pb-2 text-sm font-medium text-gray-300">
+          <label className={labelStyle}>
             Monthly Cost ($)
           </label>
           <input
             type="number"
             {...register("price", { valueAsNumber: true })}
-            className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white"
-            placeholder="eg. 15"
+            className={inputStyle}
+            placeholder="15.00"
             step="0.01"
           />
           {errors.price && (
@@ -74,14 +76,14 @@ export default function CreateMembershipForm() {
 
         {/* Membership Description */}
         <div>
-          <label className="block pb-2 text-sm font-medium text-gray-300">
+          <label className={labelStyle}>
             Membership Description
           </label>
           <textarea
             {...register("description")}
             className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white"
-            placeholder="eg. Access to behind the scenes content"
-            rows={4}
+            placeholder={`- Access to behind the scenes content\n- Exclusive episodes\n- Early access to new content\n- Members-only community`}
+            rows={5}
           />
           {errors.description && (
             <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>
@@ -92,10 +94,10 @@ export default function CreateMembershipForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
+          className={`mt-6 w-full py-2 px-4 text-black rounded-lg flex items-center justify-center transition-colors ${
             isSubmitting
               ? 'bg-gray-500 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-white hover:bg-gray-200 cursor-pointer'
           }`}
         >
           {isSubmitting ? 'Creating...' : 'Create Membership'}
