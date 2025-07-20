@@ -92,7 +92,7 @@ export const contents = createTable(
       .notNull()
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-    creatorId: d
+    creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
       .references(() => creatorPages.id),
@@ -129,7 +129,7 @@ export const storeListings = createTable (
     price: d
       .numeric({ precision: 10, scale: 2 })
       .notNull(),
-    creatorId: d
+    creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
       .references(() => creatorPages.id),
@@ -175,7 +175,7 @@ export const posts = createTable(
       .varchar({ length: 255 }).notNull(),
     description: d
       .varchar({ length: 255 }),
-    creatorId: d
+    creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
       .references(() => creatorPages.id),
@@ -220,7 +220,7 @@ export const memberships = createTable(
       .notNull()
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-    creatorId: d
+    creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
       .references(() => creatorPages.id),
@@ -340,7 +340,7 @@ export const creatorPagesRelations = relations(creatorPages, ({ many, one }) => 
 
 export const contentsRelations = relations(contents, ({ one, many }) => ({
   creator: one(creatorPages, {
-    fields: [contents.creatorId],
+    fields: [contents.creatorPageId],
     references: [creatorPages.id],
   }),
   storeContents: many(storeContents),
@@ -350,7 +350,7 @@ export const contentsRelations = relations(contents, ({ one, many }) => ({
 
 export const storeListingsRelations = relations(storeListings, ({ one, many }) => ({
   creator: one(creatorPages, {
-    fields: [storeListings.creatorId],
+    fields: [storeListings.creatorPageId],
     references: [creatorPages.id],
   }),
   storeContents: many(storeContents),
@@ -369,7 +369,7 @@ export const storeContentsRelations = relations(storeContents, ({ one }) => ({
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
   creator: one(creatorPages, {
-    fields: [posts.creatorId],
+    fields: [posts.creatorPageId],
     references: [creatorPages.id],
   }),
   postContents: many(postContents),
@@ -388,7 +388,7 @@ export const postContentsRelations = relations(postContents, ({ one }) => ({
 
 export const membershipsRelations = relations(memberships, ({ one, many }) => ({
   creator: one(creatorPages, {
-    fields: [memberships.creatorId],
+    fields: [memberships.creatorPageId],
     references: [creatorPages.id],
   }),
   membershipContents: many(membershipContents),

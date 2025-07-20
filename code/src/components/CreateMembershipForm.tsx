@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Name is required"),
   price: z.number().min(1, "Price must be at least $1").max(1000, "Price cannot exceed $1000"),
   description: z.string().min(10, "Description must be at least 10 characters")
 });
@@ -20,18 +20,16 @@ export default function CreateMembershipForm() {
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
+      title: '',
       price: undefined,
       description: ''
     }
   });
 
   const onSubmit = async (data: FormValues) => {
-    // Handle form submission (e.g., API call)
     console.log('Form submitted:', data);
     try {
-      // Replace with your actual API call
-      // const response = await createMembership(data);
+      
       alert('Membership created successfully!');
     } catch (error) {
       console.error('Error creating membership:', error);
@@ -48,12 +46,12 @@ export default function CreateMembershipForm() {
             Membership Name
           </label>
           <input
-            {...register("name")}
+            {...register("title")}
             className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white"
             placeholder="eg. Bronze Tier"
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+          {errors.title && (
+            <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
           )}
         </div>
 

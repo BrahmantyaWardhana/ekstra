@@ -63,3 +63,25 @@ export async function retrieveCreatorPageData() {
     return null;
   }
 }
+
+export async function submitMembershipTierInfo( data:{
+  title: string;
+  price: number;
+  description: string;
+}) {
+
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    return null;
+  }
+
+  try {
+    await queries.createMembershipTier({
+      ...data,
+      creatorPageId
+    })
+  } catch(error) {
+    return null
+  }
+}

@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "~/server/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
 
 // session data query
@@ -12,6 +12,7 @@ export async function getCreatorId(userId: string) {
   return creatorPage?.id ?? null;
 }
 
+// creator queries
 // check handle availability
 export async function isHandleAvailable(handle: string) {
   const existing = await db.query.creatorPages.findFirst({
@@ -77,6 +78,24 @@ export async function getMyCreatorDropdownData(
   return creatorDropdownData;
 }
 
+export async function createMembershipTier( data: {
+  title: string;
+  price: number;
+  description: string;
+  creatorPageId: string;
+
+}) {
+  const newMembershipTier = 
+    await db.insert(schema.memberships).values({
+      creatorPageId: data.creatorPageId,
+      title: data.title,
+      description: data.description,
+      price: sql`${data.price}::numeric(10,2)`
+    });
+  return newMembershipTier
+}
+
+// app queries
 // images queries
 export async function getBackground() {
   const backgroundImages = await db.query.appImages.findMany({
