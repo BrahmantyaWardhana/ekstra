@@ -28,7 +28,7 @@ export default function CreateMembershipForm() {
     try {
       await submitMembershipTierInfo(data)
       alert('Membership created successfully!');
-      redirect('creator/dashboard/membership')
+      redirect('/creator/dashboard/membership')
     } catch (error) {
       console.error('Error creating membership:', error);
       alert('Failed to create membership');

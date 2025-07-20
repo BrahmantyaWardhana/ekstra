@@ -78,7 +78,7 @@ export async function getMyCreatorDropdownData(
   return creatorDropdownData;
 }
 
-export async function createMembershipTier( data: {
+export async function createMyMembershipTier( data: {
   title: string;
   price: number;
   description: string;
@@ -93,6 +93,21 @@ export async function createMembershipTier( data: {
       price: sql`${data.price}::numeric(10,2)`
     });
   return newMembershipTier
+}
+
+export async function getMyMembershipTiers(data: {
+  creatorPageId : string
+} ) {
+  const myMembershipTiers =
+    await db.select({
+      id: schema.memberships.id,
+      title: schema.memberships.title,
+      description: schema.memberships.description,
+      price: schema.memberships.price,
+    })
+    .from(schema.memberships)
+    .where(eq(schema.creatorPages.id, data.creatorPageId))
+  return myMembershipTiers
 }
 
 // app queries

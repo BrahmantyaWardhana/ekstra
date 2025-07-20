@@ -77,10 +77,28 @@ export async function submitMembershipTierInfo( data:{
   }
 
   try {
-    await queries.createMembershipTier({
+    await queries.createMyMembershipTier({
       ...data,
       creatorPageId
     })
+  } catch(error) {
+    return null
+  }
+}
+
+export async function retrieveMyMembershipTiers() {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    return null;
+  }
+
+  try {
+    const myMembershipTiers =
+      await queries.getMyMembershipTiers({
+        creatorPageId
+      })
+    return myMembershipTiers
   } catch(error) {
     return null
   }

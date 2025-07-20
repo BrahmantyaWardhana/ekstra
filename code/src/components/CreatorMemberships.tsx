@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation';
 
 interface MembershipPlans {
   id: string,
-  name: string,
-  price: number,
-  description: string,
+  title: string,
+  price: string,
+  description: string | null,
 }
 
-export default function CreatorMemberships( {plans} : {plans : MembershipPlans[]} ) {
+export default function CreatorMemberships( {plans} : {plans : MembershipPlans[] | null} ) {
   const router = useRouter();
 
   return (
@@ -17,14 +17,14 @@ export default function CreatorMemberships( {plans} : {plans : MembershipPlans[]
       <h2 className="text-2xl font-bold mb-6">Membership Plans</h2>
       
       <div className="space-y-4">
-        {plans.map((plan) => (
+        {plans?.map((plan) => (
           <div 
             key={plan.id}
             className="bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
           >
             <div className="p-4">
               <div className="mb-2">
-                <h3 className="text-lg font-semibold">{plan.name}</h3>
+                <h3 className="text-lg font-semibold">{plan.title}</h3>
               </div>
               <p className="">${plan.price}<span className="text-sm">/month</span></p>
               

@@ -1,12 +1,13 @@
 import CreatorMemberships from "~/components/CreatorMemberships";
-import { plans } from "~/components/dummyData/membershipData"
+import { retrieveMyMembershipTiers } from "~/server/actions";
 
-
-export default function CreatorDashboardMembership() {
+export default async function CreatorDashboardMembership() {
+  const membershipPlans = await retrieveMyMembershipTiers()
+  
   return (
     <main className="p-6">
       <div className="w-1/2 mx-auto">
-        <CreatorMemberships plans={plans} />
+        <CreatorMemberships plans={membershipPlans} />
       </div>
     </main>  
   )
