@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { submitMembershipTierInfo } from '~/server/actions';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   title: z.string().min(1, "Name is required"),
@@ -24,11 +24,12 @@ export default function CreateMembershipForm() {
     mode: 'onChange'
   });
 
+  const router = useRouter();
   const onSubmit = async (data: FormValues) => {
     try {
       await submitMembershipTierInfo(data)
+      router.push('/creator/dashboard/membership')
       alert('Membership created successfully!');
-      redirect('/creator/dashboard/membership')
     } catch (error) {
       console.error('Error creating membership:', error);
       alert('Failed to create membership');

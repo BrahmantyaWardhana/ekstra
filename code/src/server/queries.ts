@@ -110,6 +110,14 @@ export async function getMyMembershipTiers(data: {
   return myMembershipTiers
 }
 
+export async function createMyPost() {
+
+}
+
+export async function createMembershipExclusivePost() {
+  
+}
+
 // app queries
 // images queries
 export async function getBackground() {

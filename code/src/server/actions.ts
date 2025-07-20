@@ -81,8 +81,9 @@ export async function submitMembershipTierInfo( data:{
       ...data,
       creatorPageId
     })
+    return { success: true };
   } catch(error) {
-    return null
+    return { success: false, error: 'Failed to create creator page' };
   }
 }
 
