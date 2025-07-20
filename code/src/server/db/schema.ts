@@ -123,7 +123,9 @@ export const storeListings = createTable (
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
     title: d
-      .varchar({ length: 255 }).notNull(),
+      .varchar({ length: 50 }).notNull(),
+    description: d
+      .varchar({ length: 50 }).notNull(),
     price: d
       .numeric({ precision: 10, scale: 2 })
       .notNull(),
@@ -248,10 +250,10 @@ export const membershipContents = createTable(
       .notNull()
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-		contentId: d
+		postId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => contents.id),
+			.references(() => posts.id),
     membershipId: d
       .varchar({ length: 255 })
 			.notNull()
@@ -397,9 +399,9 @@ export const membershipContentsRelations = relations(membershipContents, ({ one 
     fields: [membershipContents.membershipId],
     references: [memberships.id],
   }),
-  content: one(contents, {
-    fields: [membershipContents.contentId],
-    references: [contents.id],
+  post: one(posts, {
+    fields: [membershipContents.postId],
+    references: [posts.id],
   }),
 }));
 
