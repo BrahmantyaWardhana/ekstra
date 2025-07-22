@@ -3,7 +3,6 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 
 interface Memberships {
   id: string;
@@ -19,57 +18,101 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const onSubmit = async (data: FormValues) => {
-
+  // Handle form submission
 }
 
-export default function CreatePostForm({memberships} : {memberships: Memberships[]} ) {
+export default function CreatePostForm({ memberships }: { memberships: Memberships[] }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
+    watch
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: {
+      membershipIds: ['free'] // Default to "Free to All" selected
+    }
   });
 
-  const labelStyle = 'block pb-2'
-  const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white'
-  const errorStyle = 'mt-1 text-sm text-red-500'
+  const labelStyle = 'block pb-2';
+  const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white';
+  const errorStyle = 'mt-1 text-sm text-red-500';
+
+  // Handle "Free to All" checkbox change
+  const handleFreeToAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setValue('membershipIds', ['free']); // Select only "Free to All"
+    } else {
+      setValue('membershipIds', []); // Deselect all
+    }
+  };
 
   return(
     <div className="w-full p-4 bg-neutral-800 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold mb-6">Post Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         
-        {/* Membership choice */}
-        {memberships.length > 0 && (
-          <div>
-            <label className="block pb-2">
-            Available for Memberships (Select multiple)
-            </label>
-            
-            <select
-              {...register("membershipIds")}
-              multiple // This enables multi-select
-              className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 h-auto min-h-[42px]"
-              size={3} // Shows 3 options at once (scrollable)
+        {/* Membership choice - Always show "Free to All" */}
+        <div>
+          <label className="block pb-2">
+            Availability
+          </label>
+          
+          {/* Free to All option (always shown) */}
+          <div className="flex items-center mb-3">
+            <input
+              type="checkbox"
+              id="membership-free"
+              value="free"
+              checked={watch("membershipIds")?.includes('free')}
+              onChange={handleFreeToAllChange}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label
+              htmlFor="membership-free"
+              className="ml-2 text-sm font-medium text-gray-300 hover:text-white cursor-pointer"
             >
-              {memberships.map((membership) => (
-                <option 
-                  key={membership.id} 
-                  value={membership.id}
-                  className="p-2 hover:bg-stone-700"
-                >
-                  {membership.title}
-                </option>
-              ))}
-            </select>
-
-            <p className="text-sm text-gray-400 mt-1">
-              Hold Ctrl/Cmd to select multiple
-            </p>
+              Free to All
+            </label>
           </div>
-        )}
+
+          {/* Other memberships (only shown if they exist) */}
+          {memberships.length > 0 && (
+            <>
+              <label className="block pb-2 text-sm text-gray-400">
+                Or restrict to specific memberships:
+              </label>
+              <div className="space-y-2 pl-4 border-l-2 border-gray-700">
+                {memberships.map((membership) => (
+                  <div key={membership.id} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`membership-${membership.id}`}
+                      value={membership.id}
+                      {...register("membershipIds")}
+                      disabled={watch("membershipIds")?.includes('free')}
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50"
+                    />
+                    <label
+                      htmlFor={`membership-${membership.id}`}
+                      className="ml-2 text-sm font-medium text-gray-300 hover:text-white cursor-pointer"
+                    >
+                      {membership.title}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          <p className="text-sm text-gray-400 mt-1">
+            {watch("membershipIds")?.includes('free') 
+              ? "This post will be available to everyone"
+              : "Select specific memberships for this post"}
+          </p>
+        </div>
 
         {/* Post Title */}
         <div>
@@ -86,6 +129,7 @@ export default function CreatePostForm({memberships} : {memberships: Memberships
           )}
         </div>
 
+        {/* Content */}
         <div>
           <label className="block pb-2">Content</label>
           <textarea
@@ -98,7 +142,7 @@ export default function CreatePostForm({memberships} : {memberships: Memberships
           )}
         </div>
 
-        {/* Submit Button (always shown) */}
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -108,7 +152,6 @@ export default function CreatePostForm({memberships} : {memberships: Memberships
         >
           {isSubmitting ? 'Submitting...' : 'Create Post'}
         </button>
-
       </form>
     </div>
   )
