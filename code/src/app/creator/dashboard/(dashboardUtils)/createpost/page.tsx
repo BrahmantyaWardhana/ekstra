@@ -1,9 +1,10 @@
 import CreatePostForm from "~/components/CreatePostForm";
 import { retrieveMembershipNames } from "~/server/actions";
 
-const membership = await retrieveMembershipNames()
 
-export default function CreatePost() {
+export default async function CreatePost() {
+  const membership = await retrieveMembershipNames()
+
   return (
     <main className="m-10">    
       <div className="w-2/3 mx-auto">
