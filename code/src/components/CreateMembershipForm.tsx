@@ -5,9 +5,10 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { submitMembershipTierInfo } from '~/server/actions';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const formSchema = z.object({
-  title: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Title is required"),
   price: z.number().min(1, "Price must be at least $1").max(1000, "Price cannot exceed $1000"),
   description: z.string().min(10, "Description must be at least 10 characters")
 });
@@ -15,6 +16,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function CreateMembershipForm() {
+  const [isProcessing, setIsProcessing] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -26,6 +29,7 @@ export default function CreateMembershipForm() {
 
   const router = useRouter();
   const onSubmit = async (data: FormValues) => {
+    setIsProcessing(true);
     try {
       await submitMembershipTierInfo(data)
       router.push('/creator/dashboard/membership')
@@ -33,8 +37,11 @@ export default function CreateMembershipForm() {
     } catch (error) {
       console.error('Error creating membership:', error);
       alert('Failed to create membership');
+      setIsProcessing(false);
     }
   };
+
+  const isButtonDisabled = isSubmitting || isProcessing;
 
   const labelStyle = 'block pb-2'
   const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white'
@@ -96,7 +103,7 @@ export default function CreateMembershipForm() {
           type="submit"
           disabled={isSubmitting}
           className={`mt-6 w-full py-2 px-4 text-black rounded-lg flex items-center justify-center transition-colors ${
-            isSubmitting
+            isButtonDisabled
               ? 'bg-gray-500 cursor-not-allowed'
               : 'bg-white hover:bg-gray-200 cursor-pointer'
           }`}

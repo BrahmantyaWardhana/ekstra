@@ -104,3 +104,24 @@ export async function retrieveMyMembershipTiers() {
     return null
   }
 }
+
+export async function retrieveMembershipNames() {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    return null;
+  }
+
+  try {
+    const myMembershipNames =
+      await queries.getMyMembershipName({
+        creatorPageId
+      })
+    return myMembershipNames
+  } catch(error) {
+    return null
+  }
+}
+
+export async function addContentToDatabase() {
+}

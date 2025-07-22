@@ -1,3 +1,6 @@
+"use client"
+
+import { useRouter } from 'next/navigation';
 import ContentRenderer from "./ContentRenderer";
 
 type ContentItem = {
@@ -18,6 +21,7 @@ interface PostInfo {
 }
 
 export default function CreatorHome({posts} :{posts: PostInfo[]}) {
+  const router = useRouter();
 
   return (
     <div className="w-full p-4">
@@ -25,7 +29,10 @@ export default function CreatorHome({posts} :{posts: PostInfo[]}) {
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold text-white">Your Posts</h2>
         
-        <button className="px-4 py-2 text-sm bg-white text-black rounded-lg hover:bg-gray-200 flex items-center justify-center transition-colors cursor-pointer">
+        <button 
+          className="px-4 py-2 text-sm bg-white text-black rounded-lg hover:bg-gray-200 flex items-center justify-center transition-colors cursor-pointer"
+          onClick={() => router.push('/creator/dashboard/createpost')}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
           </svg>

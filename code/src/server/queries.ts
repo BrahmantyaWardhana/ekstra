@@ -110,12 +110,59 @@ export async function getMyMembershipTiers(data: {
   return myMembershipTiers
 }
 
-export async function createMyPost() {
-
+export async function createMyContent(data: {
+  creatorPageId: string,
+  type: string,
+  contentUrl: string,
+  usedIn: string,
+}) {
+  const myContent =
+    await db.insert(schema.contents).values({
+      creatorPageId: data.creatorPageId,
+      type: data.type,
+      contentUrl: data.contentUrl,
+      usedIn: data.usedIn
+    }).returning({ id: schema.contents.id });
+  return myContent
 }
 
-export async function createMembershipExclusivePost() {
-  
+export async function createMyPost(data: {
+  title: string,
+  description: string,
+  creatorPageId: string,
+}) {
+  const myPost = 
+    await db.insert(schema.posts).values({
+      title: data.title,
+      description: data.description,
+      creatorPageId: data.creatorPageId,
+    }).returning({ id: schema.posts.id });
+  return myPost
+}
+
+export async function createMembershipExclusivePost( data: {
+  postId: string,
+  membershipId: string,
+}) {
+  const membershipExclusivePost =
+    await db.insert(schema.membershipContents).values({
+      postId: data.postId,
+      membershipId: data.membershipId,
+    })
+  return membershipExclusivePost
+}
+
+export async function getMyMembershipName( data : {
+  creatorPageId : string
+}) {
+  const myMembershipNames =
+    await db.select({
+      id: schema.memberships.id,
+      title: schema.memberships.title,
+    })
+    .from(schema.memberships)
+    .where(eq(schema.memberships.creatorPageId, data.creatorPageId))
+  return myMembershipNames
 }
 
 // app queries
