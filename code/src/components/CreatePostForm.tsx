@@ -12,7 +12,7 @@ interface Memberships {
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  membershipIds: z.array(z.string()).optional()
+  membershipIds: z.array(z.string()).min(1, "Please select at least one availability option")
 })
 
 type FormValues = z.infer<typeof formSchema>;
@@ -22,6 +22,11 @@ const onSubmit = async (data: FormValues) => {
 }
 
 export default function CreatePostForm({ memberships }: { memberships: Memberships[] }) {
+  
+  const labelStyle = 'block pb-2';
+  const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white';
+  const errorStyle = 'mt-1 text-sm text-red-500';
+
   const {
     register,
     handleSubmit,
@@ -35,10 +40,6 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
       membershipIds: ['free'] // Default to "Free to All" selected
     }
   });
-
-  const labelStyle = 'block pb-2';
-  const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white';
-  const errorStyle = 'mt-1 text-sm text-red-500';
 
   // Handle "Free to All" checkbox change
   const handleFreeToAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +147,7 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`mt-4 px-4 py-2 rounded ${
+          className={`mt-4 px-4 py-2 cursor-pointer rounded ${
             isSubmitting ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-600'
           }`}
         >

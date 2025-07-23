@@ -61,14 +61,13 @@ export const ourFileRouter = {
       console.log("Upload complete for userId:", metadata.userId);
       console.log("file url", file.ufsUrl);
 
-      const creatorPageId = metadata.creatorPageId;
-      const type = file.type;
-      const contentUrl = file.ufsUrl;
-      const usedIn = 'post';
-
-      const contentId = await createMyContent({creatorPageId, type, contentUrl, usedIn} )
-
-      return { uploadedBy: metadata.creatorPageId, contentId: contentId};
+      return { 
+        uploadedBy: metadata.creatorPageId, 
+        fileUrl: file.ufsUrl,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+      };
     }),
 
 } satisfies FileRouter;
