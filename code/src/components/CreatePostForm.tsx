@@ -3,11 +3,22 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UploadButton } from '~/utils/uploadthing';
+import { useState } from 'react';
+import { removeFileFromUt } from '~/server/actions';
 
 interface Memberships {
   id: string;
   title: string;
 }
+
+type UploadedFile = {
+  key: string;
+  name: string;
+  url: string; // Using ufsUrl or the url getter
+  size: number;
+  type: string;
+};
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -26,6 +37,8 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
   const labelStyle = 'block pb-2';
   const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white';
   const errorStyle = 'mt-1 text-sm text-red-500';
+
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   const {
     register,
@@ -49,6 +62,16 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
       setValue('membershipIds', []); // Deselect all
     }
   };
+
+  function formatFileSize(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / 1048576).toFixed(1)} MB`;
+  }
+
+  function handleRemoveFile(key: string): void {
+    removeFileFromUt(key)
+  }
 
   return(
     <div className="w-full p-4 bg-neutral-800 rounded-lg shadow-sm">
@@ -131,8 +154,52 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
         </div>
 
         {/* Content */}
+        {uploadedFiles.map((file) => (
+          <div key={file.key} className="p-3 bg-gray-700 rounded-lg mb-2">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="font-medium text-gray-100">{file.name}</p>
+                <p className="text-xs text-gray-400">
+                  {formatFileSize(file.size)} • {file.type}
+                </p>
+              </div>
+              <button
+                onClick={() => handleRemoveFile(file.key)}
+                className="text-red-400 hover:text-red-300 text-sm"
+              >
+                Remove
+              </button>
+            </div>
+            {file.type.startsWith('image/') && (
+              <img 
+                src={file.url} 
+                alt={file.name}
+                className="mt-2 max-h-40 rounded border border-gray-600"
+              />
+            )}
+          </div>
+        ))}
         <div>
           <label className="block pb-2">Content</label>
+            <UploadButton 
+              endpoint={'postContentuploader'}
+              onClientUploadComplete={(res) => {
+                if (!res) return;
+                setUploadedFiles(res.map(file => ({
+                  key: file.key,
+                  name: file.name,
+                  url: file.ufsUrl,
+                  size: file.size,
+                  type: file.type
+                })));
+                console.log("Upload complete:", res);
+              }}
+            />
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="block pb-2">Description</label>
           <textarea
             {...register("description")}
             className="w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400"

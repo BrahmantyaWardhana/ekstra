@@ -2,6 +2,7 @@
 
 import { auth } from '~/server/auth';
 import * as queries from '~/server/queries';
+import { utapi } from './uploadthing';
 
 export async function checkHandleUnique(handle: string) {
   try{
@@ -121,6 +122,12 @@ export async function retrieveMembershipNames() {
   } catch(error) {
     return null
   }
+}
+
+export async function removeFileFromUt(
+  key: string
+) {
+  await utapi.deleteFiles(key);
 }
 
 export async function addContentToDatabase() {

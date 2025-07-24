@@ -1,7 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { auth } from "~/server/auth";
-import { createMyContent } from "~/server/queries";
 
 const f = createUploadthing();
 
@@ -61,13 +60,7 @@ export const ourFileRouter = {
       console.log("Upload complete for userId:", metadata.userId);
       console.log("file url", file.ufsUrl);
 
-      return { 
-        uploadedBy: metadata.creatorPageId, 
-        fileUrl: file.ufsUrl,
-        fileName: file.name,
-        fileType: file.type,
-        fileSize: file.size,
-      };
+      return 
     }),
 
 } satisfies FileRouter;
