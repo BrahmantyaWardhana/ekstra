@@ -3,18 +3,15 @@
 import { useRouter } from 'next/navigation';
 import ContentRenderer from "./ContentRenderer";
 
-type ContentItem = {
-  id : string;
-  type: string;
-  url: string;
-  title: string;
-  size: string;
-};
+interface contentInfo {
+  key: string,
+  type: string,
+}
 
 interface PostInfo {
   id: string,
   title: string,
-  content: ContentItem[],
+  content: contentInfo[],
   description: string,
   membership: string[],
   createdAt: string,
@@ -55,7 +52,7 @@ export default function CreatorHome({posts} :{posts: PostInfo[]}) {
 
               {/* Post content  */}
               {post.content && post.content.length > 0 && (
-                <ContentRenderer contentItem={post.content} />
+                <ContentRenderer content={post.content} />
               )}
               
               {post.description && (
