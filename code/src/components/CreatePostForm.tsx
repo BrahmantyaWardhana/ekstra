@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadButton } from '~/utils/uploadthing';
 import { useState } from 'react';
-import { removeFileFromUt } from '~/server/actions';
+import { linkPostContent, linkPostToMembership, removeFileFromUt, submitContentData, submitPostData } from '~/server/actions';
 
 interface Memberships {
   id: string;
@@ -15,7 +15,6 @@ interface Memberships {
 type UploadedFile = {
   key: string;
   name: string;
-  url: string; // Using ufsUrl or the url getter
   size: number;
   type: string;
 };
@@ -23,14 +22,10 @@ type UploadedFile = {
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  membershipIds: z.array(z.string()).min(1, "Please select at least one availability option")
+  membershipIds: z.array(z.string()).min(1, "Please select at least one availability option"),
 })
 
 type FormValues = z.infer<typeof formSchema>;
-
-const onSubmit = async (data: FormValues) => {
-  // Handle form submission
-}
 
 export default function CreatePostForm({ memberships }: { memberships: Memberships[] }) {
   
@@ -63,12 +58,6 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
     }
   };
 
-  function formatFileSize(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / 1048576).toFixed(1)} MB`;
-  }
-
   function handleRemoveFile(key: string): void {
     try{
       removeFileFromUt(key)
@@ -76,6 +65,41 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
     }
     catch (error) {
       console.error("Deletion error:", error);
+    }
+  }
+
+  const onSubmit = async (data: FormValues) => {
+    // create post return postId
+    const postId = await submitPostData(data.title, data.description)
+    if (!postId) {
+      console.error("Post creation failed.");
+      return;
+    }
+
+    // Check if there is content
+    if (uploadedFiles.length) {
+      // write content (key) to database and return content id
+      const contentData = uploadedFiles.map(file => ({
+        key: file.key,
+        type: file.type,
+        usedIn: 'post'
+        // name and size are excluded
+      }));
+      const contentId = await submitContentData(contentData)
+      if (!contentId) {
+        console.error("Content creation failed.");
+        return;
+      }
+
+      // link content with post return postContent id
+      await linkPostContent(postId, contentId)
+    }
+
+    // if membership exclusive content, link post to memberships
+    if (!data.membershipIds.includes('free')) {
+      for (const membershipId of data.membershipIds) {
+        await linkPostToMembership({postId, membershipId});
+      }
     }
   }
 
@@ -166,7 +190,7 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
               <div>
                 <p className="font-medium text-gray-100">{file.name}</p>
                 <p className="text-xs text-gray-400">
-                  {formatFileSize(file.size)} • {file.type}
+                  {file.size} • {file.type}
                 </p>
               </div>
               <button
@@ -177,13 +201,6 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
                 Remove
               </button>
             </div>
-            {file.type.startsWith('image/') && (
-              <img 
-                src={file.url} 
-                alt={file.name}
-                className="mt-2 max-h-40 rounded border border-gray-600"
-              />
-            )}
           </div>
         ))}
         <div>
@@ -195,7 +212,6 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
                 setUploadedFiles(res.map(file => ({
                   key: file.key,
                   name: file.name,
-                  url: file.ufsUrl,
                   size: file.size,
                   type: file.type
                 })));

@@ -22,7 +22,7 @@ export async function isHandleAvailable(handle: string) {
 }
 
 // create creator page form queries
-export async function createCreatorPage(
+export async function createMyCreatorPage(
   data: {
     name: string;
     handle: string;
@@ -113,14 +113,14 @@ export async function getMyMembershipTiers(data: {
 export async function createMyContent(data: {
   creatorPageId: string,
   type: string,
-  contentUrl: string,
+  contentKey: string,
   usedIn: string,
 }) {
   const myContent =
     await db.insert(schema.contents).values({
       creatorPageId: data.creatorPageId,
       type: data.type,
-      contentUrl: data.contentUrl,
+      contentKey: data.contentKey,
       usedIn: data.usedIn
     }).returning({ id: schema.contents.id });
   return myContent
@@ -140,7 +140,19 @@ export async function createMyPost(data: {
   return myPost
 }
 
-export async function createMembershipExclusivePost( data: {
+export async function createMyPostContent (
+  postId: string,
+  contentId: string
+) {
+  const myPostContent =
+    await db.insert(schema.postContents).values({
+      contentId: contentId,
+      postId: postId
+    }).returning({ id: schema.postContents.id });
+  return myPostContent
+}
+
+export async function createMyMembershipExclusivePost( data: {
   postId: string,
   membershipId: string,
 }) {
@@ -148,7 +160,7 @@ export async function createMembershipExclusivePost( data: {
     await db.insert(schema.membershipContents).values({
       postId: data.postId,
       membershipId: data.membershipId,
-    })
+    }).returning({ id: schema.membershipContents.id });
   return membershipExclusivePost
 }
 

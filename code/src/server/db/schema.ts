@@ -99,7 +99,7 @@ export const contents = createTable(
     type: d // video, image, file, etc.
       .varchar({ length: 100})
       .notNull(),
-    contentUrl: d // upload thing
+    contentKey: d // upload thing
       .varchar({ length: 1024 }).notNull(),
     usedIn: d
       .varchar({ length: 25 }),
