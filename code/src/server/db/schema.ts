@@ -345,7 +345,6 @@ export const contentsRelations = relations(contents, ({ one, many }) => ({
   }),
   storeContents: many(storeContents),
   postContents: many(postContents),
-  membershipContents: many(membershipContents),
 }));
 
 export const storeListingsRelations = relations(storeListings, ({ one, many }) => ({

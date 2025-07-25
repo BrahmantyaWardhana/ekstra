@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadButton } from '~/utils/uploadthing';
 import { useState } from 'react';
 import { linkPostContent, linkPostToMembership, removeFileFromUt, submitContentData, submitPostData } from '~/server/actions';
+import { useRouter } from 'next/navigation';
 
 interface Memberships {
   id: string;
@@ -32,9 +33,7 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
   const labelStyle = 'block pb-2';
   const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white';
   const errorStyle = 'mt-1 text-sm text-red-500';
-
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-
+  
   const {
     register,
     handleSubmit,
@@ -68,38 +67,54 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
     }
   }
 
-  const onSubmit = async (data: FormValues) => {
-    // create post return postId
-    const postId = await submitPostData(data.title, data.description)
-    if (!postId) {
-      console.error("Post creation failed.");
-      return;
-    }
+  const router = useRouter();
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const isButtonDisabled = isSubmitting || isProcessing;
 
-    // Check if there is content
-    if (uploadedFiles.length) {
-      // write content (key) to database and return content id
-      const contentData = uploadedFiles.map(file => ({
-        key: file.key,
-        type: file.type,
-        usedIn: 'post'
-        // name and size are excluded
-      }));
-      const contentId = await submitContentData(contentData)
-      if (!contentId) {
-        console.error("Content creation failed.");
+  const onSubmit = async (data: FormValues) => {
+    setIsProcessing(true);
+    try {
+      // create post return postId
+      const postId = await submitPostData(data.title, data.description)
+      if (!postId) {
+        console.error("Post creation failed.");
         return;
       }
 
-      // link content with post return postContent id
-      await linkPostContent(postId, contentId)
-    }
+      // Check if there is content
+      if (uploadedFiles.length) {
+        // write content (key) to database and return content id
+        const contentData = uploadedFiles.map(file => ({
+          key: file.key,
+          type: file.type,
+          usedIn: 'post'
+          // name and size are excluded
+        }));
+        const contentId = await submitContentData(contentData)
+        if (!contentId) {
+          console.error("Content creation failed.");
+          return;
+        }
 
-    // if membership exclusive content, link post to memberships
-    if (!data.membershipIds.includes('free')) {
-      for (const membershipId of data.membershipIds) {
-        await linkPostToMembership({postId, membershipId});
+        // link content with post return postContent id
+        await linkPostContent(postId, contentId)
       }
+
+      // if membership exclusive content, link post to memberships
+      if (!data.membershipIds.includes('free')) {
+        for (const membershipId of data.membershipIds) {
+          await linkPostToMembership({postId, membershipId});
+        }
+      }
+
+      // redirect after finished
+      router.push('/creator/dashboard/home')
+
+    } catch (error) {
+      console.error('Error creating post:', error);
+      alert('Failed to create post');
+      setIsProcessing(false);
     }
   }
 
@@ -161,6 +176,10 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
             </>
           )}
 
+          {errors.membershipIds && (
+            <p className={errorStyle}>{errors.membershipIds.message}</p>
+          )}
+
           <p className="text-sm text-gray-400 mt-1">
             {watch("membershipIds")?.includes('free') 
               ? "This post will be available to everyone"
@@ -205,19 +224,21 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
         ))}
         <div>
           <label className="block pb-2">Content</label>
-            <UploadButton 
-              endpoint={'postContentuploader'}
-              onClientUploadComplete={(res) => {
-                if (!res) return;
-                setUploadedFiles(res.map(file => ({
-                  key: file.key,
-                  name: file.name,
-                  size: file.size,
-                  type: file.type
-                })));
-                console.log("Upload complete:", res);
-              }}
-            />
+            <div className={isButtonDisabled ? 'pointer-events-none opacity-50' : ''}>
+              <UploadButton 
+                endpoint={'postContentuploader'}
+                onClientUploadComplete={(res) => {
+                  if (!res) return;
+                  setUploadedFiles(res.map(file => ({
+                    key: file.key,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type
+                  })));
+                  console.log("Upload complete:", res);
+                }}
+              />
+            </div>
         </div>
 
         {/* Description */}
@@ -237,11 +258,13 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`mt-4 px-4 py-2 cursor-pointer rounded ${
-            isSubmitting ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-600'
+          className={`mt-6 w-full py-2 px-4 text-black rounded-lg flex items-center justify-center transition-colors ${
+            isButtonDisabled
+              ? 'bg-gray-500 cursor-not-allowed'
+              : 'bg-white hover:bg-gray-200 cursor-pointer'
           }`}
         >
-          {isSubmitting ? 'Submitting...' : 'Create Post'}
+          {isSubmitting ? 'Creating...' : 'Create Post'}
         </button>
       </form>
     </div>
