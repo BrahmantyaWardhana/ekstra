@@ -70,7 +70,13 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
   }
 
   function handleRemoveFile(key: string): void {
-    removeFileFromUt(key)
+    try{
+      removeFileFromUt(key)
+      setUploadedFiles(prev => prev.filter(f => f.key !== key));
+    }
+    catch (error) {
+      console.error("Deletion error:", error);
+    }
   }
 
   return(
@@ -164,6 +170,7 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
                 </p>
               </div>
               <button
+                type='button'
                 onClick={() => handleRemoveFile(file.key)}
                 className="text-red-400 hover:text-red-300 text-sm"
               >
