@@ -209,3 +209,16 @@ export async function linkPostToMembership(data: {
     return null
   }
 }
+
+export async function retrievePostInfo() {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) throw new Error("user is not authenticated");
+  try {
+    const postInfo = await queries.getMyPostInfo(creatorPageId)
+    if (!postInfo) throw new Error("Failed to get post info");
+    return postInfo
+  }catch(error) {
+    return null
+  }
+}

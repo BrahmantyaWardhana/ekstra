@@ -3,21 +3,35 @@
 import { useRouter } from 'next/navigation';
 import ContentRenderer from "./ContentRenderer";
 
-interface contentInfo {
-  key: string,
-  type: string,
+type PostInfo = {
+  id: string;
+  title: string;
+  description: string | null;
+  createdAt: Date;
+  postContents: {
+    contentId: string;
+    content: {
+      contentKey: string;
+      type: string;
+    };
+  }[];
+  membershipContents: {
+    membershipId: string;
+    membership: {
+      id: string;
+      title: string;
+      description: string | null;
+      price: string;
+    };
+  }[];
+};
+
+interface CreatorHomeProps {
+  posts: PostInfo[] | null;
 }
 
-interface PostInfo {
-  id: string,
-  title: string,
-  content: contentInfo[],
-  description: string,
-  membership: string[],
-  createdAt: string,
-}
 
-export default function CreatorHome({posts} :{posts: PostInfo[]}) {
+export default function CreatorHome({ posts }: CreatorHomeProps) {
   const router = useRouter();
 
   return (
@@ -39,7 +53,7 @@ export default function CreatorHome({posts} :{posts: PostInfo[]}) {
 
       {/* Posts list */}
       <div className="space-y-4">
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <div 
             key={post.id}
             className="bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-neutral-700"
@@ -47,12 +61,15 @@ export default function CreatorHome({posts} :{posts: PostInfo[]}) {
             <div className="p-4">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-lg font-semibold text-white">{post.title}</h3>
-                <span className="text-neutral-400 text-sm">{post.createdAt}</span>
+                <span className="text-neutral-400 text-sm">{post.createdAt.toLocaleDateString()}</span>
               </div>
 
               {/* Post content  */}
-              {post.content && post.content.length > 0 && (
-                <ContentRenderer content={post.content} />
+              {post.postContents && post.postContents.length > 0 && (
+                <ContentRenderer content={post.postContents.map((pc) => ({
+                  key: pc.content.contentKey,
+                  type: pc.content.type,
+                }))} />
               )}
               
               {post.description && (
@@ -70,7 +87,7 @@ export default function CreatorHome({posts} :{posts: PostInfo[]}) {
       </div>
 
       {/* Empty state (when no posts) */}
-      {posts.length === 0 && (
+      {posts?.length === 0 && (
         <div className="bg-neutral-800 rounded-lg p-8 text-center border border-neutral-700">
           <p className="text-neutral-400 mb-4">You haven't created any posts yet</p>
           <button className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 inline-flex items-center transition-colors">

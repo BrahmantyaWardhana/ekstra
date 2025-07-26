@@ -1,11 +1,13 @@
 import CreatorHome from "~/components/CreatorHome";
-import Posts from "~/components/dummyData/DummyData"
+import { retrievePostInfo } from "~/server/actions";
+
+const creatorPostInfo = await retrievePostInfo()
 
 export default function CreatorDashboardHome() {
   return (
     <main className="p-6">
       <div className="w-1/2 mx-auto">
-        <CreatorHome posts={Posts} />
+        <CreatorHome posts={creatorPostInfo} />
       </div>
     </main>  
   )

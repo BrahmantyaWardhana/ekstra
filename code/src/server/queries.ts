@@ -177,6 +177,51 @@ export async function getMyMembershipName( data : {
   return myMembershipNames
 }
 
+export async function getMyPostInfo(
+  creatorPageId : string
+) {
+  const results = await db.query.posts.findMany({
+    where: (posts, { eq }) => eq(posts.creatorPageId, creatorPageId),
+    columns: {
+      id: true,
+      title: true,
+      description: true,
+      createdAt: true,
+    },
+    with: {
+      postContents: {
+        columns: {
+          contentId: true
+        },
+        with: {
+          content: {
+            columns: {
+              contentKey: true,
+              type: true,
+            }
+          }
+        }
+      },
+      membershipContents: {
+        columns: {
+          membershipId: true
+        },
+        with: {
+          membership: {
+            columns: {
+              id: true,
+              title: true,
+              description: true,
+              price: true,
+            }
+          }
+        }
+      },
+    }
+  })
+  return results
+}
+
 // app queries
 // images queries
 export async function getBackground() {

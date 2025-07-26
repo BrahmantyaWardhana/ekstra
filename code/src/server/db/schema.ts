@@ -372,6 +372,7 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     references: [creatorPages.id],
   }),
   postContents: many(postContents),
+  membershipContents: many(membershipContents),
 }));
 
 export const postContentsRelations = relations(postContents, ({ one }) => ({
