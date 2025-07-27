@@ -90,7 +90,10 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
       {posts?.length === 0 && (
         <div className="bg-neutral-800 rounded-lg p-8 text-center border border-neutral-700">
           <p className="text-neutral-400 mb-4">You haven't created any posts yet</p>
-          <button className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 inline-flex items-center transition-colors">
+          <button 
+            className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 inline-flex items-center transition-colors"
+            onClick={() => router.push('/creator/dashboard/createpost')}  
+          >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
             </svg>
