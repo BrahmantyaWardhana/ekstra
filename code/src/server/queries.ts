@@ -114,6 +114,8 @@ export async function createMyContent(data: {
   creatorPageId: string,
   type: string,
   contentKey: string,
+  fileName: string,
+  size: string,
   usedIn: string,
 }) {
   const myContent =
@@ -121,6 +123,8 @@ export async function createMyContent(data: {
       creatorPageId: data.creatorPageId,
       type: data.type,
       contentKey: data.contentKey,
+      fileName: data.fileName,
+      size: data.size,
       usedIn: data.usedIn
     }).returning({ id: schema.contents.id });
   return myContent

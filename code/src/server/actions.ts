@@ -153,6 +153,8 @@ export async function submitContentData(
   data :{
     key: string;
     type: string;
+    name: string;
+    size: string;
     usedIn: string;}[],
 ) {
   const user = await auth()
@@ -167,6 +169,8 @@ export async function submitContentData(
           creatorPageId: creatorPageId,
           type: content.type,
           contentKey: content.key,
+          fileName: content.name,
+          size: content.size,
           usedIn: content.usedIn
         })
         if (!result[0]) throw new Error("Failed to create content");

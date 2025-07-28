@@ -88,6 +88,8 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
         const contentData = uploadedFiles.map(file => ({
           key: file.key,
           type: file.type,
+          name: file.name,
+          size: file.size.toString(),
           usedIn: 'post'
           // name and size are excluded
         }));

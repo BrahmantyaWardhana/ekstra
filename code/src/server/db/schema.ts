@@ -101,6 +101,10 @@ export const contents = createTable(
       .notNull(),
     contentKey: d // upload thing
       .varchar({ length: 1024 }).notNull(),
+    fileName: d
+      .varchar({ length: 255 }).notNull(),
+    size: d
+      .varchar({ length: 255 }).notNull(),
     usedIn: d
       .varchar({ length: 25 }),
   	createdAt: d

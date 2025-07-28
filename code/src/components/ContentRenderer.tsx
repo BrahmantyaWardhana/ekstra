@@ -1,6 +1,8 @@
 interface ContentRendererProps {
   content: {
     key: string;
+    name: string;
+    size: string;
     type: string;
   }[];
 }

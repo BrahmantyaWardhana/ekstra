@@ -12,6 +12,8 @@ type PostInfo = {
     contentId: string;
     content: {
       contentKey: string;
+      name: string;
+      size: string;
       type: string;
     };
   }[];
@@ -69,6 +71,8 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
                 <ContentRenderer content={post.postContents.map((pc) => ({
                   key: pc.content.contentKey,
                   type: pc.content.type,
+                  name: pc.content.name,
+                  size: pc.content.size
                 }))} />
               )}
               

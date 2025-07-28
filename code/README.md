@@ -10,8 +10,6 @@
 - [x] uploadthing setup
 - [x] allow users to create a creator page (for users to post and monetize their work (use upload thing))
 - [x] connect uploadthing to creator page for user to upload content
-- { } create dynamic routes for users to checkout creators
+- { } create dynamic routes for users to check out creators
 - [ ] configure accessible creator contents based on membership
 - [ ] creator analytics
-- [ ] create a way for users to monetize their content through meberships
-- [ ] configure paywall for content made by creators
