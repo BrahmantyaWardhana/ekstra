@@ -19,7 +19,7 @@ export default function ContentRenderer({ content }: ContentRendererProps) {
 
   return (
     <div className="grid gap-4">
-      {content.map(({ key, type }, index) => {
+      {content.map(({ key, type, name, size }, index) => {
         const displayType = getTypeCategory(type);
         const fileUrl = `https://${appId}.ufs.sh/f/${key}`;
 
@@ -46,16 +46,22 @@ export default function ContentRenderer({ content }: ContentRendererProps) {
           case 'file':
           default:
             return (
-              <div key={index} className="border p-4 rounded bg-gray-100">
-                <p className="text-sm font-medium">File</p>
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline break-words"
-                >
-                  {key.split('/').pop()}
-                </a>
+              <div key={index} className="p-3 bg-gray-700 rounded-lg mb-2">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <a
+                      href={fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-gray-100"
+                    >
+                      {name}
+                    </a>
+                    <p className="text-xs text-gray-400">
+                      {size} • {type}
+                    </p>
+                  </div>
+                </div>
               </div>
             );
         }

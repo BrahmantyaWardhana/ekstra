@@ -202,6 +202,8 @@ export async function getMyPostInfo(
             columns: {
               contentKey: true,
               type: true,
+              fileName: true,
+              size: true,
             }
           }
         }
