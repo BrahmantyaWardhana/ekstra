@@ -226,3 +226,9 @@ export async function retrievePostInfo() {
     return null
   }
 }
+
+export async function contentUrl(key:string) {
+  const appId = process.env.UPLOADTHING_APP_ID
+  const contentUrl = `https://${appId}.ufs.sh/f/${key}`;
+  return contentUrl
+}

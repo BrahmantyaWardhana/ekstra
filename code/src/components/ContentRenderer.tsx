@@ -1,10 +1,17 @@
+'use client';
+
+import { useState, useEffect } from "react";
+import { contentUrl } from "~/server/actions";
+
+interface ContentItem {
+  key: string;
+  name: string;
+  size: string;
+  type: string;
+}
+
 interface ContentRendererProps {
-  content: {
-    key: string;
-    name: string;
-    size: string;
-    type: string;
-  }[];
+  content: ContentItem[];
 }
 
 const getTypeCategory = (mime: string): 'image' | 'video' | 'audio' | 'file' => {
@@ -15,30 +22,61 @@ const getTypeCategory = (mime: string): 'image' | 'video' | 'audio' | 'file' => 
 };
 
 export default function ContentRenderer({ content }: ContentRendererProps) {
-  const appId = process.env.UPLOADTHING_APP_ID
+  const [urls, setUrls] = useState<Record<string, string>>({});
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const fetchUrls = async () => {
+      const newUrls: Record<string, string> = {};
+      for (const item of content) {
+        try {
+          newUrls[item.key] = await contentUrl(item.key);
+        } catch (error) {
+          console.error(`Failed to fetch URL for key ${item.key}:`, error);
+          newUrls[item.key] = "#"; // Fallback
+        }
+      }
+      setUrls(newUrls);
+      setReady(true);
+    };
+
+    fetchUrls();
+  }, [content]);
+
+  if (!ready) {
+    return <div className="text-gray-400 text-sm">Loading content...</div>;
+  }
 
   return (
     <div className="grid gap-4">
       {content.map(({ key, type, name, size }, index) => {
+        const fileUrl = urls[key];
         const displayType = getTypeCategory(type);
-        const fileUrl = `https://${appId}.ufs.sh/f/${key}`;
+
+        if (!fileUrl || fileUrl === "#") {
+          return (
+            <div key={key} className="text-sm text-gray-400 italic">
+              Failed to load: {name}
+            </div>
+          );
+        }
 
         switch (displayType) {
           case 'image':
-            return <img key={index} src={fileUrl} alt={`Image ${index}`} className="max-w-full rounded" />;
+            return <img key={key} src={fileUrl} alt={name} className="max-w-full rounded" />;
 
           case 'video':
             return (
-              <video key={index} controls className="w-full max-h-96 rounded">
-                <source src={fileUrl} type={type} />
+              <video key={key} controls className="w-full max-h-96 rounded">
+                <source src={fileUrl} />
                 Your browser does not support the video tag.
               </video>
             );
 
           case 'audio':
             return (
-              <audio key={index} controls className="w-full">
-                <source src={fileUrl} type={type} />
+              <audio key={key} controls className="w-full">
+                <source src={fileUrl} />
                 Your browser does not support the audio element.
               </audio>
             );
@@ -46,7 +84,7 @@ export default function ContentRenderer({ content }: ContentRendererProps) {
           case 'file':
           default:
             return (
-              <div key={index} className="p-3 bg-gray-700 rounded-lg mb-2">
+              <div key={key} className="p-3 bg-gray-700 rounded-lg mb-2">
                 <div className="flex justify-between items-start">
                   <div>
                     <a
