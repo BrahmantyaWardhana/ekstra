@@ -49,7 +49,7 @@ export default function ContentRenderer({ content }: ContentRendererProps) {
 
   return (
     <div className="grid gap-4">
-      {content.map(({ key, type, name, size }, index) => {
+      {content.map(({ key, type, name, size }) => {
         const fileUrl = urls[key];
         const displayType = getTypeCategory(type);
 

@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "~/server/db";
-import { eq, sql } from "drizzle-orm";
+import { asc, eq, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
 
 // session data query
@@ -107,6 +107,7 @@ export async function getMyMembershipTiers(data: {
     })
     .from(schema.memberships)
     .where(eq(schema.memberships.creatorPageId, data.creatorPageId))
+    .orderBy(asc(schema.memberships.price));
   return myMembershipTiers
 }
 
@@ -186,6 +187,7 @@ export async function getMyPostInfo(
 ) {
   const results = await db.query.posts.findMany({
     where: (posts, { eq }) => eq(posts.creatorPageId, creatorPageId),
+    orderBy: (posts, { desc }) => [desc(posts.createdAt)],
     columns: {
       id: true,
       title: true,
