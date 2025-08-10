@@ -32,9 +32,12 @@ interface CreatorHomeProps {
   posts: PostInfo[] | null;
 }
 
-
 export default function CreatorHome({ posts }: CreatorHomeProps) {
   const router = useRouter();
+
+  const handleEditPost = (postId: string) => {
+    router.push(`/creator/dashboard/editpost/${postId}`);
+  };
 
   return (
     <div className="w-full p-4">
@@ -66,7 +69,20 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
                 <span className="text-neutral-400 text-sm">{post.createdAt.toLocaleDateString()}</span>
               </div>
 
-              {/* Post content  */}
+              {/* Membership access badge - only shown once at the top */}
+              <div className="mb-2">
+                {post.membershipContents.length === 0 ? (
+                  <span className="text-xs px-2 py-1 rounded bg-blue-900/50 text-blue-300">
+                    Free to All
+                  </span>
+                ) : (
+                  <span className="text-xs px-2 py-1 rounded bg-blue-900/50 text-blue-300">
+                    {post.membershipContents.map(m => m.membership.title).join(", ")}
+                  </span>
+                )}
+              </div>
+
+              {/* Post content */}
               {post.postContents && post.postContents.length > 0 && (
                 <ContentRenderer content={post.postContents.map((pc) => ({
                   key: pc.content.contentKey,
@@ -81,7 +97,10 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
               )}
               
               <div className="mt-4 flex justify-end">
-                <button className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 transition-colors cursor-pointer">
+                <button 
+                  className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
+                  onClick={() => handleEditPost(post.id)}  
+                >
                   Edit Post
                 </button>
               </div>

@@ -242,3 +242,60 @@ export async function getBackground() {
   });
   return backgroundImages;
 }
+
+export async function checkPostOwnership(creatorPageId:string, postId:string) {
+  const postCreator = await db.select({
+    creatorPageId: schema.posts.creatorPageId
+  }) 
+  .from(schema.posts)
+  .where(eq(schema.posts.id, postId))
+
+  return postCreator[0]?.creatorPageId === creatorPageId
+}
+
+export async function getPostInfoById(
+  postId : string
+) {
+  const results = await db.query.posts.findMany({
+    where: (posts, { eq }) => eq(posts.id, postId),
+    columns: {
+      id: true,
+      title: true,
+      description: true,
+      createdAt: true,
+    },
+    with: {
+      postContents: {
+        columns: {
+          contentId: true
+        },
+        with: {
+          content: {
+            columns: {
+              contentKey: true,
+              type: true,
+              fileName: true,
+              size: true,
+            }
+          }
+        }
+      },
+      membershipContents: {
+        columns: {
+          membershipId: true
+        },
+        with: {
+          membership: {
+            columns: {
+              id: true,
+              title: true,
+              description: true,
+              price: true,
+            }
+          }
+        }
+      },
+    }
+  })
+  return results
+}

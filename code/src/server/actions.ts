@@ -232,3 +232,24 @@ export async function contentUrl(key:string) {
   const contentUrl = `https://${appId}.ufs.sh/f/${key}`;
   return contentUrl
 }
+
+
+
+export async function retrievePostInfoById(postId : string) {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    throw new Error("user is not authenticated")
+  }
+
+  const isOwner = await queries.checkPostOwnership(creatorPageId, postId)
+
+  if (!isOwner) {
+    throw new Error("You don't have permission to access this post");
+  }
+
+  const postInfoById = await queries.getPostInfoById(postId)
+  if (!postInfoById) throw new Error("Failed to get post info");
+
+  return postInfoById
+}
