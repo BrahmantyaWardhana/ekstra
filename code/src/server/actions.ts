@@ -233,8 +233,6 @@ export async function contentUrl(key:string) {
   return contentUrl
 }
 
-
-
 export async function retrievePostInfoById(postId : string) {
   const user = await auth();
   const creatorPageId = user?.user.creatorPageId
@@ -252,4 +250,8 @@ export async function retrievePostInfoById(postId : string) {
   if (!postInfoById) throw new Error("Failed to get post info");
 
   return postInfoById
+}
+
+export async function updateFullPost() {
+  
 }

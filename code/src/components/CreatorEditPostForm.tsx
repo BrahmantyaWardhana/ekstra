@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { removeFileFromUt } from '~/server/actions';
+import { linkPostToMembership, removeAllMemberships, removeFileFromUt, updatePostInfo } from '~/server/actions';
 import { useRouter } from 'next/navigation';
 import { UploadButton } from '~/utils/uploadthing';
 
@@ -108,10 +108,28 @@ export default function CreatorEditPostForm({
     }
   };
 
-  const onSubmit = async (data: FormValues) => {
-    
+  // submit operations
+  // check changes
+  function diffMemberships(initialMemberships: string[], currentMemberships: string[]) {
+    const toAdd = currentMemberships.filter(id => !initialMemberships.includes(id));
+    const toRemove = initialMemberships.filter(id => !currentMemberships.includes(id));
+    return { toAdd, toRemove };
   }
-  
+
+  function diffFiles(initialFiles: UploadedFile[], currentFiles: UploadedFile[]) {
+    const toAdd = currentFiles.filter(file => !initialFiles.some(init => init.key === file.key));
+    const toRemove = initialFiles.filter(file => !currentFiles.some(curr => curr.key === file.key));
+    return { toAdd, toRemove };
+  }
+
+  function diffPostInfo(initial: { title: string; description: string | null }, current: { title: string; description: string | null }) {
+    const normalize = (val: string | null) => (val ?? "").trim();
+    return {
+      titleChanged: normalize(initial.title) !== normalize(current.title),
+      descriptionChanged: normalize(initial.description) !== normalize(current.description),
+    };
+  }
+
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const isButtonDisabled = isSubmitting || isProcessing;
@@ -119,6 +137,48 @@ export default function CreatorEditPostForm({
   const labelStyle = 'block pb-2';
   const inputStyle = 'w-full px-4 py-2 rounded-lg bg-stone-800 border-2 border-gray-400 focus:outline-none focus:ring-1 focus:ring-white';
   const errorStyle = 'mt-1 text-sm text-red-500';
+
+  const onSubmit = async (formValues: FormValues) => {
+    setIsProcessing(true);
+    try {
+      const initialMemberships = postInfo.membershipContents.length
+        ? postInfo.membershipContents.map(m => m.membershipId)
+        : ["free"];
+
+      const { toAdd: membershipsToAdd, toRemove: membershipsToRemove } =
+        diffMemberships(initialMemberships, formValues.membershipIds);
+
+      const { toAdd: filesToAdd, toRemove: filesToRemove } =
+        diffFiles(initialFiles, uploadedFiles);
+
+      const { titleChanged, descriptionChanged } = diffPostInfo(
+        { title: postInfo.title, description: postInfo.description ?? "" },
+        { title: formValues.title, description: formValues.description ?? "" }
+      );
+
+      await updateFullPost(postInfo.id, {
+        ...(titleChanged ? { title: formValues.title } : {}),
+        ...(descriptionChanged ? { description: formValues.description } : {}),
+        removeAllMemberships: formValues.membershipIds.includes("free"),
+        membershipsToAdd,
+        membershipsToRemove,
+        filesToAdd,
+        filesToRemove: filesToRemove.map(f => f.key),
+      });
+
+      // Remove files from storage after DB commit
+      for (const file of filesToRemove) {
+        await removeFileFromUt(file.key);
+      }
+
+      router.push("/creator/dashboard/home");
+    } catch (error) {
+      console.error("Error updating post:", error);
+      alert("Failed to update post");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return(
     <div className="w-full p-4 bg-neutral-800 rounded-lg shadow-sm">
