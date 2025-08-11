@@ -91,7 +91,7 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
                   size: pc.content.size
                 }))} />
               )}
-              
+
               {post.description && (
                 <p className="mt-2 text-neutral-300 text-sm">{post.description}</p>
               )}
