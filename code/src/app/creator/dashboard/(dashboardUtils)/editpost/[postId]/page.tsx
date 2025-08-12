@@ -8,8 +8,9 @@ export default async function EditPost({
   params: {postId : string}
 }) {
 
+  const param = await params
   const membership = await retrieveMembershipNames()
-  const postInfo = await retrievePostInfoById(params.postId)
+  const postInfo = await retrievePostInfoById(param.postId)
 
   return (
     <main className="m-10">    

@@ -173,12 +173,10 @@ export default function CreatorEditPostForm({
       for (const file of filesToRemove) {
         await removeFileFromUt(file.key);
       }
-
       router.push("/creator/dashboard/home");
     } catch (error) {
       console.error("Error updating post:", error);
       alert("Failed to update post");
-    } finally {
       setIsProcessing(false);
     }
   };
@@ -329,7 +327,7 @@ export default function CreatorEditPostForm({
               : 'bg-white hover:bg-gray-200 cursor-pointer'
           }`}
         >
-          {isSubmitting ? 'Creating...' : 'Create Post'}
+          {isSubmitting ? 'Updateing...' : 'Update Post'}
         </button>
       </form>
     </div>
