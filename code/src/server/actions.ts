@@ -252,6 +252,26 @@ export async function retrievePostInfoById(postId : string) {
   return postInfoById
 }
 
-export async function updateFullPost() {
-  
+type UploadedFile = {
+  key: string;
+  name: string;
+  size: number;
+  type: string;
+};
+
+export async function updateFullPost(postId: string, data: {
+  title?: string;
+  description?: string;
+  membershipsToAdd?: string[];
+  membershipsToRemove?: string[];
+  removeAllMemberships?: boolean;
+  filesToAdd?: UploadedFile[];
+  filesToRemove?: string[]
+}) {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    throw new Error("user is not authenticated")
+  }
+  await queries.editPostTransaction(postId, creatorPageId, data)
 }

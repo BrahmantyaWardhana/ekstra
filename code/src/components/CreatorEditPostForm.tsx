@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { linkPostToMembership, removeAllMemberships, removeFileFromUt, updatePostInfo } from '~/server/actions';
+import { removeFileFromUt, updateFullPost } from '~/server/actions';
 import { useRouter } from 'next/navigation';
 import { UploadButton } from '~/utils/uploadthing';
 

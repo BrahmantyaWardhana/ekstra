@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "~/server/db";
-import { asc, eq, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
 
 // session data query
@@ -298,5 +298,101 @@ export async function getPostInfoById(
     }
   })
   return results
+}
+
+type UploadedFile = {
+  key: string;
+  name: string;
+  size: number;
+  type: string;
+};
+
+export async function editPostTransaction(
+  postId: string,
+  creatorPageId: string,
+  data: {
+    title?: string;
+    description?: string;
+    membershipsToAdd?: string[];
+    membershipsToRemove?: string[];
+    removeAllMemberships?: boolean;
+    filesToAdd?: UploadedFile[];
+    filesToRemove?: string[];
+    
+  }
+) {
+  await db.transaction(async (tx) => {
+    // 1. Update post info
+    if (data.title !== undefined || data.description !== undefined) {
+      await tx.update(schema.posts)
+        .set({
+          ...(data.title !== undefined ? { title: data.title } : {}),
+          ...(data.description !== undefined ? { description: data.description } : {})
+        })
+        .where(eq(schema.posts.id, postId));
+    }
+
+    // 2. Update memberships
+    if (data.removeAllMemberships) {
+      await tx.delete(schema.membershipContents)
+        .where(eq(schema.membershipContents.postId, postId));
+    } else {
+      if (data.membershipsToAdd?.length) {
+        await tx.insert(schema.membershipContents).values(
+          data.membershipsToAdd.map(membershipId => ({
+            postId,
+            membershipId
+          }))
+        );
+      }
+      if (data.membershipsToRemove?.length) {
+        await tx.delete(schema.membershipContents)
+          .where(
+            and(
+              inArray(schema.membershipContents.membershipId, data.membershipsToRemove),
+              eq(schema.membershipContents.postId, postId)
+            )
+          );
+      }
+    }
+
+    // 3. Update files
+    if (data.filesToRemove?.length) {
+      // First delete from postContents based on related content IDs
+      await tx.delete(schema.postContents)
+        .where(
+          inArray(
+            schema.postContents.contentId,
+            tx.select({ id: schema.contents.id })
+              .from(schema.contents)
+              .where(inArray(schema.contents.contentKey, data.filesToRemove))
+          )
+        );
+
+      // Then delete from contents
+      await tx.delete(schema.contents)
+        .where(inArray(schema.contents.contentKey, data.filesToRemove));
+    }
+
+    if (data.filesToAdd?.length) {
+      const contentIds = await tx.insert(schema.contents).values(
+        data.filesToAdd.map(f => ({
+          creatorPageId: creatorPageId,
+          type: f.type,
+          contentKey: f.key,
+          fileName: f.name,
+          size: String(f.size),
+          usedIn: "post",
+        }))
+      ).returning({ id: schema.contents.id });
+
+      await tx.insert(schema.postContents).values(
+        contentIds.map(c => ({
+          postId: postId,
+          contentId: c.id,
+        }))
+      )
+    }
+  });
 }
 
