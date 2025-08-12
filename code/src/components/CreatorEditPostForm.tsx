@@ -46,7 +46,7 @@ interface Memberships {
 }
 
 interface CreatorEditPostFormProps {
-  postInfo: PostInfo
+  postInfo: PostInfo[];
   memberships: Memberships[];
 }
 
@@ -62,12 +62,13 @@ export default function CreatorEditPostForm({
   postInfo,
   memberships,
 }:CreatorEditPostFormProps) {
+  const postInfoFirst = postInfo[0]!
   
   // files associated with post
-  const initialFiles: UploadedFile[] = postInfo.postContents.map((pc) => ({
-    key: pc.content.contentKey,   // matches your UploadedFile.key
+  const initialFiles: UploadedFile[] = postInfoFirst.postContents.map((pc) => ({
+    key: pc.content.contentKey,
     name: pc.content.fileName,
-    size: Number(pc.content.size), // convert string to number
+    size: Number(pc.content.size),
     type: pc.content.type,
   }));
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>(initialFiles ?? []);
@@ -93,10 +94,10 @@ export default function CreatorEditPostForm({
       resolver: zodResolver(formSchema),
       mode: 'onChange',
       defaultValues: {
-        title: postInfo.title,
-      description: postInfo.description ?? '',
-      membershipIds: postInfo.membershipContents.length
-        ? postInfo.membershipContents.map((m) => m.membershipId)
+        title: postInfoFirst.title,
+      description: postInfoFirst.description ?? '',
+      membershipIds: postInfoFirst.membershipContents.length
+        ? postInfoFirst.membershipContents.map((m) => m.membershipId)
         : ['free'],
       }
     });
@@ -143,8 +144,8 @@ export default function CreatorEditPostForm({
   const onSubmit = async (formValues: FormValues) => {
     setIsProcessing(true);
     try {
-      const initialMemberships = postInfo.membershipContents.length
-        ? postInfo.membershipContents.map(m => m.membershipId)
+      const initialMemberships = postInfoFirst.membershipContents.length
+        ? postInfoFirst.membershipContents.map(m => m.membershipId)
         : ["free"];
 
       const { toAdd: membershipsToAdd, toRemove: membershipsToRemove } =
@@ -154,11 +155,11 @@ export default function CreatorEditPostForm({
         diffFiles(initialFiles, uploadedFiles);
 
       const { titleChanged, descriptionChanged } = diffPostInfo(
-        { title: postInfo.title, description: postInfo.description ?? "" },
+        { title: postInfoFirst.title, description: postInfoFirst.description ?? "" },
         { title: formValues.title, description: formValues.description ?? "" }
       );
 
-      await updateFullPost(postInfo.id, {
+      await updateFullPost(postInfoFirst.id, {
         ...(titleChanged ? { title: formValues.title } : {}),
         ...(descriptionChanged ? { description: formValues.description } : {}),
         removeAllMemberships: formValues.membershipIds.includes("free"),
