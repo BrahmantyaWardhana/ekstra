@@ -495,3 +495,13 @@ export async function editMembershipInfo(
     })
     .where(eq(schema.memberships.id, id));
 }
+
+export async function deleteMembership(membershipId: string) {
+  await db
+    .delete(schema.membershipContents)
+    .where(eq(schema.membershipContents.membershipId, membershipId));
+
+  await db
+    .delete(schema.memberships)
+    .where(eq(schema.memberships.id, membershipId));
+}

@@ -312,3 +312,7 @@ export async function updateMembershipTierInfo(id: string, data: {
   
   await queries.editMembershipInfo(id, data)
 }
+
+export async function removeMembership(membershipId: string) {
+  await queries.deleteMembership(membershipId)
+}

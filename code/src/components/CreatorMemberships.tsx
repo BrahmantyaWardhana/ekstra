@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
+import { removeMembership } from '~/server/actions';
 
 interface MembershipPlans {
   id: string,
@@ -12,8 +13,18 @@ interface MembershipPlans {
 export default function CreatorMemberships( {plans} : {plans : MembershipPlans[] | null} ) {
   const router = useRouter();
 
-  const handleEditMembership = (postId: string) => {
-    router.push(`/creator/dashboard/editmembership/${postId}`);
+  const handleEditMembership = (membershipId: string) => {
+    router.push(`/creator/dashboard/editmembership/${membershipId}`);
+  };
+
+  const handleDeleteMembership = async (membershipId: string) => {
+    try {
+      await removeMembership(membershipId)
+      router.refresh();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post');
+    }
   };
 
   return (
@@ -42,6 +53,12 @@ export default function CreatorMemberships( {plans} : {plans : MembershipPlans[]
                   onClick={() => handleEditMembership(plan.id)}  
                 >
                   Edit
+                </button>
+                <button 
+                  className="ml-1 px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 cursor-pointer flex items-center justify-center transition-colors"
+                  onClick={() => handleDeleteMembership(plan.id)}  
+                >
+                  Delete
                 </button>
               </div>
             </div>
