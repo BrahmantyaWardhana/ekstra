@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "~/server/db";
-import { and, asc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, ne, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
 
 // session data query
@@ -396,3 +396,62 @@ export async function editPostTransaction(
   });
 }
 
+export async function deletePost(postId: string) {
+  await db.transaction(async (tx) => {
+    // 1. Delete membership links
+    await tx
+      .delete(schema.membershipContents)
+      .where(eq(schema.membershipContents.postId, postId));
+
+    // 2. Get all content IDs linked to this post
+    const postContentRecords = await tx
+      .select({ contentId: schema.postContents.contentId })
+      .from(schema.postContents)
+      .where(eq(schema.postContents.postId, postId));
+
+    const contentIds = postContentRecords.map((pc) => pc.contentId);
+
+    // 3. Delete post-content links
+    await tx
+      .delete(schema.postContents)
+      .where(eq(schema.postContents.postId, postId));
+
+    // 4. Remove unused contents
+    if (contentIds.length > 0) {
+      // Find which are still used in other posts
+      const usedInOtherPosts = await tx
+        .select({ contentId: schema.postContents.contentId })
+        .from(schema.postContents)
+        .where(
+          and(
+            inArray(schema.postContents.contentId, contentIds),
+            ne(schema.postContents.postId, postId)
+          )
+        );
+
+      // Find which are used in store listings (if you have storeContents)
+      const usedInStore = await tx
+        .select({ contentId: schema.storeContents.contentId })
+        .from(schema.storeContents)
+        .where(inArray(schema.storeContents.contentId, contentIds));
+
+      const usedContentIds = new Set([
+        ...usedInOtherPosts.map((u) => u.contentId),
+        ...usedInStore.map((u) => u.contentId),
+      ]);
+
+      const unusedContentIds = contentIds.filter(
+        (id) => !usedContentIds.has(id)
+      );
+
+      if (unusedContentIds.length > 0) {
+        await tx
+          .delete(schema.contents)
+          .where(inArray(schema.contents.id, unusedContentIds));
+      }
+    }
+
+    // 5. Finally, delete the post
+    await tx.delete(schema.posts).where(eq(schema.posts.id, postId));
+  });
+}

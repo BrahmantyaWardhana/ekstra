@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
+import { removePost } from '~/server/actions'
 import ContentRenderer from "./ContentRenderer";
 
 type PostInfo = {
@@ -38,6 +39,16 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
   const handleEditPost = (postId: string) => {
     router.push(`/creator/dashboard/editpost/${postId}`);
   };
+
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await removePost(postId)
+      router.refresh();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post');
+    }
+  }
 
   return (
     <div className="w-full p-4">
@@ -97,6 +108,12 @@ export default function CreatorHome({ posts }: CreatorHomeProps) {
               )}
               
               <div className="mt-4 flex justify-end">
+                <button 
+                  className="mr-2 px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
+                  onClick={() => handleDeletePost(post.id)}  
+                >
+                  Delete Post
+                </button>                
                 <button 
                   className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
                   onClick={() => handleEditPost(post.id)}  

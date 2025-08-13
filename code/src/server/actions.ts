@@ -275,3 +275,7 @@ export async function updateFullPost(postId: string, data: {
   }
   await queries.editPostTransaction(postId, creatorPageId, data)
 }
+
+export async function removePost(postId: string) {
+  await queries.deletePost(postId)
+}
