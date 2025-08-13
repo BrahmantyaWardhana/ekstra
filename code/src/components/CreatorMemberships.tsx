@@ -19,7 +19,7 @@ export default function CreatorMemberships( {plans} : {plans : MembershipPlans[]
   return (
     <div className="w-full p-4">
       <h2 className="text-2xl font-bold mb-6">Membership Plans</h2>
-        
+
       <div className="space-y-4">
         {plans?.map((plan) => (
           <div 
@@ -33,7 +33,7 @@ export default function CreatorMemberships( {plans} : {plans : MembershipPlans[]
               <p className="">${plan.price}<span className="text-sm">/month</span></p>
               
               {plan.description && (
-                <p className="mt-2 text-sm">{plan.description}</p>
+                <p className="mt-2 text-sm whitespace-pre-line">{plan.description}</p>
               )}
               
               <div className="mt-4 flex space-x-2">

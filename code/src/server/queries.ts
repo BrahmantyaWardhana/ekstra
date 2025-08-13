@@ -458,7 +458,7 @@ export async function deletePost(postId: string) {
 
 export async function checkMembershipCreator(creatorPageId:string, membershipId:string) {
   const membershipCreator = await db.select({
-    creatorPageId: schema.posts.creatorPageId
+    creatorPageId: schema.memberships.creatorPageId
   }) 
   .from(schema.memberships)
   .where(eq(schema.memberships.id, membershipId))
