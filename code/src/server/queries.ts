@@ -455,3 +455,43 @@ export async function deletePost(postId: string) {
     await tx.delete(schema.posts).where(eq(schema.posts.id, postId));
   });
 }
+
+export async function checkMembershipCreator(creatorPageId:string, membershipId:string) {
+  const membershipCreator = await db.select({
+    creatorPageId: schema.posts.creatorPageId
+  }) 
+  .from(schema.memberships)
+  .where(eq(schema.memberships.id, membershipId))
+
+  return membershipCreator[0]?.creatorPageId === creatorPageId
+}
+
+export async function getMembershipInfoById(membershipId:string) {
+  const myMembershipInfo =
+    await db.select({
+      id: schema.memberships.id,
+      title: schema.memberships.title,
+      description: schema.memberships.description,
+      price: schema.memberships.price,
+    })
+    .from(schema.memberships)
+    .where(eq(schema.memberships.id, membershipId))
+  return myMembershipInfo
+}
+
+export async function editMembershipInfo(
+  id: string, data: {
+    description: string;
+    title: string;
+    price: number;
+  }
+) {
+  await db
+    .update(schema.memberships)
+    .set({
+      title: data.title,
+      description: data.description,
+      price: String(data.price),
+    })
+    .where(eq(schema.memberships.id, id));
+}

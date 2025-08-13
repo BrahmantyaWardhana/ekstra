@@ -95,10 +95,10 @@ export default function CreatorEditPostForm({
       mode: 'onChange',
       defaultValues: {
         title: postInfoFirst.title,
-      description: postInfoFirst.description ?? '',
-      membershipIds: postInfoFirst.membershipContents.length
-        ? postInfoFirst.membershipContents.map((m) => m.membershipId)
-        : ['free'],
+        description: postInfoFirst.description ?? '',
+        membershipIds: postInfoFirst.membershipContents.length
+          ? postInfoFirst.membershipContents.map((m) => m.membershipId)
+          : ['free'],
       }
     });
 

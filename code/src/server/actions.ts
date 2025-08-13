@@ -279,3 +279,36 @@ export async function updateFullPost(postId: string, data: {
 export async function removePost(postId: string) {
   await queries.deletePost(postId)
 }
+
+export async function retrieveMembershipInfoById(membershipId: string) {
+  const user = await auth()
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    throw new Error("user is not authenticated")
+  }
+
+  const isOwner = await queries.checkMembershipCreator(creatorPageId, membershipId)
+
+  if (!isOwner) {
+    throw new Error("You don't have permission to access this post");
+  }
+
+  const membershipInfoById = await queries.getMembershipInfoById(membershipId)
+  if (!membershipInfoById) throw new Error("Failed to get post info");
+
+  return membershipInfoById
+}
+
+export async function updateMembershipTierInfo(id: string, data: {
+  description: string;
+  title: string;
+  price: number;
+}) {
+  const user = await auth()
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    throw new Error("user is not authenticated")
+  }
+  
+  await queries.editMembershipInfo(id, data)
+}

@@ -12,10 +12,14 @@ interface MembershipPlans {
 export default function CreatorMemberships( {plans} : {plans : MembershipPlans[] | null} ) {
   const router = useRouter();
 
+  const handleEditMembership = (postId: string) => {
+    router.push(`/creator/dashboard/editmembership/${postId}`);
+  };
+
   return (
     <div className="w-full p-4">
       <h2 className="text-2xl font-bold mb-6">Membership Plans</h2>
-      
+        
       <div className="space-y-4">
         {plans?.map((plan) => (
           <div 
@@ -33,7 +37,10 @@ export default function CreatorMemberships( {plans} : {plans : MembershipPlans[]
               )}
               
               <div className="mt-4 flex space-x-2">
-                <button className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 cursor-pointer flex items-center justify-center transition-colors">
+                <button 
+                  className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 cursor-pointer flex items-center justify-center transition-colors"
+                  onClick={() => handleEditMembership(plan.id)}  
+                >
                   Edit
                 </button>
               </div>
