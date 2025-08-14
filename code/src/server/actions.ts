@@ -233,6 +233,18 @@ export async function contentUrl(key:string) {
   return contentUrl
 }
 
+export async function authenticatePostEditForm(postId: string) {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    throw new Error("user is not authenticated")
+  }
+
+  const isOwner = await queries.checkPostOwnership(creatorPageId, postId)
+
+  return isOwner
+}
+
 export async function retrievePostInfoById(postId : string) {
   const user = await auth();
   const creatorPageId = user?.user.creatorPageId
@@ -278,6 +290,19 @@ export async function updateFullPost(postId: string, data: {
 
 export async function removePost(postId: string) {
   await queries.deletePost(postId)
+}
+
+
+export async function authenticateMembershipEditForm(membershipId: string) {
+  const user = await auth();
+  const creatorPageId = user?.user.creatorPageId
+  if (!creatorPageId) {
+    throw new Error("user is not authenticated")
+  }
+
+  const isOwner = await queries.checkMembershipCreator(creatorPageId, membershipId)
+
+  return isOwner
 }
 
 export async function retrieveMembershipInfoById(membershipId: string) {

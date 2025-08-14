@@ -1,6 +1,7 @@
+import { redirect } from 'next/navigation'
 import React from 'react'
 import CreatorEditMembershipForm from '~/components/CreatorEditMembershipForm'
-import { retrieveMembershipInfoById } from '~/server/actions'
+import { authenticateMembershipEditForm, retrieveMembershipInfoById } from '~/server/actions'
 
 export default async function EditMembership({
   params,
@@ -9,12 +10,18 @@ export default async function EditMembership({
 }) {
 
   const param = await params
+  const isOwner = await authenticateMembershipEditForm(param.membershipId);
+
+  if (!isOwner) {
+    redirect("/creator/dashboard/home");
+  }
+
   const membershipInfo = await retrieveMembershipInfoById(param.membershipId)
 
   return (
     <main className="m-10">    
       <div className="w-2/3 mx-auto">
-        <CreatorEditMembershipForm 
+        <CreatorEditMembershipForm
           plans={membershipInfo}
         />
       </div>

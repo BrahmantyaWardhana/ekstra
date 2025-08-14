@@ -1,6 +1,7 @@
+import { redirect } from 'next/navigation'
 import React from 'react'
 import CreatorEditPostForm from '~/components/CreatorEditPostForm'
-import { retrieveMembershipNames, retrievePostInfoById } from '~/server/actions'
+import { authenticatePostEditForm, retrieveMembershipNames, retrievePostInfoById } from '~/server/actions'
 
 export default async function EditPost({
   params,
@@ -9,6 +10,11 @@ export default async function EditPost({
 }) {
 
   const param = await params
+  const isOwner = await authenticatePostEditForm(param.postId);
+
+  if (!isOwner) {
+    redirect("/creator/dashboard/home");
+  }
   const membership = await retrieveMembershipNames()
   const postInfo = await retrievePostInfoById(param.postId)
 
