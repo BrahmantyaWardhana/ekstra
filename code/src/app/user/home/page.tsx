@@ -1,8 +1,10 @@
+import ApplicationHome from "~/components/ApplicationHome";
+
 export default async function AppHome() {
   return (
     <>
       <main className="p-6">
-        <p>App Home Page</p>
+        <ApplicationHome />
       </main>
     </>
   );
