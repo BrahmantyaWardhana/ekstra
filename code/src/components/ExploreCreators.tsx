@@ -7,6 +7,7 @@ interface Creator {
   id: string;
   name: string;
   description: string | null;
+  pageHandle: string;
   img: string;
 }
 
@@ -59,14 +60,14 @@ export default function ExploreCreators({
 
       {/* Creators */}
       <h2 className="text-lg font-semibold mb-6">Ekstra Creators</h2>
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid grid-cols-6 gap-8">
         {creators.map((creator) => (
           <div key={creator.id} className="bg-neutral-800 rounded-lg overflow-hidden">
-            <div className="h-28 bg-neutral-700">
+            <div className="h-40 bg-neutral-700">
               <img
                 src={creator.img}
                 alt={creator.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full"
               />
             </div>
             <div className="p-3">

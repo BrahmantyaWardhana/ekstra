@@ -515,7 +515,7 @@ export async function getCreators(search: string, page: number, limit: number) {
       name: schema.creatorPages.name,
       description: schema.creatorPages.description,
       pageHandle: schema.creatorPages.pageHandle,
-      img: schema.creatorPages.profileImage, // renamed for matching type
+      img: schema.creatorPages.profileImage,
     })
     .from(schema.creatorPages)
     .where(

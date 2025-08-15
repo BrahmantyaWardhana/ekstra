@@ -345,7 +345,7 @@ export async function removeMembership(membershipId: string) {
 export async function findCreators(
   search: string = "",
   page: number = 0,
-  limit: number = 12
+  limit: number = 15
 ) {
   const { creators, total } = await queries.getCreators(search, page, limit);
 
