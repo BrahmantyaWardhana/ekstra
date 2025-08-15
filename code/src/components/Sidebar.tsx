@@ -3,6 +3,7 @@
 import { type ReactElement, type ReactNode} from "react";
 import MobileSidebar from "./MobileSidebar";
 import { usePathname } from 'next/navigation';
+import Link from "next/link";
 
 interface MenuItem {
     name: string;
@@ -50,7 +51,7 @@ export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
               <ul className="space-y-1">
                 {menuItems.map((item) => (
                   <li key={item.name}>
-                    <a
+                    <Link
                       className={`w-full flex items-center gap-x-3.5 p-2.5 text-base rounded-lg hover:bg-neutral-700 ${
                         activeItem === item.name ? "bg-neutral-700" : ""
                       }`}
@@ -58,7 +59,7 @@ export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
                     >
                       {item.icon}
                       {item.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
