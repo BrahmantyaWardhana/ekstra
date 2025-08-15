@@ -13,7 +13,7 @@ export default async function EditPost({
   const isOwner = await authenticatePostEditForm(param.postId);
 
   if (!isOwner) {
-    redirect("/creator/dashboard/home");
+    redirect("/creator/dashboard");
   }
   const membership = await retrieveMembershipNames()
   const postInfo = await retrievePostInfoById(param.postId)

@@ -173,7 +173,7 @@ export default function CreatorEditPostForm({
       for (const file of filesToRemove) {
         await removeFileFromUt(file.key);
       }
-      router.push("/creator/dashboard/home");
+      router.push("/creator/dashboard");
     } catch (error) {
       console.error("Error updating post:", error);
       alert("Failed to update post");

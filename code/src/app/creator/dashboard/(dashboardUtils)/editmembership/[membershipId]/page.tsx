@@ -13,7 +13,7 @@ export default async function EditMembership({
   const isOwner = await authenticateMembershipEditForm(param.membershipId);
 
   if (!isOwner) {
-    redirect("/creator/dashboard/home");
+    redirect("/creator/dashboard");
   }
 
   const membershipInfo = await retrieveMembershipInfoById(param.membershipId)

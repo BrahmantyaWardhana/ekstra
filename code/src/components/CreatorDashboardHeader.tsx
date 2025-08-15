@@ -19,7 +19,7 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
   }, [])
   
   const navItems = [
-    {name: 'Home', href: '/creator/dashboard/home'},
+    {name: 'Home', href: '/creator/dashboard'},
     {name: 'Membership', href: '/creator/dashboard/membership'},
     {name: 'Shop', href: '/creator/dashboard/shop'}
   ]
@@ -28,7 +28,7 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
   const activeItem = navItems.find(item => 
     pathname === item.href || 
     pathname.startsWith(`${item.href}/`)
-  )?.href || '/creator/dashboard/home';
+  )?.href || '/creator/dashboard';
 
   return (
     <div className="bg-neutral-300 pb-6">

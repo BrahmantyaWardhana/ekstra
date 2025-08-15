@@ -111,7 +111,7 @@ export default function CreatePostForm({ memberships }: { memberships: Membershi
       }
 
       // redirect after finished
-      router.push('/creator/dashboard/home')
+      router.push('/creator/dashboard')
 
     } catch (error) {
       console.error('Error creating post:', error);
