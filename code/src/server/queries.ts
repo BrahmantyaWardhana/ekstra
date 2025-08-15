@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "~/server/db";
-import { and, asc, eq, inArray, ne, sql } from "drizzle-orm";
+import { and, asc, eq, ilike, inArray, ne, or, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
 
 // session data query
@@ -28,7 +28,7 @@ export async function createMyCreatorPage(
     handle: string;
     description: string;
     userId: string;
-    userImage: string | null;
+    userImage: string;
   }
 ) {
   const newCreatorPage = await db.insert(schema.creatorPages).values({
@@ -504,4 +504,40 @@ export async function deleteMembership(membershipId: string) {
   await db
     .delete(schema.memberships)
     .where(eq(schema.memberships.id, membershipId));
+}
+
+export async function getCreators(search: string, page: number, limit: number) {
+  const offset = page * limit;
+
+  const rows = await db
+    .select({
+      id: schema.creatorPages.id,
+      name: schema.creatorPages.name,
+      description: schema.creatorPages.description,
+      pageHandle: schema.creatorPages.pageHandle,
+      img: schema.creatorPages.profileImage, // renamed for matching type
+    })
+    .from(schema.creatorPages)
+    .where(
+      or(
+        ilike(schema.creatorPages.name, `%${search}%`),
+        ilike(schema.creatorPages.description, `%${search}%`)
+      )
+    )
+    .limit(limit)
+    .offset(offset);
+
+  const countRows = await db
+    .select({ count: sql`count(*)`.mapWith(Number) })
+    .from(schema.creatorPages)
+    .where(
+      or(
+        ilike(schema.creatorPages.name, `%${search}%`),
+        ilike(schema.creatorPages.description, `%${search}%`)
+      )
+    );
+
+  const { count } = countRows[0] ?? { count: 0 };
+
+  return { creators: rows, total: count };
 }

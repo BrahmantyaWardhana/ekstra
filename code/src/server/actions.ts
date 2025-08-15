@@ -19,9 +19,9 @@ export async function submitCreatorPage(data: {
 }) {
   const user = await auth();
   const userId = user?.user?.id;
-  const userImage = user?.user?.image ?? null;
+  const userImage = user?.user?.image;
 
-  if (!userId) {
+  if (!userId || !userImage) {
     throw new Error('User not authenticated');
   }
 

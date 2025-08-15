@@ -70,7 +70,8 @@ export const creatorPages = createTable(
     pageHandle: d
       .varchar({ length: 1024 }).notNull().unique(), // user created
     profileImage: d
-      .varchar({ length: 255 }), // default image should be taken from user profile image
+      .varchar({ length: 255 })
+      .notNull(),
     createdAt: d
       .timestamp({ withTimezone: true, mode: 'date' })
       .notNull()
