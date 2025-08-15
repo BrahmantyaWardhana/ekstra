@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { getCreators } from "~/server/queries";
+import { findCreators } from "~/server/actions";
 
 interface Creator {
   id: string;
@@ -29,7 +29,7 @@ export default function ExploreCreators({
 
   async function loadData(newSearch = search, newPage = page) {
     startTransition(async () => {
-      const { creators, total } = await getCreators(newSearch, newPage, limit);
+      const { creators, total } = await findCreators(newSearch, newPage, limit);
       setCreators(creators);
       setTotal(total);
       setPage(newPage);
@@ -58,6 +58,7 @@ export default function ExploreCreators({
       {isPending && <p className="text-gray-400 text-sm">Loading...</p>}
 
       {/* Creators */}
+      <h2 className="text-lg font-semibold mb-6">Ekstra Creators</h2>
       <div className="grid grid-cols-4 gap-8">
         {creators.map((creator) => (
           <div key={creator.id} className="bg-neutral-800 rounded-lg overflow-hidden">

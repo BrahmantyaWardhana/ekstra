@@ -1,9 +1,8 @@
 import ExploreCreators from "~/components/ExploreCreators";
-import { getCreators } from "~/server/queries";
+import { findCreators } from "~/server/actions";
 
 export default async function AppHome() {
-  const limit = 12;
-  const { creators, total } = await getCreators("", 0, limit);
+  const { creators, total, limit } = await findCreators()
 
   return (
     <main className="p-8">

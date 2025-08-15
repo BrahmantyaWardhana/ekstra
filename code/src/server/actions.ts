@@ -6,7 +6,7 @@ import { utapi } from './uploadthing';
 
 export async function checkHandleUnique(handle: string) {
   try{
-    return await queries.isHandleAvailable(handle); // returns true if taken
+    return await queries.isHandleAvailable(handle);
   } catch (error) {
     return null
   }
@@ -340,4 +340,14 @@ export async function updateMembershipTierInfo(id: string, data: {
 
 export async function removeMembership(membershipId: string) {
   await queries.deleteMembership(membershipId)
+}
+
+export async function findCreators(
+  search: string = "",
+  page: number = 0,
+  limit: number = 12
+) {
+  const { creators, total } = await queries.getCreators(search, page, limit);
+
+  return { creators, total, limit }
 }
