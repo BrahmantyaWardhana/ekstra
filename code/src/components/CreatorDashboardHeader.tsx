@@ -25,10 +25,13 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
   ]
 
   const pathname = usePathname();
-  const activeItem = navItems.find(item => 
-    pathname === item.href || 
-    pathname.startsWith(`${item.href}/`)
-  )?.href || '/creator/dashboard';
+  const activeItem =
+  navItems.find(item =>
+    item.href === "/creator/dashboard"
+      ? pathname === item.href
+      : pathname === item.href || pathname.startsWith(`${item.href}/`)
+  )?.href || "/creator/dashboard";
+
 
   return (
     <div className="bg-neutral-300 pb-6">

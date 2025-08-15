@@ -20,7 +20,7 @@ export default function Sidebar({ menuItems, accountDropdown }: SidebarProps) {
   const pathname = usePathname();
   
   // Find the menu item that matches the current path
-  const activeItem = menuItems.find(item => pathname.startsWith(item.href))?.name || menuItems[0]?.name;
+  const activeItem = menuItems.find(item => pathname.startsWith(item.href))?.name;
 
   return (
     <>
