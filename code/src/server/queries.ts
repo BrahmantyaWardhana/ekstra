@@ -541,3 +541,26 @@ export async function getCreators(search: string, page: number, limit: number) {
 
   return { creators: rows, total: count };
 }
+
+export async function getCreatorPageInfoByHandle(pageHandle: string) {
+  const creatorPage = await db.query.creatorPages.findFirst({
+    where: eq(schema.creatorPages.pageHandle, pageHandle),
+    with: {
+      posts: {
+        with: {
+          postContents: { 
+            with: { content: true }
+          },
+          membershipContents: {
+            with: {
+              membership: true,
+            }
+          },
+        },
+      },
+      memberships: true,  
+    },
+  });
+
+  return creatorPage;
+}
