@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { findCreators } from "~/server/actions";
 
@@ -62,19 +63,23 @@ export default function ExploreCreators({
       <h2 className="text-lg font-semibold mb-6">Ekstra Creators</h2>
       <div className="grid grid-cols-6 gap-8">
         {creators.map((creator) => (
-          <div key={creator.id} className="bg-neutral-800 rounded-lg overflow-hidden">
+          <Link
+            key={creator.id}
+            href={`/creatorpage/${creator.pageHandle}`}
+            className="bg-neutral-800 rounded-lg overflow-hidden hover:ring-2 hover:ring-neutral-600 transition"
+          >
             <div className="h-40 bg-neutral-700">
               <img
                 src={creator.img}
                 alt={creator.name}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="p-3">
               <h3 className="text-sm font-semibold">{creator.name}</h3>
               <p className="text-xs text-gray-400">{creator.description}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

@@ -353,11 +353,10 @@ export async function findCreators(
 }
 
 export async function retrieveCreatorPageInfoByHandle(pageHandle:string) {
-  const user = await auth();
-  const userId = user?.user?.id;
-
-  if (!userId) {throw new Error('User not authenticated');}
 
   const result = await queries.getCreatorPageInfoByHandle(pageHandle)
+
+  if (!result) {throw new Error('Failed to fetch data');}
+
   return result
 }

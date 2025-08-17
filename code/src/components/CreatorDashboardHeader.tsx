@@ -1,8 +1,8 @@
 "use client"
 
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react'
 import DomainDisplay from './DomainDisplay';
+import Link from 'next/link';
 
 interface CreatorPageData {
   name: string,
@@ -12,11 +12,6 @@ interface CreatorPageData {
 }
 
 export default function CreatorDashboardHeader( {creatorData} : { creatorData: CreatorPageData[] | null } ) {
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
   
   const navItems = [
     {name: 'Home', href: '/creator/dashboard'},
@@ -31,7 +26,6 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
       ? pathname === item.href
       : pathname === item.href || pathname.startsWith(`${item.href}/`)
   )?.href || "/creator/dashboard";
-
 
   return (
     <div className="bg-neutral-300 pb-6">
@@ -50,7 +44,7 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
         {/* Navigation Tabs */}
         <nav className="mt-6 flex justify-center gap-6 text-sm font-medium text-gray-700">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               className={`hover:text-black pb-1 transition-colors ${
                 activeItem === item.href
@@ -60,7 +54,7 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
               href={item.href}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>

@@ -1,18 +1,32 @@
-import { CreatorPageTabs } from "~/components/CreatorPageTabs";
+// app/creatorpage/[uniqueHandle]/page.tsx
 import { getCreatorPageInfoByHandle } from "~/server/queries";
+import CreatorPageHeader from "~/components/CreatorPageHeader";
 
-export default async function CreatorPageView({
+export default async function CreatorPublicPage({
   params,
 }: {
-  params: { pageHandle: string };
+  params: { uniqueHandle: string };
 }) {
+  const creator = await getCreatorPageInfoByHandle(params.uniqueHandle);
 
-  const param = await params
-  const creatorPage = await getCreatorPageInfoByHandle(param.pageHandle);
+
+  const displayName = creator?.name ?? "Creator";
+  const handle = creator?.pageHandle ?? params.uniqueHandle;
+  const avatarUrl = creator?.profileImage || "";
+  const bio = creator?.description || null;
+
+  const creatorData = [
+    {
+      name: displayName,
+      profileImage: avatarUrl,
+      description: bio,
+      pageHandle: handle,
+    },
+  ];  
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <CreatorPageTabs creator={creatorPage} />
+    <div className="">
+      <CreatorPageHeader creatorData={creatorData} />
     </div>
   );
 }
