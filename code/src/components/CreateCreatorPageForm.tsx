@@ -10,7 +10,9 @@ const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   handle: z.string()
     .min(3, "Must be at least 3 characters")
-    .max(20, "Cannot exceed 20 characters"),
+    .max(20, "Cannot exceed 20 characters")
+    .transform((s) => s.trim().replace(/^@+/, "").toLowerCase())
+    .pipe(z.string().regex(/^[a-z0-9_]+$/, "Only lowercase letters, numbers, and underscore")),
   description: z.string().min(10, "Description must be at least 10 characters")
 });
 
