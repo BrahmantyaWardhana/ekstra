@@ -372,3 +372,15 @@ export async function retrievePostInfoByHandle(pageHandle:string) {
 
   return postInfo
 }
+
+export async function retrieveMyMembershipTiersByHandle(pageHandle:string) {
+  const user = await auth();
+  if (!user) throw new Error("user is not authenticated");
+  
+  const creatorPageId = await queries.getCreatorIdByHandle(pageHandle)
+  if (!creatorPageId) throw new Error("user is not authenticated");
+
+  const postInfo = await queries.getMyMembershipTiers({ creatorPageId })
+
+  return postInfo
+}

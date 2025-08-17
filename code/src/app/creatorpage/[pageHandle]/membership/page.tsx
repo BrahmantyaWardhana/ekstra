@@ -1,5 +1,6 @@
-import CreatorPageHeader from "~/components/CreatorPageHeader";
-import { retrieveCreatorDataByHandle } from "~/server/actions";
+import CreatorMembershipsView from "~/components/CreatorMembershipsView";
+import { retrieveMyMembershipTiersByHandle } from "~/server/actions";
+
 
 export default async function CreatorPublicPageMemberships({
   params,
@@ -7,10 +8,13 @@ export default async function CreatorPublicPageMemberships({
   params: { uniqueHandle: string };
 }) {
   const param = await params
+  const membershipPlans = await retrieveMyMembershipTiersByHandle(param.uniqueHandle)
 
   return (
-    <div className="">
-      <p>Memberships</p>
-    </div>
+    <main className="p-6">
+      <div className="w-1/2 mx-auto">
+        <CreatorMembershipsView plans={membershipPlans} />
+      </div>
+    </main>
   );
 }
