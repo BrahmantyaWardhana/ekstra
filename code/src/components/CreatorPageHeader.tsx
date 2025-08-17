@@ -37,8 +37,12 @@ export default function CreatorDashboardHeader({
     [base, handle]
   );
 
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(href + "/");
+  const isActive = (href: string) => {
+    if (href === base) return pathname === base;
+
+    return pathname === href || pathname.startsWith(href + "/");
+  };
+
 
   return (
     <div className="bg-neutral-300 pb-6">

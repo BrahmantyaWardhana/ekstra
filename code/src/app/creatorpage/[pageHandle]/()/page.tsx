@@ -2,17 +2,16 @@
 import CreatorPageHeader from "~/components/CreatorPageHeader";
 import { retrieveCreatorDataByHandle } from "~/server/actions";
 
-export default async function CreatorPublicPage({
+export default async function CreatorPublicPageHome({
   params,
 }: {
   params: { uniqueHandle: string };
 }) {
-  const param = params
-  const creatorId = await retrieveCreatorDataByHandle(params.uniqueHandle)
+  const param = await params
 
   return (
     <div className="">
-      <p>Test</p>
+      <p>Home</p>
     </div>
   );
 }

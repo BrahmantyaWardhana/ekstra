@@ -564,3 +564,10 @@ export async function getCreatorDataByHandle(pageHandle:string) {
 
   return page
 }
+
+export async function getCreatorHeader(handle: string) {
+  return db.query.creatorPages.findFirst({
+    where: eq(schema.creatorPages.pageHandle, handle),
+    columns: { id: true, name: true, profileImage: true, description: true, pageHandle: true },
+  });
+}
