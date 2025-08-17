@@ -358,7 +358,17 @@ export async function retrieveCreatorDataByHandle(pageHandle:string) {
   if (!creatorPageId) {
     throw new Error("user is not authenticated")
   }
-  
+
   const creatorInfo = await queries.getCreatorDataByHandle(pageHandle)
   return creatorInfo
+}
+
+export async function retrievePostInfoByHandle(pageHandle:string) {
+  const user = await auth();
+  if (!user) throw new Error("user is not authenticated");
+  
+  const creatorPageId = await queries.getCreatorIdByHandle(pageHandle)
+  const postInfo = await queries.getMyPostInfo(creatorPageId!)
+
+  return postInfo
 }

@@ -571,3 +571,13 @@ export async function getCreatorHeader(handle: string) {
     columns: { id: true, name: true, profileImage: true, description: true, pageHandle: true },
   });
 }
+
+export async function getCreatorIdByHandle(pageHandle:string) {
+  const [row] = await db
+    .select({ id: schema.creatorPages.id })
+    .from(schema.creatorPages)
+    .where(eq(schema.creatorPages.pageHandle, pageHandle))
+    .limit(1);
+
+  return row?.id ?? null;
+}

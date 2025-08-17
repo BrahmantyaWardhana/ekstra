@@ -1,17 +1,19 @@
-// app/creatorpage/[uniqueHandle]/page.tsx
-import CreatorPageHeader from "~/components/CreatorPageHeader";
-import { retrieveCreatorDataByHandle } from "~/server/actions";
+import CreatorPostsView from "~/components/CreatorPostsView";
+import { retrievePostInfoByHandle } from "~/server/actions";
 
 export default async function CreatorPublicPageHome({
   params,
 }: {
-  params: { uniqueHandle: string };
+  params: { pageHandle: string };
 }) {
   const param = await params
+  const creatorPostInfo = await retrievePostInfoByHandle(param.pageHandle)
 
   return (
-    <div className="">
-      <p>Home</p>
-    </div>
+    <main className="p-6">
+      <div className="w-1/2 mx-auto">
+        <CreatorPostsView posts={creatorPostInfo} />
+      </div>
+    </main>
   );
 }

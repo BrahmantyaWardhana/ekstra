@@ -1,4 +1,3 @@
-// app/creatorpage/[uniqueHandle]/page.tsx
 import CreatorPageHeader from "~/components/CreatorPageHeader";
 import { retrieveCreatorDataByHandle } from "~/server/actions";
 
