@@ -1,7 +1,5 @@
 "use client"
 
-import { useRouter } from 'next/navigation';
-import { removePost } from '~/server/actions'
 import ContentRenderer from "./ContentRenderer";
 
 type PostInfo = {
@@ -34,21 +32,6 @@ interface CreatorHomeProps {
 }
 
 export default function CreatorPostsView({ posts }: CreatorHomeProps) {
-  const router = useRouter();
-
-  const handleEditPost = (postId: string) => {
-    router.push(`/creator/dashboard/editpost/${postId}`);
-  };
-
-  const handleDeletePost = async (postId: string) => {
-    try {
-      await removePost(postId)
-      router.refresh();
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      alert('Failed to delete post');
-    }
-  }
 
   return (
     <div className="w-full p-4">

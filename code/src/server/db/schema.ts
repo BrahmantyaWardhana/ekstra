@@ -269,6 +269,26 @@ export const membershipContents = createTable(
 	],
 );
 
+export const userMemberships = createTable(
+  "userMembership",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    membershipId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => memberships.id, { onDelete: "cascade" }),
+  })
+);
+
+
 // auth
 export const accounts = createTable(
 	"account",
@@ -328,6 +348,7 @@ export const verificationTokens = createTable(
 // relations
 export const usersRelations = relations(users, ({ many, one }) => ({
 	accounts: many(accounts),
+  userMemberships: many(userMemberships),
   session: one(sessions),
   creatorPage: one(creatorPages),
 }));
@@ -397,6 +418,7 @@ export const membershipsRelations = relations(memberships, ({ one, many }) => ({
     references: [creatorPages.id],
   }),
   membershipContents: many(membershipContents),
+  userMemberships: many(userMemberships),
 }));
 
 export const membershipContentsRelations = relations(membershipContents, ({ one }) => ({
@@ -410,3 +432,13 @@ export const membershipContentsRelations = relations(membershipContents, ({ one 
   }),
 }));
 
+export const userMembershipsRelations = relations(userMemberships, ({ one }) => ({
+  user: one(users, {
+    fields: [userMemberships.userId],
+    references: [users.id],
+  }),
+  membership: one(memberships, {
+    fields: [userMemberships.membershipId],
+    references: [memberships.id],
+  }),
+}));
