@@ -1,7 +1,8 @@
 import "server-only";
 import { db } from "~/server/db";
-import { and, asc, eq, ilike, inArray, ne, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, inArray, lte, ne, or, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
+import { addMonthsSafe } from "~/utils/dates";
 
 // session data query
 // find if user is a creator
@@ -580,4 +581,90 @@ export async function getCreatorIdByHandle(pageHandle:string) {
     .limit(1);
 
   return row?.id ?? null;
+}
+
+export async function getMembershipsByHandle(pageHandle: string) {
+  const creator = await db.query.creatorPages.findFirst({
+    where: eq(schema.creatorPages.pageHandle, pageHandle),
+    columns: { id: true },
+  });
+
+  if (!creator) return [];
+
+  return db.query.memberships.findMany({
+    where: eq(schema.memberships.creatorPageId, creator.id),
+    columns: {
+      id: true,
+      title: true,
+      description: true,
+      price: true,
+    },
+    orderBy: (m, { asc }) => [asc(m.price)],
+  });
+}
+
+export async function getMembershipPriceString(membershipId: string) {
+  const row = await db.query.memberships.findFirst({
+    where: eq(schema.memberships.id, membershipId),
+    columns: { price: true },
+  });
+  if (!row) throw new Error("Membership not found");
+  return row.price as unknown as string;
+}
+
+/** Returns the currently active period if any (now in [start, end)) */
+export async function getActiveMembershipPeriod(userId: string, membershipId: string) {
+  const now = new Date();
+  // Scan periods for (user, plan) and pick one where now is inside
+  const row = await db.query.userMemberships.findFirst({
+    where: (m, { and, eq }) =>
+      and(eq(m.userId, userId), eq(m.membershipId, membershipId), eq(m.status, "active")),
+    orderBy: desc(schema.userMemberships.currentPeriodStart),
+    columns: {
+      id: true,
+      currentPeriodStart: true,
+      currentPeriodEnd: true,
+    },
+  });
+
+  if (!row?.currentPeriodStart || !row?.currentPeriodEnd) return null;
+  if (row.currentPeriodStart <= now && now < row.currentPeriodEnd) return row;
+  return null;
+}
+
+/** Insert a fresh period [now, now+1month) as a new row. */
+export async function createMembershipPeriod(opts: {
+  userId: string;
+  membershipId: string;
+  priceString: string; // "9.99"
+}) {
+  const now = new Date();
+  const end = addMonthsSafe(now, 1);
+
+  // New period = new row. Unique index prevents exact same (user, plan, start) duplicate.
+  const inserted = await db
+    .insert(schema.userMemberships)
+    .values({
+      userId: opts.userId,
+      membershipId: opts.membershipId,
+      status: "active",
+      autoRenew: true,
+      canceledAt: null,
+      currentPeriodStart: now,
+      currentPeriodEnd: end,
+      currentPrice: opts.priceString,
+    })
+    .returning({ id: schema.userMemberships.id });
+
+  return { id: inserted[0]?.id, start: now, end };
+}
+
+/** (Optional) Get the last period end to chain the next one. */
+export async function getLastPeriodEnd(userId: string, membershipId: string) {
+  const row = await db.query.userMemberships.findFirst({
+    where: (m, { and, eq }) => and(eq(m.userId, userId), eq(m.membershipId, membershipId)),
+    orderBy: desc(schema.userMemberships.currentPeriodEnd),
+    columns: { currentPeriodEnd: true },
+  });
+  return row?.currentPeriodEnd ?? null;
 }

@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { index, pgTableCreator, primaryKey } from "drizzle-orm/pg-core";
+import { index, pgTableCreator, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
 /**
@@ -272,22 +272,27 @@ export const membershipContents = createTable(
 export const userMemberships = createTable(
   "userMembership",
   (d) => ({
-    id: d
-      .varchar({ length: 255 })
-      .notNull()
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    userId: d
-      .varchar({ length: 255 })
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    membershipId: d
-      .varchar({ length: 255 })
-      .notNull()
-      .references(() => memberships.id, { onDelete: "cascade" }),
-  })
-);
+    id: d.varchar({ length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
+    userId: d.varchar({ length: 255 }).notNull().references(() => users.id, { onDelete: "cascade" }),
+    membershipId: d.varchar({ length: 255 }).notNull().references(() => memberships.id, { onDelete: "cascade" }),
 
+    status: d.varchar({ length: 20 }).default("active").notNull(), 
+
+    autoRenew: d.boolean().default(true).notNull(),
+    canceledAt: d.timestamp({ withTimezone: true }),
+
+    currentPeriodStart: d.timestamp({ withTimezone: true }),
+    currentPeriodEnd: d.timestamp({ withTimezone: true }),
+
+    currentPrice: d.numeric({ precision: 10, scale: 2 }).notNull(),
+
+    createdAt: d.timestamp({ withTimezone: true }).defaultNow().notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+    uniqueIndex("ux_user_plan_once").on(t.userId, t.membershipId, t.currentPeriodStart),
+  ]
+)
 
 // auth
 export const accounts = createTable(

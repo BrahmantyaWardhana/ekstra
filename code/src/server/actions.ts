@@ -397,3 +397,48 @@ export async function checkIfSelf(pageHandle:string) {
     return false
   }
 }
+
+type SubscribeResult =
+  | { ok: true; message: string; until?: string }
+  | { ok: false; message: string; until?: string };
+
+export async function subscribeMembershipAction(input: {
+  membershipId: string;
+  pageHandle: string;
+}): Promise<SubscribeResult> {
+  const session = await auth();
+  if (!session) return { ok: false, message: "Please sign in to subscribe." };
+
+  try {
+    // 1) If already active, tell them until when
+    const active = await queries.getActiveMembershipPeriod(session.user.id, input.membershipId);
+    if (active?.currentPeriodEnd) {
+      return {
+        ok: false,
+        message: `You already have an active membership until ${active.currentPeriodEnd.toISOString()}.`,
+        until: active.currentPeriodEnd.toISOString(),
+      };
+    }
+
+    // 2) Create a new period row
+    const priceString = await queries.getMembershipPriceString(input.membershipId);
+    const res = await queries.createMembershipPeriod({
+      userId: session.user.id,
+      membershipId: input.membershipId,
+      priceString,
+    });
+
+    return {
+      ok: true,
+      message: `Subscription started. Valid until ${res.end.toISOString()}.`,
+      until: res.end.toISOString(),
+    };
+  } catch (err: any) {
+    // Duplicate start (very rare) or other DB error
+    const msg =
+      err?.code === "23505"
+        ? "Duplicate period detected. Please try again in a moment."
+        : err?.message ?? "Failed to subscribe.";
+    return { ok: false, message: msg };
+  }
+}

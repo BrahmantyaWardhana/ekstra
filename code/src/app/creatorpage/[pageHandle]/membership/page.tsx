@@ -1,19 +1,16 @@
+import { getMembershipsByHandle } from "~/server/queries";
 import CreatorMembershipsView from "~/components/CreatorMembershipsView";
-import { retrieveMyMembershipTiersByHandle } from "~/server/actions";
 
-
-export default async function CreatorPublicPageMemberships({
+export default async function MembershipPage({
   params,
-}: {
-  params: { pageHandle: string };
-}) {
+}: { params: { pageHandle: string } }) {
   const param = await params
-  const membershipPlans = await retrieveMyMembershipTiersByHandle(param.pageHandle)
+  const plans = await getMembershipsByHandle(param.pageHandle);
 
   return (
     <main className="p-6">
       <div className="w-1/2 mx-auto">
-        <CreatorMembershipsView plans={membershipPlans} />
+        <CreatorMembershipsView plans={plans} pageHandle={param.pageHandle}/>
       </div>
     </main>
   );
