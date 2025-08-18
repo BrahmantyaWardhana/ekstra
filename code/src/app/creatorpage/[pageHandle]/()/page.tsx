@@ -1,5 +1,6 @@
+import { redirect } from "next/navigation";
 import CreatorPostsView from "~/components/CreatorPostsView";
-import { retrievePostInfoByHandle } from "~/server/actions";
+import { checkIfSelf, retrievePostInfoByHandle } from "~/server/actions";
 
 export default async function CreatorPublicPageHome({
   params,
@@ -7,6 +8,13 @@ export default async function CreatorPublicPageHome({
   params: { pageHandle: string };
 }) {
   const param = await params
+
+  const isSelf = await checkIfSelf(param.pageHandle)
+
+  if (isSelf) {
+    redirect("/creator/dashboard");
+  }
+
   const creatorPostInfo = await retrievePostInfoByHandle(param.pageHandle)
 
   return (

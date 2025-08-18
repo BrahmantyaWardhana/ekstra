@@ -176,8 +176,8 @@ export async function submitContentData(
         if (!result[0]) throw new Error("Failed to create content");
         return result[0].id;
       })
-    ) 
-    return contentIds 
+    )
+    return contentIds
   } catch (error) {
     return null
   }
@@ -383,4 +383,17 @@ export async function retrieveMyMembershipTiersByHandle(pageHandle:string) {
   const postInfo = await queries.getMyMembershipTiers({ creatorPageId })
 
   return postInfo
+}
+
+export async function checkIfSelf(pageHandle:string) {
+  const user = await auth();
+  const userCreatorId: string | null =
+    user?.user?.creatorPageId ?? null;
+  const pageId: string | null = await queries.getCreatorIdByHandle(pageHandle);
+
+  if (userCreatorId == pageId) {
+    return true
+  } else {
+    return false
+  }
 }
