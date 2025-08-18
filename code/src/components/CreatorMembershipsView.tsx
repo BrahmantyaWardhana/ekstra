@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import { removeMembership } from '~/server/actions';
 
 interface MembershipPlans {
   id: string,
@@ -49,6 +48,12 @@ export default function CreatorMembershipsView( {plans} : {plans : MembershipPla
           </div>
         ))}
       </div>
+
+      {plans?.length === 0 && (
+        <div className="bg-neutral-800 rounded-lg p-8 text-center border border-neutral-700">
+          <p className="text-neutral-400 mb-4">This creator haven't created any memberships yet</p>
+        </div>
+      )}
     </div>
   );
 }

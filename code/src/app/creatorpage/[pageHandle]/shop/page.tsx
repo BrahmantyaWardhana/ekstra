@@ -1,5 +1,4 @@
-import CreatorPageHeader from "~/components/CreatorPageHeader";
-import { retrieveCreatorDataByHandle } from "~/server/actions";
+import CreatorShopView from "~/components/CreatorShopView";
 
 export default async function CreatorPublicPageShop({
   params,
@@ -9,8 +8,10 @@ export default async function CreatorPublicPageShop({
   const param = await params
 
   return (
-    <div className="">
-      <p>Shop</p>
-    </div>
+    <main className="p-6">
+      <div className="w-1/2 mx-auto">
+        <CreatorShopView />
+      </div>
+    </main>
   );
 }
