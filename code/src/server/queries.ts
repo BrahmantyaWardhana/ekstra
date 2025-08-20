@@ -632,11 +632,10 @@ export async function getActiveMembershipPeriod(userId: string, membershipId: st
   return null;
 }
 
-/** Insert a fresh period [now, now+1month) as a new row. */
 export async function createMembershipPeriod(opts: {
   userId: string;
   membershipId: string;
-  priceString: string; // "9.99"
+  priceString: string;
 }) {
   const now = new Date();
   const end = addMonthsSafe(now, 1);
@@ -667,4 +666,35 @@ export async function getLastPeriodEnd(userId: string, membershipId: string) {
     columns: { currentPeriodEnd: true },
   });
   return row?.currentPeriodEnd ?? null;
+}
+
+export async function getViewerMembershipIdsForCreator(pageHandle:string, userId:string) {
+  const creator = await db.query.creatorPages.findFirst({
+    where: eq(schema.creatorPages.pageHandle, pageHandle),
+    columns: { id: true },
+  });
+  if (!creator) return [];
+
+  // 2. Find all membership IDs for this creator
+  const creatorMemberships = await db.query.memberships.findMany({
+    where: eq(schema.memberships.creatorPageId, creator.id),
+    columns: { id: true },
+  });
+  if (creatorMemberships.length === 0) return [];
+
+  const membershipIds = creatorMemberships.map((m) => m.id);
+
+  // 3. Get the intersection with memberships the viewer owns
+  const rows = await db
+    .select({ membershipId: schema.userMemberships.membershipId })
+    .from(schema.userMemberships)
+    .where(
+      and(
+        eq(schema.userMemberships.userId, userId),
+        inArray(schema.userMemberships.membershipId, membershipIds)
+      )
+    );
+
+  // 4. Return the IDs the viewer has
+  return rows.map((r) => r.membershipId);
 }

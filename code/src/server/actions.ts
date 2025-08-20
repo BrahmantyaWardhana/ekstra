@@ -442,3 +442,11 @@ export async function subscribeMembershipAction(input: {
     return { ok: false, message: msg };
   }
 }
+
+export async function retrieveViewerMembershipIdsForCreator(pageHandle:string) {
+  const user = await auth();
+  if (!user) throw new Error("user is not authenticated");
+
+  const result = await queries.getViewerMembershipIdsForCreator(pageHandle, user.user.id)
+  return result
+}

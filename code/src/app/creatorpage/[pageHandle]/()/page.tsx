@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import CreatorPostsView from "~/components/CreatorPostsView";
-import { checkIfSelf, retrievePostInfoByHandle } from "~/server/actions";
+import { checkIfSelf, retrievePostInfoByHandle, retrieveViewerMembershipIdsForCreator } from "~/server/actions";
 
 export default async function CreatorPublicPageHome({
   params,
@@ -10,6 +10,7 @@ export default async function CreatorPublicPageHome({
   const param = await params
 
   const isSelf = await checkIfSelf(param.pageHandle)
+  const viewerMembershipIds = await retrieveViewerMembershipIdsForCreator(param.pageHandle)
 
   if (isSelf) {
     redirect("/creator/dashboard");
@@ -20,7 +21,7 @@ export default async function CreatorPublicPageHome({
   return (
     <main className="p-6">
       <div className="w-1/2 mx-auto">
-        <CreatorPostsView posts={creatorPostInfo} />
+        <CreatorPostsView posts={creatorPostInfo} viewerMembershipIds={viewerMembershipIds} pageHandle={param.pageHandle} />
       </div>
     </main>
   );
