@@ -38,7 +38,7 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
             referrerPolicy="no-referrer" 
           />
           <h1 className="mt-4 text-2xl font-semibold text-black">{creatorData?.[0]?.name}</h1>
-          <p className="text-sm text-gray-800 mt-1"><DomainDisplay />/{creatorData?.[0]?.pageHandle}</p>
+          <p className="text-sm text-gray-800 mt-1"><DomainDisplay />/creatorpage/{creatorData?.[0]?.pageHandle}</p>
         </div>
 
         {/* Navigation Tabs */}

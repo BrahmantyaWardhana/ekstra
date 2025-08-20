@@ -698,3 +698,104 @@ export async function getViewerMembershipIdsForCreator(pageHandle:string, userId
   // 4. Return the IDs the viewer has
   return rows.map((r) => r.membershipId);
 }
+
+export async function getUserMembershipsWithDetails(userId: string) {
+  return db.query.userMemberships.findMany({
+    where: eq(schema.userMemberships.userId, userId),
+    orderBy: desc(schema.userMemberships.createdAt),
+    // Select columns you actually need (optional but good practice)
+    columns: {
+      id: true,
+      status: true,
+      autoRenew: true,
+      canceledAt: true,
+      currentPeriodStart: true,
+      currentPeriodEnd: true,
+      currentPrice: true,
+    },
+    with: {
+      membership: {
+        columns: {
+          id: true,
+          title: true,
+          description: true,
+          price: true,
+          creatorPageId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        with: {
+          creator: {
+            // This is the creatorPage the membership belongs to
+            columns: {
+              id: true,
+              name: true,
+              pageHandle: true,
+              profileImage: true,
+              description: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+export async function getCreatorsWithUserMemberships(userId:string) {
+  const rows = await db
+    .select({
+      // creator
+      creatorId: schema.creatorPages.id,
+      creatorName: schema.creatorPages.name,
+      creatorHandle: schema.creatorPages.pageHandle,
+      creatorImg: schema.creatorPages.profileImage,
+      creatorDesc: schema.creatorPages.description,
+
+      // membership
+      membershipId: schema.memberships.id,
+      membershipTitle: schema.memberships.title,
+      membershipPrice: schema.memberships.price, // numeric -> string
+    })
+    .from(schema.userMemberships)
+    .innerJoin(schema.memberships, eq(schema.userMemberships.membershipId, schema.memberships.id))
+    .innerJoin(schema.creatorPages, eq(schema.memberships.creatorPageId, schema.creatorPages.id))
+    .where(
+      and(
+        eq(schema.userMemberships.userId, userId),
+        eq(schema.userMemberships.status, "active") // only active
+      )
+    );
+
+  // Group memberships under their creator page
+  const byCreator = new Map<
+    string,
+    {
+      id: string;
+      name: string;
+      pageHandle: string;
+      img: string;
+      description: string | null;
+      memberships: { id: string; title: string; price: string }[];
+    }
+  >();
+
+  for (const r of rows) {
+    if (!byCreator.has(r.creatorId)) {
+      byCreator.set(r.creatorId, {
+        id: r.creatorId,
+        name: r.creatorName,
+        pageHandle: r.creatorHandle,
+        img: r.creatorImg,
+        description: r.creatorDesc ?? null,
+        memberships: [],
+      });
+    }
+    byCreator.get(r.creatorId)!.memberships.push({
+      id: r.membershipId,
+      title: r.membershipTitle,
+      price: String(r.membershipPrice),
+    });
+  }
+
+  return Array.from(byCreator.values());
+}

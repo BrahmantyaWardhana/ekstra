@@ -345,7 +345,7 @@ export async function removeMembership(membershipId: string) {
 export async function findCreators(
   search: string = "",
   page: number = 0,
-  limit: number = 15
+  limit: number = 18
 ) {
   const { creators, total } = await queries.getCreators(search, page, limit);
 
@@ -448,5 +448,13 @@ export async function retrieveViewerMembershipIdsForCreator(pageHandle:string) {
   if (!user) throw new Error("user is not authenticated");
 
   const result = await queries.getViewerMembershipIdsForCreator(pageHandle, user.user.id)
+  return result
+}
+
+export async function retrieveCreatorsWithUserMemberships() {
+  const user = await auth();
+  if (!user) throw new Error("user is not authenticated");
+
+  const result = await queries.getCreatorsWithUserMemberships(user.user.id)
   return result
 }
