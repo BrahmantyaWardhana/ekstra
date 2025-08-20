@@ -73,12 +73,6 @@ export default function CreatorAccountDropdown({ creatorDropdownData }: { creato
             className={dropDownItemStyle}
           >
             User account
-          </a>    
-          <a 
-            href="#" 
-            className={dropDownItemStyle}
-          >
-            Profile
           </a>
           <button
             onClick={() => signOut({ redirectTo: "/" })}
