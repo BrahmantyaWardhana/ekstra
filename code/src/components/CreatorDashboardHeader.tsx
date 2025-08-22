@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import DomainDisplay from './DomainDisplay';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface CreatorPageData {
   name: string,
@@ -12,7 +13,21 @@ interface CreatorPageData {
 }
 
 export default function CreatorDashboardHeader( {creatorData} : { creatorData: CreatorPageData[] | null } ) {
-  
+  const pageHandle = creatorData?.[0]?.pageHandle ?? "";
+  const [copied, setCopied] = useState(false);
+
+  async function copyPublicLink() {
+    if (!pageHandle) return;
+    const url = `${window.location.origin}/creatorpage/${pageHandle}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch {
+
+    }
+  }
+
   const navItems = [
     {name: 'Home', href: '/creator/dashboard'},
     {name: 'Membership', href: '/creator/dashboard/membership'},
@@ -38,7 +53,23 @@ export default function CreatorDashboardHeader( {creatorData} : { creatorData: C
             referrerPolicy="no-referrer" 
           />
           <h1 className="mt-4 text-2xl font-semibold text-black">{creatorData?.[0]?.name}</h1>
-          <p className="text-sm text-gray-800 mt-1"><DomainDisplay />/creatorpage/{creatorData?.[0]?.pageHandle}</p>
+          {/* URL + Copy button */}
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <span className="text-sm text-gray-800">
+              <DomainDisplay />/creatorpage/{pageHandle}
+            </span>
+            <button
+              type="button"
+              onClick={copyPublicLink}
+              disabled={!pageHandle}
+              className="px-2 py-1 text-xs rounded-md border bg-black text-white disabled:opacity-50 cursor-pointer"
+              aria-live="polite"
+              title="Copy public link"
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
+
         </div>
 
         {/* Navigation Tabs */}
