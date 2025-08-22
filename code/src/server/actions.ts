@@ -299,6 +299,15 @@ export async function updateFullPost(postId: string, data: {
 }
 
 export async function removePost(postId: string) {
+  const row = await queries.getContentKey(postId)
+  const keys = row
+    .map(r => r.contentKey)
+    .filter((k): k is string => typeof k === "string" && k.length > 0);
+
+  if (keys.length > 0) {
+    await utapi.deleteFiles(keys);
+  }
+
   await queries.deletePost(postId)
 }
 

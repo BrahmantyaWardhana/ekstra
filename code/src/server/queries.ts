@@ -397,6 +397,16 @@ export async function editPostTransaction(
   });
 }
 
+export async function getContentKey(postId: string) {
+  const result = await db.select({
+    contentKey: schema.contents.contentKey,
+  })
+  .from(schema.postContents)
+  .innerJoin(schema.contents, eq(schema.postContents.contentId, schema.contents.id))
+  .where(eq(schema.postContents.postId, postId))
+  return result
+}
+
 export async function deletePost(postId: string) {
   await db.transaction(async (tx) => {
     // 1. Delete membership links
