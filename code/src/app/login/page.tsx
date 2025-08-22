@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
@@ -9,9 +10,10 @@ export default function LoginPage() {
         <h2 className="text-2xl font-bold text-white mb-6 text-center">
           Ekstra
         </h2>
+
         <div className="flex justify-center">
           <button
-            onClick={() => signIn("google", { redirectTo: "/user/home" })}
+            onClick={() => signIn("google", { callbackUrl: "/user/home" })}
             className="px-4 py-2 border-2 flex gap-2 border-slate-200 rounded-lg text-slate-200 hover:border-slate-500 hover:text-slate-300 hover:shadow transition duration-150 hover:cursor-pointer"
           >
             <img
@@ -22,6 +24,17 @@ export default function LoginPage() {
             />
             <span>Login with Google</span>
           </button>
+        </div>
+
+        {/* Disclaimer (box style untouched) */}
+        <div className="mt-4 text-xs text-slate-400">
+          <p>
+            By continuing with Google, Ekstra will receive your{" "}
+            <strong>name</strong>, <strong>email</strong>, and{" "}
+            <strong>profile photo</strong> from your Google account. We use this
+            to create and personalize your account and keep you signed in. We do
+            not access your contacts or post on your behalf.
+          </p>
         </div>
       </div>
     </div>

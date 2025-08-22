@@ -20,7 +20,7 @@ export default function GeneralInformation() {
             {[
               {
                 q: "How do creators get paid?",
-                a: "Members subscribe to your tiers; payouts are processed to your account via Xendit based on your payout setup.",
+                a: "Members subscribe to your tiers; payouts are processed to your account via Stripe based on your payout setup.",
               },
               {
                 q: "What fees does Ekstra charge?",

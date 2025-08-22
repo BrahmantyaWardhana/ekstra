@@ -65,7 +65,7 @@ export default function Pricing() {
               </div>
 
               <p className="mt-4 text-xs text-slate-400">
-                * Xendit fees vary by payment method and are subject to change per Xendit’s pricing.
+                * Stripe fees vary by payment method and are subject to change per Xendit’s pricing.
               </p>
             </div>
           </div>
