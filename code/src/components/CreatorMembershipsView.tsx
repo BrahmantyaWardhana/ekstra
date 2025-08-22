@@ -39,7 +39,7 @@ export default function CreatorMembershipsView({
               <div className="mt-4 flex space-x-2">
                 <button
                   disabled={isPending}
-                  className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 disabled:opacity-60"
+                  className="px-3 py-1 text-sm bg-white text-black rounded-md hover:bg-gray-200 disabled:opacity-60 cursor-pointer"
                   onClick={() => handleSubscribe(plan.id)}
                 >
                   {isPending ? "Subscribing..." : "Subscribe"}

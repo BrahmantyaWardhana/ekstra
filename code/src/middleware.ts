@@ -1,49 +1,43 @@
 import { auth } from "~/server/auth";
 
 export default auth((req) => {
-  const { pathname } = req.nextUrl;
+  const { pathname, origin } = req.nextUrl;
   const creatorPageId = req.auth?.user?.creatorPageId ?? null;
 
-  const publicRoutes = ['/', '/login', '/about', '/gettingstarted'];
-  const creatorRoutes = ['/creator', '/creator/*'];
-  const creatorSetupRoute = '/creatorsetup';
+  // helpers
+  const segMatch = (base: string) => pathname === base || pathname.startsWith(`${base}/`);
 
-  const isPublicRoute = publicRoutes.includes(pathname);
-  const isCreatorRoute = creatorRoutes.some(route =>
-    pathname.startsWith(route.replace('/*', ''))
-  );
-  const isCreatorSetup = pathname === creatorSetupRoute;
+  // route buckets
+  const isPublicRoute = ['/', '/login', '/about', '/gettingstarted'].includes(pathname);
+  const isCreatorRoute = segMatch('/creator');
+  const isCreatorSetup = pathname === '/creatorsetup';
+  const isCreatorPageRoute = segMatch('/creatorpage');
 
   if (isCreatorSetup) {
-    if (!req.auth) {
-      return Response.redirect(new URL("/login", req.nextUrl.origin));
-    }
-    if (creatorPageId) {
-      return Response.redirect(new URL("/creator/dashboard", req.nextUrl.origin));
-    }
+    if (!req.auth) return Response.redirect(new URL("/login", origin));
+    if (creatorPageId) return Response.redirect(new URL("/creator/dashboard", origin));
     return;
   }
 
   if (isCreatorRoute) {
-    if (!req.auth) {
-      return Response.redirect(new URL("/login", req.nextUrl.origin));
-    }
-    if (creatorPageId === null) {
-      return Response.redirect(new URL("/creatorsetup", req.nextUrl.origin));
-    }
+    if (!req.auth) return Response.redirect(new URL("/login", origin));
+    if (!creatorPageId) return Response.redirect(new URL("/creatorsetup", origin));
     return;
   }
 
+  if (isCreatorPageRoute) {
+    if (!req.auth) return Response.redirect(new URL("/login", origin));
+    return;
+  }
+
+  // Public routes
   if (isPublicRoute) {
-    if (req.auth) {
-      return Response.redirect(new URL("/user/home", req.nextUrl.origin));
-    }
+    if (req.auth) return Response.redirect(new URL("/user/home", origin));
     return;
   }
 
-  if (!req.auth) {
-    return Response.redirect(new URL("/login", req.nextUrl.origin));
-  }
+  // Everything else requires auth
+  if (!req.auth) return Response.redirect(new URL("/login", origin));
 
   return;
 });

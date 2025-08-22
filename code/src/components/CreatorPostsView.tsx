@@ -111,7 +111,7 @@ export default function CreatorPostsView({
                     </p>
                     <Link
                       href={`/creatorpage/${pageHandle}/membership`}
-                      className="mt-3 inline-block rounded-md border border-blue-600 px-3 py-1 text-sm text-blue-300 hover:bg-blue-600/10"
+                      className="mt-3 px-3 py-1 text-sm inline-block rounded-md border bg-white text-black hover:bg-gray-200 transition-colors cursor-pointer"
                     >
                       See membership options
                     </Link>
