@@ -40,7 +40,7 @@ export const ourFileRouter = {
 
   postContentuploader: f({
     image: {maxFileSize: "4MB", maxFileCount: 1},
-    video: {maxFileSize: "16MB", maxFileCount: 1},
+    video: {maxFileSize: "1GB", maxFileCount: 1},
     audio: {maxFileSize :"8MB", maxFileCount: 1},
     blob: {maxFileSize: "8MB", maxFileCount: 1},
     pdf: {maxFileSize: "4MB", maxFileCount: 1},

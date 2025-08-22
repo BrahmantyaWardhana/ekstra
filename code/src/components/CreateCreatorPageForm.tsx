@@ -40,7 +40,7 @@ export default function CreateCreatorPageForm() {
     }
 
     await submitCreatorPage(data);
-    redirect('creator/dashboard/home')
+    redirect('creator/dashboard')
   };
 
   return (

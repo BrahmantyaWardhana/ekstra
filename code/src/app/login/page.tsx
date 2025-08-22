@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
@@ -26,7 +25,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Disclaimer (box style untouched) */}
+        {/* Disclaimer*/}
         <div className="mt-10 text-xs text-slate-400">
           <p>
             By continuing with Google, Ekstra will receive your{" "}

@@ -3,6 +3,7 @@
 import { auth } from '~/server/auth';
 import * as queries from '~/server/queries';
 import { utapi } from './uploadthing';
+import type { FileEsque } from 'uploadthing/types';
 
 export async function checkHandleUnique(handle: string) {
   try{
@@ -127,6 +128,11 @@ export async function removeFileFromUt(
   key: string
 ) {
   await utapi.deleteFiles(key);
+}
+
+export async function uploadFileToUt(files: FileEsque[]) {
+  const response = await utapi.uploadFiles(files)
+  return response
 }
 
 export async function submitPostData(title: string, description: string) {
