@@ -64,7 +64,7 @@ export const creatorPages = createTable(
     userId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     description: d
       .varchar({ length: 255 }),
     pageHandle: d
@@ -96,7 +96,7 @@ export const contents = createTable(
     creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => creatorPages.id),
+      .references(() => creatorPages.id, { onDelete: "cascade" }),
     type: d // video, image, file, etc.
       .varchar({ length: 100})
       .notNull(),
@@ -137,7 +137,7 @@ export const storeListings = createTable (
     creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => creatorPages.id),
+      .references(() => creatorPages.id, { onDelete: "cascade" }),
   	createdAt: d
 			.timestamp({ withTimezone: true })
 			.default(sql`CURRENT_TIMESTAMP`)
@@ -160,11 +160,11 @@ export const storeContents = createTable(
     contentId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => contents.id),
+			.references(() => contents.id, { onDelete: "cascade" }),
     storeListingId: d
       .varchar({ length: 255 })
 			.notNull()
-			.references(() => storeListings.id),
+			.references(() => storeListings.id, { onDelete: "cascade" }),
   })
 )
 
@@ -183,7 +183,7 @@ export const posts = createTable(
     creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => creatorPages.id),
+      .references(() => creatorPages.id, { onDelete: "cascade" }),
     createdAt: d
 			.timestamp({ withTimezone: true })
 			.default(sql`CURRENT_TIMESTAMP`)
@@ -206,11 +206,11 @@ export const postContents = createTable(
 		contentId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => contents.id),
+			.references(() => contents.id, { onDelete: "cascade" }),
     postId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => posts.id),
+			.references(() => posts.id, { onDelete: "cascade" }),
   }),
   (t) => [
 
@@ -228,7 +228,7 @@ export const memberships = createTable(
     creatorPageId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => creatorPages.id),
+      .references(() => creatorPages.id, { onDelete: "cascade" }),
     title: d
       .varchar({ length: 255 }).notNull(),
     description: d
@@ -258,11 +258,11 @@ export const membershipContents = createTable(
 		postId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => posts.id),
+			.references(() => posts.id, { onDelete: "cascade" }),
     membershipId: d
       .varchar({ length: 255 })
 			.notNull()
-			.references(() => memberships.id),
+			.references(() => memberships.id, { onDelete: "cascade" }),
 	}),
 	(t) => [
     
@@ -301,7 +301,7 @@ export const accounts = createTable(
 		userId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => users.id),
+			.references(() => users.id, { onDelete: "cascade" }),
 		type: d.varchar({ length: 255 }).$type<AdapterAccount["type"]>().notNull(),
 		provider: d.varchar({ length: 255 }).notNull(),
 		providerAccountId: d.varchar({ length: 255 }).notNull(),
@@ -330,7 +330,7 @@ export const sessions = createTable(
 		userId: d
 			.varchar({ length: 255 })
 			.notNull()
-			.references(() => users.id),
+			.references(() => users.id, { onDelete: "cascade" }),
 		expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
 	}),
 	(t) => [index("t_user_id_idx").on(t.userId)],
