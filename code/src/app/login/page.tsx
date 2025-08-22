@@ -27,13 +27,13 @@ export default function LoginPage() {
         </div>
 
         {/* Disclaimer (box style untouched) */}
-        <div className="mt-4 text-xs text-slate-400">
+        <div className="mt-10 text-xs text-slate-400">
           <p>
             By continuing with Google, Ekstra will receive your{" "}
             <strong>name</strong>, <strong>email</strong>, and{" "}
             <strong>profile photo</strong> from your Google account. We use this
             to create and personalize your account and keep you signed in. We do
-            not access your contacts or post on your behalf.
+            not access your contacts or post on your behalf.*
           </p>
         </div>
       </div>
