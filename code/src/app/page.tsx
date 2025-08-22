@@ -1,38 +1,44 @@
 import Footer from "~/components/AppFooter";
+import FeaturesInfo from "~/components/landingPage/FeaturesInfo";
+import GeneralInformation from "~/components/landingPage/GeneralInformation";
+import Hero from "~/components/landingPage/Hero";
+import Pricing from "~/components/landingPage/Pricing";
+import ServiceGuide from "~/components/landingPage/ServiceGuide";
+import ServiceIntro from "~/components/landingPage/ServiceIntro";
 import Navbar from "~/components/Navbar";
-import RotatingBackground from "~/components/RotatingBackground";
-import SearchBar from "~/components/SearchBar";
-import { getBackground } from "~/server/queries";
 
-export default async function HomePage() {
-  const backgroundImages = await getBackground();
+export const metadata = {
+  title: "Ekstra — Memberships for Creators",
+  description:
+    "Build your creator page, post exclusive content, and earn from memberships. Ekstra makes it simple for creators and fun for fans.",
+};
 
+export default function HomePage() {
   return (
-    <>
-      <div className="bg-slate-950">
-        <Navbar />
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <Navbar />
+      <div className="min-h-[calc(100vh)] pt-24">
+        <main>
+          {/* Hero */}
+          <Hero />
 
-        {/* Main content area */}
-        <div className="flex min-h-[calc(100vh)] pt-24">
-          {/* Left Column with Gradient */}
-          <div className="relative w-full md:w-2/3">
-            {/* Gradient Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_30%_40%,#3e3e3e,transparent)] opacity-80"></div>
-            {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-center items-center p-8 text-white">
-              <h1 className="text-4xl font-bold mb-6">Left Column Content</h1>
-              <SearchBar />
-            </div>
-          </div>
+          {/* Service Intro*/}
+          <ServiceIntro />
 
-          {/* Right Column */}
-          <div className="md:w-1/3 bg-white hidden md:block">
-            <RotatingBackground images={backgroundImages} interval={4500} />
-          </div>
-        </div>
-        {/*Footer goes here*/}
-        <Footer />
+          {/* Features Info */}
+          <FeaturesInfo />
+
+          {/* Service Guide */}
+          <ServiceGuide />
+
+          {/* Pricing */}
+          <Pricing />
+
+          {/* GeneralInformation */}
+          <GeneralInformation />
+        </main>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
