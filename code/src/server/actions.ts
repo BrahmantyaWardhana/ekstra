@@ -130,9 +130,13 @@ export async function removeFileFromUt(
   await utapi.deleteFiles(key);
 }
 
-export async function uploadFileToUt(files: FileEsque[]) {
-  const response = await utapi.uploadFiles(files)
-  return response
+export async function uploadFileToUt(formData: FormData) {
+  const entries = formData.getAll("files");
+  const files = entries.filter((e): e is File => e instanceof File);
+
+  if (files.length === 0) return [];
+  const uploaded = await utapi.uploadFiles(files);
+  return uploaded;
 }
 
 export async function submitPostData(title: string, description: string) {
