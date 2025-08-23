@@ -15,10 +15,10 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen">
       <Navbar />
       <div className="min-h-[calc(100vh)] pt-24">
-        <main>
+        <main className="bg-slate-300 text-black">
           {/* Hero */}
           <Hero />
 

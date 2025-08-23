@@ -11,7 +11,7 @@ export default function FeaturesInfo() {
             <h2 className="text-3xl font-bold md:text-4xl">
               Everything you need to start earning Ekstra
             </h2>
-            <p className="mt-3 text-slate-300">
+            <p className="mt-3 text-slate-800">
               Start simple. Grow as you go. Ekstra focuses on what creators
               use daily.
             </p>
@@ -46,9 +46,9 @@ export default function FeaturesInfo() {
             ].map((f, i) => (
               <div
                 key={i}
-                className="group rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"
+                className="group rounded-2xl border border-white/10 bg-slate-200 p-6"
               >
-                <div className="mb-4 inline-flex size-10 items-center justify-center rounded-xl bg-white/10">
+                <div className="mb-4 inline-flex size-10 items-center justify-center rounded-xl">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -61,7 +61,7 @@ export default function FeaturesInfo() {
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm text-slate-300">{f.desc}</p>
+                <p className="mt-2 text-sm text-slate-700">{f.desc}</p>
               </div>
             ))}
           </div>

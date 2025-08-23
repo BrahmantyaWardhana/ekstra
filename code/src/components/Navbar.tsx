@@ -32,7 +32,7 @@ export default function Navbar() {
                 href={item.href}
                 className="px-4 py-2 rounded-full text-sm font-medium text-white 
                        border-2 border-white hover:bg-white hover:text-black 
-                       transition-all duration-300 transform hover:scale-105"
+                       transition-all duration-300"
               >
                 {item.name}
               </a>

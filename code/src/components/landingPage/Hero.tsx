@@ -14,13 +14,13 @@ export default function Hero() {
             </span>
             {" "} with us.
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300 md:text-xl">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-black md:text-xl">
             Ekstra lets you create a page, lock posts behind memberships,
             and get paid monthly. Simple for you. Special for your fans.
           </p>
 
           {/* Credibility strip */}
-          <div className="mt-10 text-xs text-slate-400">
+          <div className="mt-10 text-xs text-black">
             No setup fees • Cancel anytime • Keep ownership of your content
           </div>
         </div>
