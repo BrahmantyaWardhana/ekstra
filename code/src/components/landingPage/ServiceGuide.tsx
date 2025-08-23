@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function ServiceGuide() {
   return(
     <RevealOnScroll>
-      <section className="py-20">
+      <section id="how" className="py-20">
         <div className="container mx-auto grid items-center gap-10 px-6 md:grid-cols-2">
           <div>
             <span className="rounded-full border border-white/10 bg-slate-200 px-3 py-1 text-xs uppercase tracking-wider shadow-2xl">

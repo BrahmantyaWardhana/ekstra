@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function ServiceIntro() {
   return(
     <RevealOnScroll>
-      <section className="py-14">
+      <section id="intro" className="py-14">
         <div className="container mx-auto grid gap-8 px-6 md:grid-cols-2">
           <div className="rounded-2xl p-6 bg-slate-200 shadow-2xl">
             <h2 className="text-2xl font-bold">For Creators</h2>

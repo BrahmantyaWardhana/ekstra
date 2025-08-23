@@ -5,7 +5,7 @@ import RevealOnScroll from "../RevealOnScroll";
 export default function Hero() {
   return(
     <RevealOnScroll>
-      <section className="relative overflow-hidden">
+      <section id="hero" className="relative overflow-hidden">
         <div className="container mx-auto px-6 pt-16 pb-24 text-center">
           <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-6xl">
             Earn{" "}
