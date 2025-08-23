@@ -18,7 +18,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Navbar />
       <div className="min-h-[calc(100vh)] pt-24">
-        <main className="bg-slate-300 text-black">
+        <main className="bg-white/70 text-black">
           {/* Hero */}
           <Hero />
 

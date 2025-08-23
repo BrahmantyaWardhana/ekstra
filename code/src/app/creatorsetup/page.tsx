@@ -1,9 +1,13 @@
 import CreateCreatorPageForm from "~/components/CreateCreatorPageForm";
 import RotatingBackground from "~/components/RotatingBackground";
 import { getBackground } from "~/server/queries";
+import { auth } from '~/server/auth';
+import { redirect } from 'next/navigation'
 
 export default async function creatorSetup() {
   const backgroundImages = await getBackground();
+  const session = await auth();
+  if (!session) redirect(`/login?callbackUrl=/creatorsetup`);
 
   return (
     <>

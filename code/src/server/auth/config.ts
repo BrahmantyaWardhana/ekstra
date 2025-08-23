@@ -69,6 +69,14 @@ export const authConfig = {
       }
       return true;
     },
+
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (new URL(url).origin === baseUrl) return url;
+
+      return baseUrl;
+    },
+
 		session: async ({ session, user }) => ({
       ...session,
       user: {
