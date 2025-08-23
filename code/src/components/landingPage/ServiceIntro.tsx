@@ -34,7 +34,7 @@ export default function ServiceIntro() {
             <div className="mt-6">
               <Link
                 href="/creator/onboarding"
-                className="inline-flex text-slate-200 rounded-2xl bg-black border-2  px-5 py-2.5 font-semibold 
+                className="inline-flex text-slate-200 rounded-2xl bg-black border-2  px-5 py-2.5 
                   hover:bg-slate-200 hover:border-black hover:text-black transition-all duration-300"
               >
                 Start your page
@@ -63,7 +63,7 @@ export default function ServiceIntro() {
             <div className="mt-6">
               <Link
                 href="/user/explore"
-                className="inline-flex text-slate-200 rounded-2xl bg-black border-2  px-5 py-2.5 font-semibold 
+                className="inline-flex text-slate-200 rounded-2xl bg-black border-2  px-5 py-2.5 
                   hover:bg-slate-200 hover:border-black hover:text-black transition-all duration-300"
               >
                 Browse creators
