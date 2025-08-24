@@ -72,6 +72,7 @@ export default function ExploreCreators({
               <img
                 src={creator.img}
                 alt={creator.name}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
             </div>
