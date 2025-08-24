@@ -9,7 +9,10 @@ export default function FeaturesInfo() {
         <div className="container mx-auto px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">
-              Everything you need to start earning Ekstra
+              Everything you need to start earning{" "}
+              <span className="text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                Ekstra
+              </span>
             </h2>
             <p className="mt-3 text-slate-800">
               Start simple. Grow as you go. Ekstra focuses on what creators

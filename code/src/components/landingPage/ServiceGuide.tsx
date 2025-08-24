@@ -38,7 +38,7 @@ export default function ServiceGuide() {
             </ol>
             <div className="mt-8">
               <Link
-                href="/creator/onboarding"
+                href="/creatorsetup"
                 className="rounded-2xl bg-slate-200 px-6 py-3 font-semibold shadow-2xl
                   hover:bg-black hover:text-slate-200 transition-all duration-300"
               >
@@ -49,7 +49,9 @@ export default function ServiceGuide() {
           <div className="rounded-2xl border border-white/10 bg-white/5 p-2 shadow-2xl">
             <div className="aspect-[4/3] w-full rounded-xl bg-gradient-to-br from-indigo-500/30 to-sky-500/30 grid place-content-center">
               <span className="text-sm text-slate-200">
-                Membership tiers preview
+                 <img className="rounded-xl" 
+                  src="https://fwweqj94zp.ufs.sh/f/YAX5aEmdMaW67k5Opa9YJ1O4a9vAjiQxUtz6EK38DNP0yXLM">
+                 </img>
               </span>
             </div>
           </div>

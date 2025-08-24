@@ -2,7 +2,7 @@ import { auth } from "~/server/auth";
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const PUBLIC_ROUTES = ["/", "/login"]
+const USER_ROUTES = ["/user/"]
 const CREATOR_ROUTES = ["/creator/"]
 
 
@@ -14,10 +14,10 @@ export async function middleware(request: NextRequest) {
   const isAuthenticated = !!session?.user
   const isCreator = !!session?.user.creatorPageId
 
-  const isPublicRoute = PUBLIC_ROUTES.some((route: any) => pathname.startsWith(route));
+  const isNotPublicRoute = USER_ROUTES.some((route: any) => pathname.startsWith(route));
   const isCreatorRoute = CREATOR_ROUTES.some((route: any) => pathname.startsWith(route));
 
-  if (!isAuthenticated && !isPublicRoute) {
+  if (!isAuthenticated && isNotPublicRoute) {
     return NextResponse.redirect(new URL("/login", nextUrl))
   }
 

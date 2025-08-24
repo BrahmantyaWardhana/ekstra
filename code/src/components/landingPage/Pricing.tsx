@@ -61,7 +61,7 @@ export default function Pricing() {
               {/* CTA */}
               <div className="mt-6">
                 <Link
-                  href="/creator/onboarding"
+                  href="/creatorsetup"
                   className="inline-flex w-full justify-center text-slate-200 rounded-2xl bg-black border-2  px-5 py-2.5 
                   hover:bg-white/30 hover:border-black hover:text-black transition-all duration-300"
                 >
