@@ -1,17 +1,30 @@
 import { auth } from "~/server/auth";
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export default auth((req) => {
-  const { pathname, origin } = req.nextUrl;
-  const creatorPageId = req.auth?.user?.creatorPageId ?? null;
+const PUBLIC_ROUTES = ["/", "/login"]
+const CREATOR_ROUTES = ["/creator/"]
 
-  // helpers
-  const segMatch = (base: string) => pathname === base || pathname.startsWith(`${base}/`);
 
-  // route buckets
-  const isCreatorRoute = segMatch('/creator');
+export async function middleware(request: NextRequest) {
+  const { nextUrl } = request
+  const pathname = nextUrl.pathname; 
   
-  return;
-});
+  const session = await auth()
+  const isAuthenticated = !!session?.user
+  const isCreator = !!session?.user.creatorPageId
+
+  const isPublicRoute = PUBLIC_ROUTES.some((route: any) => pathname.startsWith(route));
+  const isCreatorRoute = CREATOR_ROUTES.some((route: any) => pathname.startsWith(route));
+
+  if (!isAuthenticated && !isPublicRoute) {
+    return NextResponse.redirect(new URL("/login", nextUrl))
+  }
+
+  if (isCreatorRoute && !isCreator) {
+    return NextResponse.redirect(new URL("/creatorsetup/", nextUrl));
+  }
+}
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],

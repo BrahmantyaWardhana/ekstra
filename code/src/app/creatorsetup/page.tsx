@@ -7,7 +7,11 @@ import { redirect } from 'next/navigation'
 export default async function creatorSetup() {
   const backgroundImages = await getBackground();
   const session = await auth();
-  if (!session) redirect(`/login?callbackUrl=/creatorsetup`);
+  if (!session) redirect(`/login?callbackUrl=/creatorsetup`)
+
+  if (session.user.creatorPageId) {
+    redirect("/creator/dashboard")
+  }
 
   return (
     <>
