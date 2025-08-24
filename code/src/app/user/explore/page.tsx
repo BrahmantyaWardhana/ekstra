@@ -1,5 +1,6 @@
 import ExploreCreators from "~/components/ExploreCreators";
 import { findCreators } from "~/server/actions";
+export const dynamic = 'force-dynamic';
 
 export default async function AppHome() {
   const { creators, total, limit } = await findCreators()
