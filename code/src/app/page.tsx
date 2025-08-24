@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Footer from "~/components/AppFooter";
 import FeaturesInfo from "~/components/landingPage/FeaturesInfo";
 import GeneralInformation from "~/components/landingPage/GeneralInformation";
@@ -6,14 +7,11 @@ import Pricing from "~/components/landingPage/Pricing";
 import ServiceGuide from "~/components/landingPage/ServiceGuide";
 import ServiceIntro from "~/components/landingPage/ServiceIntro";
 import Navbar from "~/components/Navbar";
+import { auth } from "~/server/auth";
 
-export const metadata = {
-  title: "Ekstra — Memberships for Creators",
-  description:
-    "Build your creator page, post exclusive content, and earn from memberships. Ekstra makes it simple for creators and fun for fans.",
-};
-
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await auth();
+  if (session) redirect(`/user/home`);
   return (
     <div className="min-h-screen">
       <Navbar />

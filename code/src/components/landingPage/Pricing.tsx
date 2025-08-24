@@ -62,7 +62,8 @@ export default function Pricing() {
               <div className="mt-6">
                 <Link
                   href="/creator/onboarding"
-                  className="inline-flex w-full justify-center rounded-xl bg-slate-900 px-6 py-3 font-semibold text-white transition hover:brightness-95"
+                  className="inline-flex w-full justify-center text-slate-200 rounded-2xl bg-black border-2  px-5 py-2.5 
+                  hover:bg-white/30 hover:border-black hover:text-black transition-all duration-300"
                 >
                   Start earning
                 </Link>

@@ -8,11 +8,7 @@ export default auth((req) => {
   const segMatch = (base: string) => pathname === base || pathname.startsWith(`${base}/`);
 
   // route buckets
-  const isPublicRoute = ['/'].includes(pathname);
   const isCreatorRoute = segMatch('/creator');
-  const isCreatorSetup = pathname === '/creatorsetup';
-  const isCreatorPageRoute = segMatch('/creatorpage');
-
   
   return;
 });
