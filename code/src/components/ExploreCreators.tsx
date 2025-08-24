@@ -61,7 +61,7 @@ export default function ExploreCreators({
 
       {/* Creators */}
       <h2 className="text-lg font-semibold mb-6">Ekstra Creators</h2>
-      <div className="grid grid-cols-6 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8">
         {creators.map((creator) => (
           <Link
             key={creator.id}
