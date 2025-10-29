@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
 import GARouteTracker from "~/components/GARouteTracker";
+import { Suspense } from "react";
 import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 
@@ -46,7 +47,11 @@ export default function RootLayout({
           <SessionProvider>
             {children}
           </SessionProvider>
-          {gaId ? <GARouteTracker /> : null}
+          {gaId ? (
+            <Suspense fallback={null}>
+              <GARouteTracker />
+            </Suspense>
+          ) : null}
         </body>
 		</html>
 	);
