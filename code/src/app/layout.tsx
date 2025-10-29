@@ -1,10 +1,8 @@
 import "~/styles/globals.css";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import Script from "next/script";
 import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
-import GAListener from "~/components/GAListener";
 
 export const metadata: Metadata = {
   title: "Ekstra",
@@ -20,30 +18,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={geist.variable}>
       <body>
-        {gaId && (
-          <>
-            <Script
-              id="gtag-src"
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="beforeInteractive" // loads in <head>
-            />
-            <Script id="ga-init" strategy="beforeInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);} 
-                gtag('js', new Date());
-                gtag('config', '${gaId}'); // keep auto page_view
-              `}
-            </Script>
-          </>
-        )}
+
+        <>
+          <Script
+            id="gtag-src"
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="beforeInteractive" // loads in <head>
+          />
+          <Script id="ga-init" strategy="beforeInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);} 
+              gtag('js', new Date());
+              gtag('config', '${gaId}'); // keep auto page_view
+            `}
+          </Script>
+        </>
+
         <SessionProvider>
           {children}
-          {gaId && (
-            <Suspense fallback={null}>
-              <GAListener />
-            </Suspense>
-          )}
         </SessionProvider>
       </body>
     </html>
