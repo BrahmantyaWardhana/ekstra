@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import GAListener from "~/components/GAListener";
 
 export const metadata: Metadata = {
   title: "Ekstra",
@@ -28,14 +29,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Script id="ga-init" strategy="beforeInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+                function gtag(){dataLayer.push(arguments);} 
                 gtag('js', new Date());
                 gtag('config', '${gaId}'); // keep auto page_view
               `}
             </Script>
           </>
         )}
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          {children}
+          {gaId && <GAListener />}
+        </SessionProvider>
       </body>
     </html>
   );
