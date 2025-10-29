@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Script from "next/script";
 import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
@@ -38,7 +39,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <SessionProvider>
           {children}
-          {gaId && <GAListener />}
+          {gaId && (
+            <Suspense fallback={null}>
+              <GAListener />
+            </Suspense>
+          )}
         </SessionProvider>
       </body>
     </html>
