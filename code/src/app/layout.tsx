@@ -23,33 +23,31 @@ export default function RootLayout({
 	const gaId = process.env.NEXT_PUBLIC_GA_ID;
 	return (
 		<html lang="en" className={`${geist.variable}`}>
-      <SessionProvider>
-			  <body>
-            {/* Google Analytics */}
-            {gaId ? (
-              <>
-                <Script
-                  src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-                  strategy="afterInteractive"
-                />
-                <Script id="ga-init" strategy="afterInteractive">
-                  {`
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);} 
-                    gtag('js', new Date());
-                    gtag('config', '${gaId}');
-                  `}
-                </Script>
-              </>
-            ) : null}
-
-            {/* App content */}
+        <head>
+          {/* Google Analytics */}
+          {gaId ? (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+                strategy="afterInteractive"
+              />
+              <Script id="ga-init" strategy="afterInteractive">
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);} 
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}');
+                `}
+              </Script>
+            </>
+          ) : null}
+        </head>
+        <body>
+          <SessionProvider>
             {children}
-
-            {/* Track client-side route changes */}
-            {gaId ? <GARouteTracker /> : null}
-            </body>
-      </SessionProvider>
+          </SessionProvider>
+          {gaId ? <GARouteTracker /> : null}
+        </body>
 		</html>
 	);
 }
