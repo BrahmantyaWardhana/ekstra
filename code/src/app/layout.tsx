@@ -1,6 +1,8 @@
 import "~/styles/globals.css";
 
 import type { Metadata } from "next";
+import Script from "next/script";
+import GARouteTracker from "~/components/GARouteTracker";
 import { Geist } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 
@@ -18,10 +20,35 @@ const geist = Geist({
 export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
+	const gaId = process.env.NEXT_PUBLIC_GA_ID;
 	return (
 		<html lang="en" className={`${geist.variable}`}>
       <SessionProvider>
-			  <body>{children}</body>
+			  <body>
+            {/* Google Analytics */}
+            {gaId ? (
+              <>
+                <Script
+                  src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+                  strategy="afterInteractive"
+                />
+                <Script id="ga-init" strategy="afterInteractive">
+                  {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);} 
+                    gtag('js', new Date());
+                    gtag('config', '${gaId}');
+                  `}
+                </Script>
+              </>
+            ) : null}
+
+            {/* App content */}
+            {children}
+
+            {/* Track client-side route changes */}
+            {gaId ? <GARouteTracker /> : null}
+            </body>
       </SessionProvider>
 		</html>
 	);
