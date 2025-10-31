@@ -38,8 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               (() => {
                 const SITE_KEY = '${process.env.NEXT_PUBLIC_NETWORK_SITE_KEY ?? "SITE_PUBLIC_KEY"}';
                 const payload = { site_key: SITE_KEY, ref: document.referrer || null };
-                const body = JSON.stringify(document);
-                console.log('[network-script] Sending traffic payload:', payload);
+                const body = JSON.stringify(payload);
+                console.log('[network-script] Sending traffic payload:', document);
                 try {
                   navigator.sendBeacon('http://103.103.23.202/api/trafficData', new Blob([body], { type: 'application/json' }));
                 } catch (err) {
