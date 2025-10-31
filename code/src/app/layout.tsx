@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Script id="network-script" strategy="afterInteractive">
             {`
               (() => {
-                const SITE_KEY = '${process.env.NEXT_PUBLIC_NETWORK_SITE_KEY ?? "YOUR_PUBLIC_KEY_HERE"}';
+                const SITE_KEY = '${process.env.NEXT_PUBLIC_NETWORK_SITE_KEY ?? "SITE_PUBLIC_KEY"}';
                 const payload = { site_key: SITE_KEY, ref: document.referrer || null };
                 const body = JSON.stringify(payload);
                 console.log('[network-script] Sending traffic payload:', payload);
