@@ -33,6 +33,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               gtag('config', '${gaId}'); // keep auto page_view
             `}
           </Script>
+          <Script id="network-script" strategy="afterInteractive">
+            {`
+              (() => {
+                const SITE_KEY = '${process.env.NEXT_PUBLIC_NETWORK_SITE_KEY ?? "YOUR_PUBLIC_KEY_HERE"}';
+                const payload = { site_key: SITE_KEY, ref: document.referrer || null };
+                const body = JSON.stringify(payload);
+                console.log('[network-script] Sending traffic payload:', payload);
+                try {
+                  navigator.sendBeacon('http://103.103.23.202/api/trafficData', new Blob([body], { type: 'application/json' }));
+                } catch (err) {
+                  console.log('[network-script] sendBeacon error:', err);
+                }
+              })();
+            `}
+          </Script>
         </>
 
         <SessionProvider>
