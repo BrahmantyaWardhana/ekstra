@@ -30,21 +30,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               })(window, document, 'https://monitoring.supersmartsystem.com/beacon/rum.js?appKey=75c54110-2d62-4fd2-83b7-4fe06c160a9e', 'mtag');
             `}
           </Script>
-          <Script id="network-script" strategy="afterInteractive">
-            {`
-              (() => {
-                const SITE_KEY = '${process.env.NEXT_PUBLIC_NETWORK_SITE_KEY ?? "SITE_PUBLIC_KEY"}';
-                const payload = { site_key: SITE_KEY, ref: document.referrer || null };
-                const body = JSON.stringify(payload);
-                console.log('[network-script] Sending traffic payload:', document);
-                try {
-                  navigator.sendBeacon('http://103.103.23.202/api/trafficData', new Blob([body], { type: 'application/json' }));
-                } catch (err) {
-                  console.log('[network-script] sendBeacon error:', err);
-                }
-              })();
-            `}
-          </Script>
         </>
 
         <SessionProvider>
