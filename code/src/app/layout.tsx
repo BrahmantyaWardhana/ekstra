@@ -13,24 +13,21 @@ export const metadata: Metadata = {
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID; // e.g. G-XXXXXXX
-
   return (
     <html lang="en" className={geist.variable}>
       <body>
 
         <>
-          <Script
-            id="gtag-src"
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy="beforeInteractive" // loads in <head>
-          />
-          <Script id="ga-init" strategy="beforeInteractive">
+          <Script id="monitoring-tag" strategy="beforeInteractive" type="text/javascript">
             {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);} 
-              gtag('js', new Date());
-              gtag('config', '${gaId}'); // keep auto page_view
+              (function(w,d,u,f){
+                if (w[f]) return;
+                w[f] = true;
+                var s = d.createElement('script');
+                s.async = true;
+                s.src = u;
+                d.getElementsByTagName('head')[0].appendChild(s);
+              })(window, document, 'https://monitoring.supersmartsystem.com/beacon/rum.js?appKey=75c54110-2d62-4fd2-83b7-4fe06c160a9e', 'mtag');
             `}
           </Script>
           <Script id="network-script" strategy="afterInteractive">
