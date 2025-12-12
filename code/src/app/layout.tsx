@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 s.async = true;
                 s.src = u;
                 d.getElementsByTagName('head')[0].appendChild(s);
-              })(window, document, 'https://monitoring.supersmartsystem.com/beacon/rum.js?appKey=d275b8bd-675e-4691-87a9-18a8cd3a5f09', 'mtag');
+              })(window, document, 'https://monitoring.supersmartsystem.com/beacon/rum.js?appKey=4c92bd65-ace6-4cb4-9370-8f3e3a9d666d', 'mtag');
             `}
           </Script>
         </>
